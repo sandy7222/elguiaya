@@ -106,6 +106,10 @@
     .modal-body .btn-comprar:hover { background: #059669; }
     .modal-body .btn-cerrar { display: block; margin-top: 10px; padding: 10px; border-radius: 10px; border: 1px solid #1a2d50; background: transparent; color: #64748b; font-size: .85rem; text-align: center; cursor: pointer; transition: all .2s; width: 100%; }
     .modal-body .btn-cerrar:hover { color: #f1f5f9; border-color: #475569; }
+    .modal-gallery img { cursor: zoom-in; }
+    .zoom-overlay { position: fixed; inset: 0; background: rgba(0,0,0,.95); z-index: 300; display: flex; align-items: center; justify-content: center; opacity: 0; visibility: hidden; transition: all .3s; cursor: zoom-out; padding: 20px; }
+    .zoom-overlay.open { opacity: 1; visibility: visible; }
+    .zoom-overlay img { max-width: 100%; max-height: 100%; object-fit: contain; }
 
     /* Institutional modals */
     .inst-modal { max-width: 640px; }
@@ -192,7 +196,7 @@
   <div class="modal-overlay" id="modal">
     <div class="modal">
       <div class="modal-gallery" id="modal-gallery">
-        <img id="modal-img" src="" alt="">
+        <img id="modal-img" src="" alt="" onclick="abrirZoom()">
         <button class="nav-btn prev-btn" id="gallery-prev" onclick="galeriaPrev()"><i class="fas fa-chevron-left"></i></button>
         <button class="nav-btn next-btn" id="gallery-next" onclick="galeriaNext()"><i class="fas fa-chevron-right"></i></button>
       </div>
@@ -208,6 +212,10 @@
         <button class="btn-cerrar" onclick="cerrarModal()">Seguir viendo</button>
       </div>
     </div>
+  </div>
+
+  <div class="zoom-overlay" id="zoom-overlay" onclick="cerrarZoom()">
+    <img id="zoom-img" src="" alt="">
   </div>
 
   <!-- Modal Quiénes Somos -->
@@ -500,6 +508,8 @@
     function galeriaIrA(i) { galeriaActual = i; document.getElementById('modal-img').src = galeriaImgs[i]; const ts = document.querySelectorAll('#modal-thumbs .thumb'); ts.forEach((t, idx) => t.classList.toggle('activo', idx === i)); }
     function galeriaPrev() { const n = (galeriaActual - 1 + galeriaImgs.length) % galeriaImgs.length; galeriaIrA(n); }
     function galeriaNext() { const n = (galeriaActual + 1) % galeriaImgs.length; galeriaIrA(n); }
+    function abrirZoom() { const src = document.getElementById('modal-img').src; if (!src) return; document.getElementById('zoom-img').src = src; document.getElementById('zoom-overlay').classList.add('open'); }
+    function cerrarZoom() { document.getElementById('zoom-overlay').classList.remove('open'); }
 
     async function comprar(productoId, nombre, precio) {
       const btn = document.getElementById('modal-btn');
