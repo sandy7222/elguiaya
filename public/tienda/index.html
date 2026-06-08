@@ -4,21 +4,19 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Tienda - El Guía Ya</title>
-  <script src="https://unpkg.com/@supabase/supabase-js@2">
-  </script>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { font-family: system-ui, -apple-system, sans-serif; background: #0f172a; color: #e2e8f0; min-height: 100vh; }
     .header { background: linear-gradient(135deg, #0f172a, #1e293b); border-bottom: 1px solid #1e293b; padding: 16px 24px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
     .header h1 { font-size: 1.5rem; color: #10b981; font-weight: 800; letter-spacing: -0.5px; }
     .header h1 span { color: #f59e0b; }
-    .header a { color: #94a3b8; text-decoration: none; font-size: 0.875rem; }
+    .header a { color: #94a3b8; text-decoration: none; font-size: 0.875rem; transition: color 0.2s; }
     .header a:hover { color: #10b981; }
     .hero { text-align: center; padding: 48px 24px 32px; }
     .hero h2 { font-size: 2rem; font-weight: 700; color: #f1f5f9; margin-bottom: 8px; }
     .hero p { color: #64748b; font-size: 1.05rem; max-width: 500px; margin: 0 auto; }
     .filtros { display: flex; gap: 8px; padding: 0 24px 24px; flex-wrap: wrap; justify-content: center; }
-    .filtros button { padding: 8px 20px; border-radius: 999px; border: 1px solid #334155; background: transparent; color: #94a3b8; cursor: pointer; font-size: 0.875rem; transition: all 0.2s; }
+    .filtros button { padding: 8px 20px; border-radius: 999px; border: 1px solid #334155; background: transparent; color: #94a3b8; cursor: pointer; font-size: 0.875rem; transition: all 0.2s; white-space: nowrap; }
     .filtros button:hover, .filtros button.activo { background: #10b981; color: #fff; border-color: #10b981; }
     .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 20px; padding: 0 24px 48px; max-width: 1200px; margin: 0 auto; }
     .card { background: #1e293b; border-radius: 16px; overflow: hidden; border: 1px solid #334155; transition: transform 0.2s, box-shadow 0.2s; display: flex; flex-direction: column; }
@@ -26,10 +24,11 @@
     .card-img { width: 100%; height: 200px; object-fit: cover; background: #334155; display: flex; align-items: center; justify-content: center; color: #475569; font-size: 0.8rem; }
     .card-body { padding: 16px; flex: 1; display: flex; flex-direction: column; }
     .card-body h3 { font-size: 1rem; font-weight: 600; color: #f1f5f9; margin-bottom: 4px; }
-    .card-body .desc { font-size: 0.8rem; color: #64748b; margin-bottom: 12px; line-height: 1.4; flex: 1; }
+    .card-body .desc { font-size: 0.8rem; color: #64748b; margin-bottom: 12px; line-height: 1.4; flex: 1; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
     .card-body .precio { font-size: 1.25rem; font-weight: 700; color: #10b981; margin-bottom: 12px; }
     .card-body .btn { width: 100%; padding: 10px; border-radius: 10px; border: none; background: #10b981; color: #fff; font-weight: 600; font-size: 0.875rem; cursor: pointer; transition: background 0.2s; }
     .card-body .btn:hover { background: #059669; }
+    .card-body .btn:disabled { background: #334155; color: #64748b; cursor: not-allowed; }
     .empty { text-align: center; padding: 64px 24px; color: #475569; }
     .empty svg { width: 64px; height: 64px; margin: 0 auto 16px; opacity: 0.4; }
     .loading { text-align: center; padding: 64px; }
@@ -40,6 +39,17 @@
     .badge-stock { background: #065f46; color: #6ee7b7; }
     .badge-agotado { background: #7f1d1d; color: #fca5a5; }
     .footer { text-align: center; padding: 24px; color: #475569; font-size: 0.8rem; border-top: 1px solid #1e293b; }
+    @media (max-width: 600px) {
+      .hero h2 { font-size: 1.5rem; }
+      .grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 12px; padding: 0 12px 32px; }
+      .card-img { height: 140px; }
+      .card-body { padding: 12px; }
+      .card-body h3 { font-size: 0.9rem; }
+      .card-body .precio { font-size: 1.1rem; }
+      .filtros { padding: 0 12px 16px; gap: 6px; }
+      .filtros button { font-size: 0.8rem; padding: 6px 14px; }
+      .hero { padding: 32px 16px 24px; }
+    }
   </style>
 </head>
 <body>
@@ -71,30 +81,40 @@
   <script>
     const SUPABASE_URL = 'https://ymgsxwfwntbqvguvbhoa.supabase.co';
     const SUPABASE_ANON_KEY = 'sb_publishable_VWBnZN0tTUA_8zeULPU8Jg_hmsJauq6';
-    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    const headers = {
+      'apikey': SUPABASE_ANON_KEY,
+      'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+    };
+
+    async function supabaseGet(table, opts = {}) {
+      let url = `${SUPABASE_URL}/rest/v1/${table}?select=*`;
+      if (opts.eq) url += `&${opts.eq.col}=eq.${encodeURIComponent(opts.eq.val)}`;
+      if (opts.order) url += `&order=${opts.order.col}${opts.order.asc ? '' : '.desc'}`;
+      if (opts.limit) url += `&limit=${opts.limit}`;
+      const r = await fetch(url, { headers });
+      if (!r.ok) throw new Error(`Supabase error: ${r.status}`);
+      return r.json();
+    }
 
     let productos = [];
     let categorias = [];
     let rubros = [];
-    let filtroActivo = 'todas';
 
     async function cargarDatos() {
       mostrarLoading(true);
       try {
-        const [resProd, resCat, resRub] = await Promise.all([
-          supabase.from('productos').select('*').eq('activo', true).order('created_at', { ascending: false }),
-          supabase.from('categorias').select('*').eq('activa', true).order('nombre'),
-          supabase.from('rubros').select('*').eq('activo', true).order('nombre'),
+        const [prod, cat, rub] = await Promise.all([
+          supabaseGet('productos', { eq: { col: 'activo', val: true }, order: { col: 'created_at', asc: false } }),
+          supabaseGet('categorias', { eq: { col: 'activa', val: true }, order: { col: 'nombre', asc: true } }),
+          supabaseGet('rubros', { eq: { col: 'activo', val: true }, order: { col: 'nombre', asc: true } }),
         ]);
-        if (resProd.error) throw resProd.error;
-        if (resCat.error) throw resCat.error;
-        if (resRub.error) throw resRub.error;
-        productos = resProd.data;
-        categorias = resCat.data;
-        rubros = resRub.data;
+        productos = prod;
+        categorias = cat;
+        rubros = rub;
         mostrarLoading(false);
         renderizarFiltros();
-        renderizarProductos('todas');
+        renderizarProductos();
       } catch (e) {
         console.error(e);
         mostrarLoading(false);
@@ -106,15 +126,12 @@
       const container = document.getElementById('filtros');
       const rubrosUnicos = [...new Set(productos.filter(p => p.rubro).map(p => p.rubro))];
       let html = '<button class="activo" data-filtro="todas">Todas</button>';
-      if (rubrosUnicos.includes('pesca')) {
-        html += '<button data-filtro="pesca">Pesca</button>';
-      }
-      if (rubrosUnicos.includes('camping')) {
-        html += '<button data-filtro="camping">Camping</button>';
-      }
+      rubrosUnicos.forEach(r => {
+        if (r) html += `<button data-filtro="${r}">${r.charAt(0).toUpperCase() + r.slice(1)}</button>`;
+      });
       categorias.forEach(c => {
         if (productos.some(p => p.categoria_id === c.id)) {
-          html += `<button data-filtro="${c.id}">${c.nombre}</button>`;
+          html += `<button data-filtro="${c.id}">${escapeHtml(c.nombre)}</button>`;
         }
       });
       container.innerHTML = html;
@@ -122,8 +139,7 @@
         btn.addEventListener('click', () => {
           container.querySelectorAll('button').forEach(b => b.classList.remove('activo'));
           btn.classList.add('activo');
-          filtroActivo = btn.dataset.filtro;
-          renderizarProductos(filtroActivo);
+          renderizarProductos(btn.dataset.filtro);
         });
       });
     }
@@ -132,13 +148,9 @@
       const container = document.getElementById('productos');
       const empty = document.getElementById('empty');
       let filtrados = productos;
-      if (filtro !== 'todas') {
-        const cat = categorias.find(c => c.id === filtro);
-        if (filtro === 'pesca' || filtro === 'camping') {
-          filtrados = productos.filter(p => p.rubro === filtro);
-        } else {
-          filtrados = productos.filter(p => p.categoria_id === filtro);
-        }
+      if (filtro && filtro !== 'todas') {
+        const esRubro = ['pesca', 'camping'].includes(filtro);
+        filtrados = productos.filter(p => esRubro ? p.rubro === filtro : p.categoria_id === filtro);
       }
       if (filtrados.length === 0) {
         container.innerHTML = '';
@@ -157,7 +169,7 @@
             <div class="card-body">
               <span class="badge ${stock ? 'badge-stock' : 'badge-agotado'}">${stock ? 'En stock' : 'Agotado'}</span>
               <h3>${escapeHtml(p.nombre)}</h3>
-              <p class="desc">${escapeHtml((p.descripcion || '').slice(0, 100))}</p>
+              <p class="desc">${escapeHtml((p.descripcion || '').slice(0, 120))}</p>
               <div class="precio">$${Number(p.precio).toLocaleString('es-AR', { minimumFractionDigits: 2 })}</div>
               <button class="btn" onclick="comprar('${p.id}')" ${stock ? '' : 'disabled'}>${stock ? 'Comprar' : 'Sin stock'}</button>
             </div>
@@ -165,8 +177,8 @@
       }).join('');
     }
 
-    function comprar(productoId) {
-      window.location.href = `https://app.elguiaya.com/tienda`;
+    function comprar() {
+      window.location.href = 'https://app.elguiaya.com/tienda';
     }
 
     function escapeHtml(text) {
