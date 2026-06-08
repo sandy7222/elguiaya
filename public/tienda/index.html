@@ -10,7 +10,6 @@
     body { font-family: system-ui, -apple-system, sans-serif; background: #0b1628; color: #e2e8f0; min-height: 100vh; overflow-x: hidden; }
     img { max-width: 100%; display: block; }
 
-    /* ── HEADER ── */
     .header { background: linear-gradient(135deg, #0b1628, #132244); border-bottom: 1px solid #1a2d50; padding: 12px 16px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; backdrop-filter: blur(12px); }
     .header-logo { display: flex; align-items: center; gap: 10px; }
     .header-logo .icon { width: 36px; height: 36px; border-radius: 50%; border: 2px solid #10b981; display: flex; align-items: center; justify-content: center; color: #10b981; font-size: 1.1rem; }
@@ -20,39 +19,32 @@
     .header-actions a { width: 36px; height: 36px; border-radius: 50%; border: 1px solid #1a2d50; background: #0f1d38; display: flex; align-items: center; justify-content: center; color: #94a3b8; text-decoration: none; transition: all .2s; font-size: .9rem; }
     .header-actions a:hover { background: #10b981; color: #fff; border-color: #10b981; }
 
-    /* ── MARQUEE ── */
     .marquee-bar { overflow: hidden; background: #065f46; padding: 8px 0; white-space: nowrap; }
     .marquee-bar .inner { display: inline-block; animation: marq 25s linear infinite; font-size: .78rem; color: #a7f3d0; font-weight: 600; letter-spacing: .5px; }
     .marquee-bar .inner span { padding: 0 40px; }
     @keyframes marq { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
 
-    /* ── SEARCH BAR ── */
     .search-wrap { padding: 12px 16px; max-width: 1200px; margin: 0 auto; }
     .search-wrap input { width: 100%; padding: 10px 16px; border-radius: 10px; border: 1px solid #1a2d50; background: #0f1d38; color: #e2e8f0; font-size: .88rem; outline: none; transition: border .2s; }
     .search-wrap input:focus { border-color: #10b981; }
     .search-wrap input::placeholder { color: #475569; }
 
-    /* ── SECTION TITLE ── */
     .section-wrap { max-width: 1200px; margin: 0 auto; padding: 0 16px; }
     .section-title { display: flex; align-items: center; justify-content: space-between; padding: 20px 0 10px; }
     .section-title h2 { font-size: .82rem; font-weight: 700; color: #94a3b8; letter-spacing: 1px; }
-    .section-title a { font-size: .78rem; color: #10b981; text-decoration: none; font-weight: 600; }
-    .section-title a:hover { text-decoration: underline; }
 
-    /* ── PRODUCT SCROLL ── */
-    .scroll-wrap { padding-bottom: 16px; position: relative; }
+    .scroll-wrap { padding-bottom: 16px; }
     .scroll-inner { display: flex; gap: 10px; overflow-x: auto; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; padding: 0 16px; scrollbar-width: none; }
     .scroll-inner::-webkit-scrollbar { display: none; }
-    .scroll-inner .card { flex: 0 0 160px; scroll-snap-align: start; background: #0f1d38; border-radius: 10px; overflow: hidden; border: 1px solid #1a2d50; transition: transform .25s ease, box-shadow .25s ease; cursor: pointer; }
+    .scroll-inner .card { flex: 0 0 160px; scroll-snap-align: start; background: #0f1d38; border-radius: 10px; overflow: hidden; border: 1px solid #1a2d50; transition: transform .25s ease, box-shadow .25s ease; cursor: pointer; display: flex; flex-direction: column; }
     .scroll-inner .card:hover { transform: translateY(-6px); box-shadow: 0 12px 28px -10px rgba(0,0,0,.6); }
     .card-img { width: 100%; height: 140px; object-fit: cover; background: #132244; display: flex; align-items: center; justify-content: center; color: #334155; font-size: .7rem; }
-    .card-body { padding: 8px 10px 10px; }
+    .card-body { padding: 8px 10px 10px; flex: 1; display: flex; flex-direction: column; }
     .card-body h3 { font-size: .78rem; font-weight: 600; color: #f1f5f9; margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .card-body .precio { font-size: .92rem; font-weight: 700; color: #10b981; }
-    .buy-btn { display: block; width: 100%; margin-top: 8px; padding: 7px; border-radius: 8px; border: none; background: #10b981; color: #fff; font-weight: 600; font-size: .78rem; text-align: center; text-decoration: none; transition: background .2s; cursor: pointer; }
-    .buy-btn:hover { background: #059669; }
+    .card-body .precio { font-size: .92rem; font-weight: 700; color: #10b981; margin-top: auto; }
+    .card-body .buy-btn { display: block; width: 100%; margin-top: 8px; padding: 7px 0; border-radius: 8px; border: none; background: #10b981; color: #fff; font-weight: 600; font-size: .75rem; text-align: center; text-decoration: none; cursor: pointer; transition: all .2s; }
+    .card-body .buy-btn:hover { background: #059669; }
 
-    /* ── CARRUSEL ── */
     .carousel-wrap { position: relative; overflow: hidden; height: 280px; margin: 8px 16px; border-radius: 12px; }
     .carousel-slide { position: absolute; inset: 0; opacity: 0; transition: opacity .6s; background-size: cover; background-position: center; display: flex; align-items: flex-end; padding: 24px; }
     .carousel-slide.activo { opacity: 1; }
@@ -63,22 +55,19 @@
     .carousel-dots button { width: 8px; height: 8px; border-radius: 50%; border: 2px solid rgba(255,255,255,.4); background: transparent; cursor: pointer; transition: all .3s; padding: 0; }
     .carousel-dots button.activo { background: #10b981; border-color: #10b981; }
 
-    /* ── BANNER FIXO ── */
     .banner-fixo { margin: 0 16px 16px; border-radius: 12px; overflow: hidden; height: 160px; background-size: cover; background-position: center; position: relative; cursor: pointer; transition: transform .3s; }
     .banner-fixo:hover { transform: scale(1.01); }
     .banner-fixo .overlay { position: absolute; inset: 0; background: linear-gradient(135deg, rgba(0,0,0,.5), transparent); padding: 20px; display: flex; flex-direction: column; justify-content: flex-end; }
     .banner-fixo .overlay h3 { font-size: 1.1rem; font-weight: 700; color: #fff; }
     .banner-fixo .overlay p { font-size: .82rem; color: #d1d5db; margin-top: 2px; }
 
-    /* ── CATEGORY GRID ── */
     .cat-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 8px; padding: 0 16px 16px; max-width: 1200px; margin: 0 auto; }
-    .cat-grid .item { background: #0f1d38; border-radius: 10px; padding: 14px 8px; text-align: center; border: 1px solid #1a2d50; cursor: pointer; transition: all .25s; }
+    .cat-grid .item { background: #0f1d38; border-radius: 10px; padding: 14px 8px; text-align: center; border: 1px solid #1a2d50; text-decoration: none; color: inherit; display: block; transition: all .25s; }
     .cat-grid .item:hover { background: #10b981; border-color: #10b981; transform: translateY(-3px); }
     .cat-grid .item i { font-size: 1.4rem; color: #10b981; margin-bottom: 5px; display: block; }
     .cat-grid .item:hover i { color: #fff; }
     .cat-grid .item span { font-size: .72rem; color: #e2e8f0; font-weight: 500; }
 
-    /* ── FOOTER ── */
     .footer { background: #0b1628; border-top: 1px solid #1a2d50; padding: 24px 16px 16px; margin-top: 24px; }
     .footer-inner { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 20px; }
     .footer-col h4 { color: #f1f5f9; font-size: .82rem; font-weight: 600; margin-bottom: 8px; }
@@ -86,14 +75,27 @@
     .footer-col a:hover { color: #10b981; }
     .footer-bot { text-align: center; color: #475569; font-size: .72rem; border-top: 1px solid #1a2d50; margin-top: 20px; padding-top: 14px; }
 
-    /* ── STATES ── */
+    /* Modal de detalle de producto */
+    .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,.8); z-index: 200; display: flex; align-items: center; justify-content: center; padding: 16px; opacity: 0; visibility: hidden; transition: all .3s; }
+    .modal-overlay.open { opacity: 1; visibility: visible; }
+    .modal { background: #0f1d38; border-radius: 16px; max-width: 480px; width: 100%; max-height: 90vh; overflow-y: auto; border: 1px solid #1a2d50; transform: scale(.9); transition: transform .3s; }
+    .modal-overlay.open .modal { transform: scale(1); }
+    .modal-img { width: 100%; height: 280px; object-fit: cover; background: #132244; border-radius: 16px 16px 0 0; }
+    .modal-body { padding: 20px; }
+    .modal-body h2 { font-size: 1.2rem; font-weight: 700; color: #f1f5f9; margin-bottom: 8px; }
+    .modal-body .desc { font-size: .85rem; color: #94a3b8; line-height: 1.6; margin-bottom: 16px; }
+    .modal-body .precio-lg { font-size: 1.6rem; font-weight: 800; color: #10b981; margin-bottom: 20px; }
+    .modal-body .btn-comprar { display: block; width: 100%; padding: 14px; border-radius: 12px; border: none; background: #10b981; color: #fff; font-weight: 700; font-size: 1rem; text-align: center; text-decoration: none; cursor: pointer; transition: background .2s; }
+    .modal-body .btn-comprar:hover { background: #059669; }
+    .modal-body .btn-cerrar { display: block; margin-top: 10px; padding: 10px; border-radius: 10px; border: 1px solid #1a2d50; background: transparent; color: #64748b; font-size: .85rem; text-align: center; cursor: pointer; transition: all .2s; width: 100%; }
+    .modal-body .btn-cerrar:hover { color: #f1f5f9; border-color: #475569; }
+
     .loading { text-align: center; padding: 80px 16px; }
     .spinner { width: 32px; height: 32px; border: 3px solid #1a2d50; border-top-color: #10b981; border-radius: 50%; animation: spin .8s linear infinite; margin: 0 auto 10px; }
     @keyframes spin { to { transform: rotate(360deg); } }
     .loading p, .error p { color: #64748b; font-size: .82rem; }
     .error { text-align: center; padding: 60px 16px; color: #ef4444; }
 
-    /* ── RESPONSIVE ── */
     @media (min-width: 768px) {
       .scroll-inner .card { flex: 0 0 190px; }
       .card-img { height: 160px; }
@@ -101,7 +103,6 @@
       .banner-fixo { max-width: 1200px; margin: 0 auto 16px; height: 200px; }
       .section-wrap { padding: 0; }
       .scroll-inner { padding: 0; }
-      .header { padding: 12px 24px; }
       .cat-grid { padding: 0 0 16px; }
     }
     @media (max-width: 400px) {
@@ -142,6 +143,19 @@
     <div id="content" style="display:none"></div>
   </div>
 
+  <div class="modal-overlay" id="modal">
+    <div class="modal">
+      <img class="modal-img" id="modal-img" src="" alt="">
+      <div class="modal-body">
+        <h2 id="modal-title"></h2>
+        <p class="desc" id="modal-desc"></p>
+        <div class="precio-lg" id="modal-price"></div>
+        <a class="btn-comprar" id="modal-btn" href="https://app.elguiaya.com/tienda" target="_blank"><i class="fas fa-shopping-cart"></i> Comprar ahora</a>
+        <button class="btn-cerrar" onclick="cerrarModal()">Seguir viendo</button>
+      </div>
+    </div>
+  </div>
+
   <footer class="footer" style="display:none" id="footer">
     <div class="footer-inner">
       <div class="footer-col"><h4>El Guía Ya</h4><p>Plataforma náutica argentina para la vinculación segura de pescadores y capitanes.</p></div>
@@ -149,7 +163,7 @@
       <div class="footer-col"><h4>Ayuda</h4><a href="/">Inicio</a><a href="/#how-it-works">Cómo funciona</a></div>
       <div class="footer-col"><h4>Contacto</h4><p>Buenos Aires, Argentina</p></div>
     </div>
-    <div class="footer-bot">© 2026 El Guía Ya — Todos los derechos reservados</div>
+    <div class="footer-bot">© 2026 El Guía Ya</div>
   </footer>
 
   <script>
@@ -169,7 +183,7 @@
       return r.json();
     }
 
-    let prods = [], cats = [], bans = [], blogs = [], carruselInterval;
+    let prods = [], cats = [], bans = [], blogs = [];
 
     async function init() {
       try {
@@ -180,11 +194,7 @@
           api('blog_articulos', { filters: [{ col: 'activo', op: 'eq', val: true }], order: { col: 'created_at', asc: false }, limit: 4 }),
         ]);
         render();
-      } catch (e) {
-        console.error(e);
-        document.getElementById('loading').style.display = 'none';
-        document.getElementById('error').style.display = 'block';
-      }
+      } catch (e) { console.error(e); document.getElementById('loading').style.display = 'none'; document.getElementById('error').style.display = 'block'; }
     }
 
     function render() {
@@ -194,7 +204,6 @@
 
       let html = '';
 
-      // Marquee
       const marquee = bans.filter(b => b.tipo === 'marquee');
       if (marquee.length) {
         document.getElementById('marquee').style.display = 'block';
@@ -202,64 +211,48 @@
         document.getElementById('marquee').innerHTML = '<div class="inner">' + items + items + '</div>';
       }
 
-      // Hero carousel
       const hero = bans.filter(b => b.tipo === 'hero');
       if (hero.length) {
         html += '<div class="carousel-wrap" id="hero">';
         hero.forEach((b, i) => {
           html += '<div class="carousel-slide' + (i === 0 ? ' activo' : '') + '" style="background-image:url(\'' + b.imagen_url + '\')"><div class="overlay"><h2>' + esc(b.titulo) + '</h2>' + (b.subtitulo ? '<p>' + esc(b.subtitulo) + '</p>' : '') + '</div></div>';
         });
-        html += '<div class="carousel-dots">' + hero.map((_, i) => '<button class="' + (i === 0 ? 'activo' : '') + '" onclick="goSlide(' + i + ')"></button>').join('') + '</div>';
-        html += '</div>';
-        if (hero.length > 1) carruselInterval = setInterval(nextSlide, 5000);
+        html += '<div class="carousel-dots">' + hero.map((_, i) => '<button class="' + (i === 0 ? 'activo' : '') + '" onclick="goSlide(' + i + ')"></button>').join('') + '</div></div>';
+        if (hero.length > 1) setInterval(() => { const w = document.getElementById('hero'); if (!w) return; const s = w.querySelectorAll('.carousel-slide'), d = w.querySelectorAll('.carousel-dots button'); if (!s.length) return; const cur = Array.from(s).findIndex(x => x.classList.contains('activo')); const n = (cur + 1) % s.length; s.forEach(x => x.classList.remove('activo')); d.forEach(x => x.classList.remove('activo')); s[n].classList.add('activo'); d[n].classList.add('activo'); }, 5000);
       }
 
-      // Category sections (each with horizontal product scroll)
       const activeCats = cats.filter(c => prods.some(p => p.categoria_id === c.id));
       activeCats.forEach((cat, idx) => {
         const catProds = prods.filter(p => p.categoria_id === cat.id);
         if (!catProds.length) return;
-        html += '<div class="section-wrap">';
-        html += '<div class="section-title"><h2>' + esc(cat.nombre.toUpperCase()) + '</h2><a href="https://app.elguiaya.com/tienda" target="_blank">Ver todos</a></div>';
-        html += '<div class="scroll-wrap"><div class="scroll-inner">';
+        html += '<div class="section-wrap"><div class="section-title"><h2>' + esc(cat.nombre.toUpperCase()) + '</h2></div><div class="scroll-wrap"><div class="scroll-inner">';
         catProds.forEach(p => { html += cardHtml(p); });
         html += '</div></div></div>';
 
-        // Insert mid banners after first category
         if (idx === 0) {
           const mid = bans.filter(b => b.tipo === 'middle');
           if (mid.length) {
-            mid.forEach(b => {
-              html += '<div class="section-wrap"><div class="section-title"><h2>DESTACADOS DE LA TEMPORADA</h2></div></div>';
-              html += '<div class="banner-fixo" style="background-image:url(\'' + b.imagen_url + '\')"><div class="overlay"><h3>' + esc(b.titulo) + '</h3>' + (b.subtitulo ? '<p>' + esc(b.subtitulo) + '</p>' : '') + '</div></div>';
-            });
+            html += '<div class="section-wrap"><div class="section-title"><h2>DESTACADOS DE LA TEMPORADA</h2></div></div>';
+            mid.forEach(b => html += '<div class="banner-fixo" style="background-image:url(\'' + b.imagen_url + '\')"><div class="overlay"><h3>' + esc(b.titulo) + '</h3>' + (b.subtitulo ? '<p>' + esc(b.subtitulo) + '</p>' : '') + '</div></div>');
           }
         }
-
-        // Insert bottom banners before last category
         if (idx === Math.min(activeCats.length - 1, 2)) {
           const bot = bans.filter(b => b.tipo === 'bottom');
           if (bot.length) {
             html += '<div class="section-wrap"><div class="section-title"><h2>COLECCIONES ESPECIALES</h2></div></div>';
-            bot.forEach(b => {
-              html += '<div class="banner-fixo" style="background-image:url(\'' + b.imagen_url + '\')"><div class="overlay"><h3>' + esc(b.titulo) + '</h3>' + (b.subtitulo ? '<p>' + esc(b.subtitulo) + '</p>' : '') + '</div></div>';
-            });
+            bot.forEach(b => html += '<div class="banner-fixo" style="background-image:url(\'' + b.imagen_url + '\')"><div class="overlay"><h3>' + esc(b.titulo) + '</h3>' + (b.subtitulo ? '<p>' + esc(b.subtitulo) + '</p>' : '') + '</div></div>');
           }
         }
       });
 
-      // Novedades
-      html += '<div class="section-wrap"><div class="section-title"><h2>NOVEDADES / ÚLTIMOS INGRESOS</h2><a href="https://app.elguiaya.com/tienda" target="_blank">Ver todos</a></div>';
-      html += '<div class="scroll-wrap"><div class="scroll-inner">';
+      html += '<div class="section-wrap"><div class="section-title"><h2>NOVEDADES / ÚLTIMOS INGRESOS</h2></div><div class="scroll-wrap"><div class="scroll-inner">';
       prods.slice(0, 10).forEach(p => { html += cardHtml(p); });
       html += '</div></div></div>';
 
-      // Categories grid (explora)
-      html += '<div class="section-wrap"><div class="section-title"><h2>EXPLORA POR CATEGORÍA</h2></div></div>';
-      html += '<div class="cat-grid">';
+      html += '<div class="section-wrap"><div class="section-title"><h2>EXPLORA POR CATEGORÍA</h2></div></div><div class="cat-grid">';
       const iconMap = { 'Carpas': 'fa-campground', 'Reels': 'fa-hook', 'Reeles Frontales': 'fa-hook', 'Reeles Rotativos': 'fa-hook', 'Mesas y Sillas': 'fa-chair', 'Cañas': 'fa-fish', 'Señuelos': 'fa-worm', 'Pesca Deportiva': 'fa-fish', 'Camping': 'fa-campground', 'Náutica': 'fa-ship', 'Indumentaria': 'fa-tshirt' };
       cats.filter(c => prods.some(p => p.categoria_id === c.id)).slice(0, 8).forEach(c => {
-        html += '<a class="item" href="https://app.elguiaya.com/tienda" target="_blank" style="text-decoration:none;color:inherit"><i class="fas ' + (iconMap[c.nombre] || 'fa-tag') + '"></i><span>' + esc(c.nombre) + '</span></a>';
+        html += '<a class="item" href="https://app.elguiaya.com/tienda" target="_blank"><i class="fas ' + (iconMap[c.nombre] || 'fa-tag') + '"></i><span>' + esc(c.nombre) + '</span></a>';
       });
       html += '</div>';
 
@@ -269,9 +262,28 @@
 
     function cardHtml(p) {
       const img = p.imagen_url ? '<div class="card-img" style="background-image:url(\'' + esc(p.imagen_url) + '\');background-size:cover;background-position:center"></div>' : '<div class="card-img">Sin imagen</div>';
-      const href = 'https://app.elguiaya.com/tienda';
-      return '<div class="card"><a href="' + href + '" target="_blank" style="text-decoration:none;color:inherit">' + img + '</a><div class="card-body"><a href="' + href + '" target="_blank" style="text-decoration:none;color:inherit"><h3>' + esc(p.nombre) + '</h3><div class="precio">$' + Number(p.precio).toLocaleString('es-AR', { minimumFractionDigits: 2 }) + '</div></a><a href="' + href + '" target="_blank" class="buy-btn">Comprar</a></div></div>';
+      return '<div class="card" onclick="abrirProducto(\'' + p.id + '\')">' + img + '<div class="card-body"><h3>' + esc(p.nombre) + '</h3><div class="precio">$' + Number(p.precio).toLocaleString('es-AR', { minimumFractionDigits: 2 }) + '</div><button class="buy-btn">Comprar</button></div></div>';
     }
+
+    function abrirProducto(id) {
+      const p = prods.find(x => x.id === id);
+      if (!p) return;
+      document.getElementById('modal-img').src = p.imagen_url || '';
+      document.getElementById('modal-img').alt = esc(p.nombre);
+      document.getElementById('modal-img').onerror = function() { this.outerHTML = '<div class="modal-img" style="display:flex;align-items:center;justify-content:center;background:#132244;color:#334155">Sin imagen</div>'; };
+      document.getElementById('modal-title').textContent = p.nombre;
+      document.getElementById('modal-desc').textContent = p.descripcion || 'Producto de pesca, camping y náutica de la más alta calidad.';
+      document.getElementById('modal-price').textContent = '$' + Number(p.precio).toLocaleString('es-AR', { minimumFractionDigits: 2 });
+      document.getElementById('modal-btn').href = 'https://app.elguiaya.com/tienda';
+      document.getElementById('modal').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function cerrarModal() {
+      document.getElementById('modal').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+    document.getElementById('modal').addEventListener('click', function(e) { if (e.target === this) cerrarModal(); });
 
     function onSearch(val) {
       val = val.toLowerCase().trim();
@@ -286,23 +298,13 @@
     }
 
     function goSlide(n) {
-      const w = document.getElementById('hero');
-      if (!w) return;
+      const w = document.getElementById('hero'); if (!w) return;
       const s = w.querySelectorAll('.carousel-slide'), d = w.querySelectorAll('.carousel-dots button');
-      s.forEach(x => x.classList.remove('activo'));
-      d.forEach(x => x.classList.remove('activo'));
+      s.forEach(x => x.classList.remove('activo')); d.forEach(x => x.classList.remove('activo'));
       if (s[n]) { s[n].classList.add('activo'); if (d[n]) d[n].classList.add('activo'); }
     }
-    function nextSlide() {
-      const w = document.getElementById('hero');
-      if (!w) return;
-      const s = w.querySelectorAll('.carousel-slide');
-      if (!s.length) return;
-      const cur = Array.from(s).findIndex(x => x.classList.contains('activo'));
-      goSlide((cur + 1) % s.length);
-    }
-    function esc(t) { if (!t) return ''; const d = document.createElement('div'); d.textContent = t; return d.innerHTML; }
 
+    function esc(t) { if (!t) return ''; const d = document.createElement('div'); d.textContent = t; return d.innerHTML; }
     init();
   </script>
 </body>
