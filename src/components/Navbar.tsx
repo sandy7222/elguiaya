@@ -22,13 +22,22 @@ export const Navbar: React.FC<NavbarProps> = ({ onScrollTo, onPreRegister, onDow
     { label: 'Mapa', target: 'interactive-map', icon: MapPin },
     { label: 'Chat El GuIA', target: 'fishing-ai', icon: Sparkles },
     { label: 'Seguridad', target: 'security', icon: Shield },
-    { label: 'Tienda', target: '', icon: ShoppingBag, url: 'capitanya://tienda' },
+    { label: 'Tienda', target: '', icon: ShoppingBag, url: '/tienda', deepLink: 'capitanya://tienda' },
   ];
 
-  const handleNavClick = (target: string, url?: string) => {
+  const handleNavClick = (target: string, url?: string, deepLink?: string) => {
   if (url) {
-    window.location.href = url; // Abre la tienda en la misma pestaña
-    // Si prefieres pestaña nueva, usa: window.open(url, '_blank', 'noopener,noreferrer');
+    if (deepLink && /Android/i.test(navigator.userAgent)) {
+      const start = Date.now();
+      window.location.href = deepLink;
+      setTimeout(() => {
+        if (Date.now() - start < 1200) {
+          window.location.href = url;
+        }
+      }, 1000);
+    } else {
+      window.location.href = url;
+    }
     setIsOpen(false);
     return;
   }
@@ -50,7 +59,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onScrollTo, onPreRegister, onDow
             {navItems.map((item) => (
               <button
                 key={item.target}
-                onClick={() => handleNavClick(item.target, item.url)}
+                onClick={() => handleNavClick(item.target, item.url, (item as any).deepLink)}
                 className="text-slate-300 hover:text-emerald-400 font-medium text-sm transition-colors duration-200 cursor-pointer flex items-center gap-1.5"
                 id={`nav-link-${item.target}`}
               >
@@ -98,7 +107,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onScrollTo, onPreRegister, onDow
           {navItems.map((item) => (
             <button
               key={item.target}
-              onClick={() => handleNavClick(item.target, item.url)}
+              onClick={() => handleNavClick(item.target, item.url, (item as any).deepLink)}
               className="w-full text-left py-2.5 px-3 rounded-lg text-slate-300 hover:text-white hover:bg-slate-800 text-base font-medium transition-all flex items-center gap-3 cursor-pointer"
               id={`mob-nav-${item.target}`}
             >
