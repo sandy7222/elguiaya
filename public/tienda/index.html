@@ -221,6 +221,8 @@
         if (hero.length > 1) setInterval(() => { const w = document.getElementById('hero'); if (!w) return; const s = w.querySelectorAll('.carousel-slide'), d = w.querySelectorAll('.carousel-dots button'); if (!s.length) return; const cur = Array.from(s).findIndex(x => x.classList.contains('activo')); const n = (cur + 1) % s.length; s.forEach(x => x.classList.remove('activo')); d.forEach(x => x.classList.remove('activo')); s[n].classList.add('activo'); d[n].classList.add('activo'); }, 5000);
       }
 
+      const interleaveBanners = bans.filter(b => b.tipo === 'middle' || b.tipo === 'bottom');
+      let bannerIdx = 0;
       const activeCats = cats.filter(c => prods.some(p => p.categoria_id === c.id));
       activeCats.forEach((cat, idx) => {
         const catProds = prods.filter(p => p.categoria_id === cat.id);
@@ -229,19 +231,9 @@
         catProds.forEach(p => { html += cardHtml(p); });
         html += '</div></div></div>';
 
-        if (idx === 0) {
-          const mid = bans.filter(b => b.tipo === 'middle');
-          if (mid.length) {
-            html += '<div class="section-wrap"><div class="section-title"><h2>DESTACADOS DE LA TEMPORADA</h2></div></div>';
-            mid.forEach(b => html += '<div class="banner-fixo" style="background-image:url(\'' + b.imagen_url + '\')"><div class="overlay"><h3>' + esc(b.titulo) + '</h3>' + (b.subtitulo ? '<p>' + esc(b.subtitulo) + '</p>' : '') + '</div></div>');
-          }
-        }
-        if (idx === Math.min(activeCats.length - 1, 2)) {
-          const bot = bans.filter(b => b.tipo === 'bottom');
-          if (bot.length) {
-            html += '<div class="section-wrap"><div class="section-title"><h2>COLECCIONES ESPECIALES</h2></div></div>';
-            bot.forEach(b => html += '<div class="banner-fixo" style="background-image:url(\'' + b.imagen_url + '\')"><div class="overlay"><h3>' + esc(b.titulo) + '</h3>' + (b.subtitulo ? '<p>' + esc(b.subtitulo) + '</p>' : '') + '</div></div>');
-          }
+        if (bannerIdx < interleaveBanners.length) {
+          const b = interleaveBanners[bannerIdx++];
+          html += '<div class="banner-fixo" style="background-image:url(\'' + b.imagen_url + '\')"><div class="overlay"><h3>' + esc(b.titulo) + '</h3>' + (b.subtitulo ? '<p>' + esc(b.subtitulo) + '</p>' : '') + '</div></div>';
         }
       });
 
