@@ -49,6 +49,8 @@
     .card-body { padding: 8px 10px 10px; }
     .card-body h3 { font-size: .78rem; font-weight: 600; color: #f1f5f9; margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .card-body .precio { font-size: .92rem; font-weight: 700; color: #10b981; }
+    .buy-btn { display: block; width: 100%; margin-top: 8px; padding: 7px; border-radius: 8px; border: none; background: #10b981; color: #fff; font-weight: 600; font-size: .78rem; text-align: center; text-decoration: none; transition: background .2s; cursor: pointer; }
+    .buy-btn:hover { background: #059669; }
 
     /* ── CARRUSEL ── */
     .carousel-wrap { position: relative; overflow: hidden; height: 280px; margin: 8px 16px; border-radius: 12px; }
@@ -267,7 +269,8 @@
 
     function cardHtml(p) {
       const img = p.imagen_url ? '<div class="card-img" style="background-image:url(\'' + esc(p.imagen_url) + '\');background-size:cover;background-position:center"></div>' : '<div class="card-img">Sin imagen</div>';
-      return '<a class="card" href="https://app.elguiaya.com/tienda" target="_blank" style="text-decoration:none;color:inherit">' + img + '<div class="card-body"><h3>' + esc(p.nombre) + '</h3><div class="precio">$' + Number(p.precio).toLocaleString('es-AR', { minimumFractionDigits: 2 }) + '</div></div></a>';
+      const href = 'https://app.elguiaya.com/tienda';
+      return '<div class="card"><a href="' + href + '" target="_blank" style="text-decoration:none;color:inherit">' + img + '</a><div class="card-body"><a href="' + href + '" target="_blank" style="text-decoration:none;color:inherit"><h3>' + esc(p.nombre) + '</h3><div class="precio">$' + Number(p.precio).toLocaleString('es-AR', { minimumFractionDigits: 2 }) + '</div></a><a href="' + href + '" target="_blank" class="buy-btn">Comprar</a></div></div>';
     }
 
     function onSearch(val) {
