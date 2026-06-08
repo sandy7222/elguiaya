@@ -257,7 +257,7 @@
       html += '<div class="cat-grid">';
       const iconMap = { 'Carpas': 'fa-campground', 'Reels': 'fa-hook', 'Reeles Frontales': 'fa-hook', 'Reeles Rotativos': 'fa-hook', 'Mesas y Sillas': 'fa-chair', 'Cañas': 'fa-fish', 'Señuelos': 'fa-worm', 'Pesca Deportiva': 'fa-fish', 'Camping': 'fa-campground', 'Náutica': 'fa-ship', 'Indumentaria': 'fa-tshirt' };
       cats.filter(c => prods.some(p => p.categoria_id === c.id)).slice(0, 8).forEach(c => {
-        html += '<div class="item" onclick="window.open(\'https://app.elguiaya.com/tienda\',\'_blank\')"><i class="fas ' + (iconMap[c.nombre] || 'fa-tag') + '"></i><span>' + esc(c.nombre) + '</span></div>';
+        html += '<a class="item" href="https://app.elguiaya.com/tienda" target="_blank" style="text-decoration:none;color:inherit"><i class="fas ' + (iconMap[c.nombre] || 'fa-tag') + '"></i><span>' + esc(c.nombre) + '</span></a>';
       });
       html += '</div>';
 
@@ -266,8 +266,8 @@
     }
 
     function cardHtml(p) {
-      const img = p.imagen_url ? '<div class="card-img" style="background-image:url(\'' + esc(p.imagen_url) + '\');background-size:cover;background-position:center" onclick="window.open(\'https://app.elguiaya.com/tienda\',\'_blank\')"></div>' : '<div class="card-img" onclick="window.open(\'https://app.elguiaya.com/tienda\',\'_blank\')">Sin imagen</div>';
-      return '<div class="card">' + img + '<div class="card-body" onclick="window.open(\'https://app.elguiaya.com/tienda\',\'_blank\')"><h3>' + esc(p.nombre) + '</h3><div class="precio">$' + Number(p.precio).toLocaleString('es-AR', { minimumFractionDigits: 2 }) + '</div></div></div>';
+      const img = p.imagen_url ? '<div class="card-img" style="background-image:url(\'' + esc(p.imagen_url) + '\');background-size:cover;background-position:center"></div>' : '<div class="card-img">Sin imagen</div>';
+      return '<a class="card" href="https://app.elguiaya.com/tienda" target="_blank" style="text-decoration:none;color:inherit">' + img + '<div class="card-body"><h3>' + esc(p.nombre) + '</h3><div class="precio">$' + Number(p.precio).toLocaleString('es-AR', { minimumFractionDigits: 2 }) + '</div></div></a>';
     }
 
     function onSearch(val) {
