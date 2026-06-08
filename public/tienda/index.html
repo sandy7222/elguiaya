@@ -8,7 +8,8 @@
   <style>
     *{margin:0;padding:0;box-sizing:border-box}
     body{font-family:system-ui,-apple-system,sans-serif;background:#0b1628;color:#e2e8f0;min-height:100vh;overflow-x:hidden}
-    
+    img{max-width:100%;display:block}
+
     .header{background:linear-gradient(135deg,#0b1628,#132244);border-bottom:1px solid #1a2d50;padding:12px 24px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;backdrop-filter:blur(12px)}
     .header h1{font-size:1.3rem;color:#10b981;font-weight:800;letter-spacing:-.5px}
     .header h1 span{color:#f59e0b}
@@ -20,30 +21,103 @@
     .marquee-inner span{padding:0 40px}
     @keyframes scrollMarquee{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
 
-    .hero{text-align:center;padding:24px 16px 16px;background:linear-gradient(180deg,#0b1628,#0f1d38)}
-    .hero h2{font-size:1.3rem;font-weight:700;color:#f1f5f9}
-    .hero h2 span{color:#10b981}
-    .hero p{color:#64748b;font-size:.85rem;margin-top:4px}
+    .search-wrap{max-width:600px;margin:14px auto;padding:0 16px}
+    .search-wrap input{width:100%;padding:11px 16px;border-radius:10px;border:1px solid #1a2d50;background:#0f1d38;color:#e2e8f0;font-size:.9rem;outline:none;transition:border .2s}
+    .search-wrap input:focus{border-color:#10b981}
+    .search-wrap input::placeholder{color:#475569}
 
-    .iframe-wrap{max-width:1200px;margin:0 auto;padding:0 12px 12px}
-    .iframe-wrap iframe{width:100%;height:calc(100vh - 200px);min-height:500px;border-radius:16px;border:1px solid #1a2d50;background:#0b1628;box-shadow:0 8px 32px -8px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.05)}
-    .iframe-loading{text-align:center;padding:80px 24px}
+    .action-bar{display:flex;align-items:center;gap:6px;padding:0 16px 12px;max-width:1200px;margin:0 auto;flex-wrap:wrap}
+    .action-bar .btn-icon{display:flex;align-items:center;gap:5px;padding:7px 12px;border-radius:8px;border:1px solid #1a2d50;background:#0f1d38;color:#94a3b8;cursor:pointer;font-size:.78rem;transition:all .2s}
+    .action-bar .btn-icon:hover{background:#10b981;color:#fff;border-color:#10b981}
+    .action-bar .btn-icon i{font-size:.9rem}
+
+    .tabs-wrap{padding:0 16px;max-width:1200px;margin:0 auto}
+    .tabs-hdr{display:flex;gap:4px;background:#0f1d38;border-radius:10px;padding:3px;width:fit-content}
+    .tabs-hdr button{padding:7px 18px;border-radius:8px;border:none;background:transparent;color:#94a3b8;cursor:pointer;font-size:.82rem;font-weight:500;transition:all .2s}
+    .tabs-hdr button.activo{background:#10b981;color:#fff}
+    .tabs-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;padding:14px 0 20px}
+    .tabs-grid .card{background:#0f1d38;border-radius:10px;overflow:hidden;border:1px solid #1a2d50;transition:transform .2s,box-shadow .2s;display:flex;flex-direction:column}
+    .tabs-grid .card:hover{transform:translateY(-3px);box-shadow:0 8px 20px -6px rgba(0,0,0,.5)}
+    .tabs-grid .card-img{width:100%;height:130px;object-fit:cover;background:#132244;display:flex;align-items:center;justify-content:center;color:#475569;font-size:.7rem}
+    .tabs-grid .card-body{padding:10px;flex:1;display:flex;flex-direction:column}
+    .tabs-grid .card-body h3{font-size:.82rem;font-weight:600;color:#f1f5f9;line-height:1.2}
+    .tabs-grid .card-body .precio{font-size:.95rem;font-weight:700;color:#10b981;margin-top:6px}
+    .tag-blog{display:inline-block;padding:2px 7px;border-radius:999px;background:#065f46;color:#6ee7b7;font-size:.65rem;font-weight:600;margin-bottom:6px;width:fit-content}
+
+    .section{padding:0 16px;max-width:1200px;margin:0 auto}
+    .section-title{font-size:1.1rem;font-weight:700;color:#f1f5f9;padding:24px 0 12px;display:flex;align-items:center;gap:8px}
+    .section-title span{color:#10b981}
+    .section-title i{color:#f59e0b;font-size:1rem}
+
+    .carousel-wrap{position:relative;overflow:hidden;height:320px;border-radius:14px;margin:0 auto;max-width:1200px}
+    .carousel-slide{position:absolute;inset:0;opacity:0;transition:opacity .6s ease;background-size:cover;background-position:center;display:flex;align-items:center;padding:36px}
+    .carousel-slide.activo{opacity:1}
+    .carousel-overlay{background:linear-gradient(90deg,rgba(0,0,0,.7),transparent);padding:24px 32px;border-radius:12px;max-width:450px}
+    .carousel-overlay h2{font-size:1.4rem;font-weight:700;color:#fff;margin-bottom:4px}
+    .carousel-overlay p{font-size:.9rem;color:#d1d5db}
+    .carousel-dots{position:absolute;bottom:14px;left:50%;transform:translateX(-50%);display:flex;gap:8px}
+    .carousel-dots button{width:10px;height:10px;border-radius:50%;border:2px solid rgba(255,255,255,.4);background:transparent;cursor:pointer;transition:all .3s}
+    .carousel-dots button.activo{background:#10b981;border-color:#10b981}
+
+    .cat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px;padding:0 0 20px;max-width:1200px;margin:0 auto}
+    .cat-card{background:#0f1d38;border-radius:10px;padding:18px 10px;text-align:center;border:1px solid #1a2d50;cursor:pointer;transition:all .2s}
+    .cat-card:hover{background:#10b981;border-color:#10b981;transform:translateY(-2px)}
+    .cat-card i{font-size:1.6rem;color:#10b981;margin-bottom:6px;display:block}
+    .cat-card:hover i{color:#fff}
+    .cat-card span{font-size:.78rem;color:#e2e8f0;font-weight:500}
+
+    .banners-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;padding:0 0 20px;max-width:1200px;margin:0 auto}
+    .banner-card{border-radius:12px;overflow:hidden;position:relative;height:170px;background-size:cover;background-position:center;cursor:pointer;transition:transform .3s}
+    .banner-card:hover{transform:scale(1.02)}
+    .banner-card .overlay{position:absolute;inset:0;background:linear-gradient(135deg,rgba(0,0,0,.55),transparent);padding:18px;display:flex;flex-direction:column;justify-content:flex-end}
+    .banner-card .overlay h3{font-size:1.05rem;font-weight:700;color:#fff}
+    .banner-card .overlay p{font-size:.82rem;color:#d1d5db;margin-top:3px}
+
+    .prod-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;padding:0 0 20px;max-width:1200px;margin:0 auto}
+    .prod-grid .card{background:#0f1d38;border-radius:12px;overflow:hidden;border:1px solid #1a2d50;transition:transform .2s,box-shadow .2s;display:flex;flex-direction:column}
+    .prod-grid .card:hover{transform:translateY(-4px);box-shadow:0 10px 24px -8px rgba(0,0,0,.5)}
+    .prod-grid .card-img{width:100%;height:160px;object-fit:cover;background:#132244;display:flex;align-items:center;justify-content:center;color:#475569;font-size:.7rem}
+    .prod-grid .card-body{padding:10px;flex:1;display:flex;flex-direction:column}
+    .prod-grid .card-body h3{font-size:.85rem;font-weight:600;color:#f1f5f9;margin-bottom:2px}
+    .prod-grid .card-body .precio{font-size:1.05rem;font-weight:700;color:#10b981;margin-top:auto;padding-top:6px}
+    .badge{display:inline-block;padding:2px 7px;border-radius:999px;font-size:.62rem;font-weight:600;margin-bottom:5px;width:fit-content}
+    .badge-stock{background:#065f46;color:#6ee7b7}
+    .badge-agotado{background:#7f1d1d;color:#fca5a5}
+
+    .loading{text-align:center;padding:80px 24px}
     .spinner{width:32px;height:32px;border:3px solid #1a2d50;border-top-color:#10b981;border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 12px}
     @keyframes spin{to{transform:rotate(360deg)}}
-    .iframe-loading p{color:#64748b;font-size:.85rem}
+    .loading p{color:#64748b;font-size:.85rem}
+    .error{text-align:center;padding:60px 24px;color:#ef4444;font-size:.9rem}
+    .empty-msg{color:#475569;grid-column:1/-1;text-align:center;padding:24px}
 
-    .footer{background:#0b1628;border-top:1px solid #1a2d50;padding:24px 24px 16px}
-    .footer-inner{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:20px}
+    .footer{background:#0b1628;border-top:1px solid #1a2d50;padding:28px 16px 16px;margin-top:24px}
+    .footer-inner{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:24px}
     .footer-col h4{color:#f1f5f9;font-size:.85rem;font-weight:600;margin-bottom:8px}
     .footer-col p,.footer-col a{color:#64748b;font-size:.78rem;line-height:1.7;text-decoration:none;display:block}
     .footer-col a:hover{color:#10b981}
-    .footer-bottom{text-align:center;color:#475569;font-size:.75rem;border-top:1px solid #1a2d50;margin-top:20px;padding-top:14px}
+    .footer-bottom{text-align:center;color:#475569;font-size:.75rem;border-top:1px solid #1a2d50;margin-top:24px;padding-top:14px}
 
     @media(max-width:640px){
       .header{padding:10px 12px}.header h1{font-size:1.1rem}
-      .hero h2{font-size:1.1rem}
-      .iframe-wrap{padding:0 8px 8px}
-      .iframe-wrap iframe{height:calc(100vh - 180px);min-height:400px;border-radius:12px}
+      .marquee-wrap{padding:6px 0}.marquee-inner{font-size:.75rem}
+      .tabs-grid{grid-template-columns:repeat(2,1fr);gap:8px}
+      .prod-grid{grid-template-columns:repeat(2,1fr);gap:8px}
+      .prod-grid .card-img{height:130px}
+      .cat-grid{grid-template-columns:repeat(3,1fr);gap:6px}
+      .cat-card{padding:14px 6px}.cat-card i{font-size:1.3rem}
+      .carousel-wrap{height:210px;border-radius:10px}
+      .carousel-slide{padding:20px}
+      .carousel-overlay{padding:14px 18px}
+      .carousel-overlay h2{font-size:1.1rem}
+      .banners-grid{grid-template-columns:1fr}
+      .banner-card{height:140px}
+      .section-title{font-size:1rem;padding:18px 0 10px}
+      .section{padding:0 10px}
+      .search-wrap{padding:0 10px}
+      .action-bar{padding:0 10px 10px;gap:5px}
+      .action-bar .btn-icon{padding:6px 10px;font-size:.75rem}
+      .tabs-wrap{padding:0 10px}
     }
   </style>
 </head>
@@ -55,47 +129,212 @@
 
   <div id="marquee" class="marquee-wrap" style="display:none"></div>
 
-  <section class="hero">
-    <h2>Bienvenido a la <span>Tienda</span></h2>
-    <p>Todo el catálogo de pesca, camping y náutica con sus funcionalidades completas.</p>
-  </section>
+  <div class="search-wrap">
+    <input type="text" id="buscador" placeholder="Buscar productos..." oninput="filtrarBusqueda(this.value)">
+  </div>
 
-  <div id="loader" class="iframe-loading">
+  <div class="action-bar">
+    <button class="btn-icon" onclick="window.open('https://app.elguiaya.com/tienda','_blank')"><i class="fas fa-shopping-cart"></i> Carrito</button>
+    <button class="btn-icon" onclick="window.open('https://app.elguiaya.com/tienda','_blank')"><i class="fas fa-heart"></i> Favoritos</button>
+    <button class="btn-icon" onclick="window.open('https://app.elguiaya.com/tienda','_blank')"><i class="fas fa-user"></i> Ingresar</button>
+    <button class="btn-icon" onclick="window.open('https://app.elguiaya.com/tienda','_blank')"><i class="fas fa-external-link-alt"></i> Tienda completa</button>
+  </div>
+
+  <div id="tabs-section" class="tabs-wrap" style="display:none">
+    <div class="tabs-hdr">
+      <button class="activo" onclick="cambiarTab('productos')">Productos</button>
+      <button onclick="cambiarTab('blog')">Blog</button>
+    </div>
+    <div id="tab-content" class="tabs-grid"></div>
+  </div>
+
+  <div id="carousel" class="carousel-wrap" style="display:none"></div>
+
+  <div class="section">
+    <h2 class="section-title"><i class="fas fa-th-large"></i> Explora por <span>Categorías</span></h2>
+  </div>
+  <div id="cat-grid" class="cat-grid"></div>
+
+  <div id="banners-mid" class="banners-grid section" style="display:none"></div>
+
+  <div class="section">
+    <h2 class="section-title"><i class="fas fa-fish"></i> Accesorios de <span>Pesca</span></h2>
+  </div>
+  <div id="prods-pesca" class="prod-grid"></div>
+
+  <div id="banners-bottom" class="banners-grid section" style="display:none"></div>
+
+  <div class="section">
+    <h2 class="section-title"><i class="fas fa-star"></i> Colecciones <span>Especiales</span></h2>
+  </div>
+  <div id="colecciones" class="cat-grid"></div>
+
+  <div class="section">
+    <h2 class="section-title"><i class="fas fa-clock"></i> Novedades y <span>Nuevas Colecciones</span></h2>
+  </div>
+  <div id="novedades" class="prod-grid"></div>
+
+  <div id="loading" class="loading">
     <div class="spinner"></div>
     <p>Cargando tienda...</p>
   </div>
-
-  <div class="iframe-wrap" style="display:none">
-    <iframe id="tienda-iframe" src="https://app.elguiaya.com/tienda" loading="lazy" allow="payment *" sandbox="allow-scripts allow-same-origin allow-forms allow-popups"></iframe>
+  <div id="error" class="error" style="display:none">
+    <p><i class="fas fa-exclamation-triangle"></i> Error al cargar la tienda. <a href="/tienda" style="color:#10b981">Intentar de nuevo</a></p>
   </div>
 
   <footer class="footer">
     <div class="footer-inner">
-      <div class="footer-col"><h4>El Guía Ya</h4><p>Plataforma náutica argentina</p></div>
-      <div class="footer-col"><h4>Enlaces</h4><a href="/">Inicio</a><a href="https://app.elguiaya.com/tienda" target="_blank">Abrir en nueva pestaña</a></div>
+      <div class="footer-col"><h4>El Guía Ya</h4><p>Plataforma náutica argentina para la vinculación segura de pescadores y capitanes.</p></div>
+      <div class="footer-col"><h4>Tienda</h4><a href="https://app.elguiaya.com/tienda" target="_blank">Tienda completa</a><a href="/tienda">Inicio</a></div>
+      <div class="footer-col"><h4>Ayuda</h4><a href="/">Inicio</a><a href="/#how-it-works">Cómo funciona</a></div>
       <div class="footer-col"><h4>Contacto</h4><p>Buenos Aires, Argentina</p><p>info@elguiaya.com</p></div>
     </div>
-    <div class="footer-bottom">© 2026 El Guía Ya</div>
+    <div class="footer-bottom">© 2026 El Guía Ya — Todos los derechos reservados</div>
   </footer>
 
   <script>
-    async function cargar(){
+    const SB_URL='https://ymgsxwfwntbqvguvbhoa.supabase.co', SB_KEY='sb_publishable_VWBnZN0tTUA_8zeULPU8Jg_hmsJauq6';
+    const H={'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY,'Accept':'application/json'};
+
+    async function api(t,o){
+      let u=SB_URL+'/rest/v1/'+t+'?select=*';
+      if(o&&o.filtros)o.filtros.forEach(f=>{u+='&'+f.col+'.'+f.op+'='+encodeURIComponent(f.val)});
+      if(o&&o.order)u+='&order='+o.order.col+(o.order.asc?'.asc':'.desc');
+      if(o&&o.limit)u+='&limit='+o.limit;
+      const r=await fetch(u,{headers:H});
+      if(!r.ok)throw new Error(await r.text());
+      return r.json();
+    }
+
+    let productos=[], categorias=[], banners=[], blogs=[], tab='productos', busqueda='';
+
+    async function iniciar(){
+      document.getElementById('loading').style.display='block';
       try{
-        const hdrs={'apikey':'sb_publishable_VWBnZN0tTUA_8zeULPU8Jg_hmsJauq6','Authorization':'Bearer sb_publishable_VWBnZN0tTUA_8zeULPU8Jg_hmsJauq6'};
-        const r=await fetch('https://ymgsxwfwntbqvguvbhoa.supabase.co/rest/v1/banners_promo?select=titulo&tipo=eq.marquee&activo=eq.true&limit=5',{headers:hdrs});
-        if(r.ok){
-          const d=await r.json();
-          if(d.length){
-            const c=document.getElementById('marquee');c.style.display='block';
-            c.innerHTML='<div class="marquee-inner">'+d.map(x=>'<span>✦ '+esc(x.titulo)+'</span>').join('')+d.map(x=>'<span>✦ '+esc(x.titulo)+'</span>').join('')+'</div>';
-          }
-        }
-      }catch(e){}
-      document.getElementById('loader').style.display='none';
-      document.querySelector('.iframe-wrap').style.display='block';
+        [productos,categorias,banners,blogs]=await Promise.all([
+          api('productos',{filtros:[{col:'activo',op:'eq',val:true}],order:{col:'created_at',asc:false}}),
+          api('categorias',{filtros:[{col:'activa',op:'eq',val:true}],order:{col:'nombre',asc:true}}),
+          api('banners_promo',{filtros:[{col:'activo',op:'eq',val:true}],order:{col:'orden',asc:true}}),
+          api('blog_articulos',{filtros:[{col:'activo',op:'eq',val:true}],order:{col:'created_at',asc:false}}),
+        ]);
+        document.getElementById('loading').style.display='none';
+        renderMarquee();
+        document.getElementById('tabs-section').style.display='block';
+        renderTabs();
+        renderCarousel();
+        renderCategorias();
+        renderBanners('mid');
+        renderBanners('bottom');
+        renderPesca();
+        renderColecciones();
+        renderNovedades();
+      }catch(e){
+        console.error(e);
+        document.getElementById('loading').style.display='none';
+        document.getElementById('error').style.display='block';
+      }
+    }
+
+    function renderMarquee(){
+      const m=banners.filter(b=>b.tipo==='marquee');
+      if(!m.length)return;
+      document.getElementById('marquee').style.display='block';
+      const items=m.map(x=>'<span>✦ '+esc(x.titulo)+'</span>').join('');
+      document.getElementById('marquee').innerHTML='<div class="marquee-inner">'+items+items+'</div>';
+    }
+
+    function renderTabs(){tab==='productos'?renderTabProductos():renderTabBlog()}
+    function cambiarTab(t){tab=t;document.querySelectorAll('.tabs-hdr button').forEach(b=>b.classList.remove('activo'));document.querySelectorAll('.tabs-hdr button')[t==='productos'?0:1].classList.add('activo');renderTabs()}
+
+    function renderTabProductos(){
+      const c=document.getElementById('tab-content');
+      const items=productos.slice(0,4);
+      if(!items.length){c.innerHTML='<p class="empty-msg">Sin productos</p>';return}
+      c.innerHTML=items.map(p=>tarjetaMini(p)).join('');
+    }
+
+    function renderTabBlog(){
+      const c=document.getElementById('tab-content');
+      const items=blogs.slice(0,4);
+      if(!items.length){c.innerHTML='<p class="empty-msg">Sin artículos</p>';return}
+      c.innerHTML=items.map(b=>{
+        const img=b.imagen_portada?'<img class="card-img" src="'+esc(b.imagen_portada)+'" alt="'+esc(b.titulo)+'" loading="lazy" onerror="this.outerHTML=\'<div class=card-img>Blog</div>\'">':'<div class="card-img">Blog</div>';
+        return '<div class="card">'+img+'<div class="card-body"><span class="tag-blog">'+esc(b.categoria||'Artículo')+'</span><h3>'+esc(b.titulo)+'</h3></div></div>'
+      }).join('');
+    }
+
+    function renderCarousel(){
+      const h=banners.filter(b=>b.tipo==='hero');
+      if(!h.length)return;
+      const c=document.getElementById('carousel');c.style.display='block';
+      c.innerHTML=h.map((b,i)=>'<div class="carousel-slide'+(i===0?' activo':'')+'" style="background-image:url(\''+b.imagen_url+'\')"><div class="carousel-overlay"><h2>'+esc(b.titulo)+'</h2>'+(b.subtitulo?'<p>'+esc(b.subtitulo)+'</p>':'')+'</div></div>').join('')+
+        '<div class="carousel-dots">'+h.map((_,i)=>'<button class="'+(i===0?'activo':'')+'" onclick="irSlide('+i+')"></button>').join('')+'</div>';
+      if(h.length>1)setInterval(()=>{
+        const s=document.querySelectorAll('.carousel-slide'),d=document.querySelectorAll('.carousel-dots button');
+        if(!s.length)return;
+        let idx=Array.from(s).findIndex(x=>x.classList.contains('activo'));const n=(idx+1)%s.length;
+        s.forEach(x=>x.classList.remove('activo'));d.forEach(x=>x.classList.remove('activo'));
+        s[n].classList.add('activo');d[n].classList.add('activo');
+      },5000);
+    }
+    function irSlide(n){const cl=document.getElementById('carousel');if(!cl)return;const s=cl.querySelectorAll('.carousel-slide'),d=cl.querySelectorAll('.carousel-dots button');s.forEach(x=>x.classList.remove('activo'));d.forEach(x=>x.classList.remove('activo'));s[n].classList.add('activo');d[n].classList.add('activo')}
+
+    function renderCategorias(){
+      const c=document.getElementById('cat-grid');
+      if(!categorias.length){c.innerHTML='<p class="empty-msg">Sin categorías</p>';return}
+      const iconos={'Pesca Deportiva':'fa-fish','Camping':'fa-campground','Náutica':'fa-ship','Indumentaria':'fa-tshirt','Electrónica':'fa-microchip','Señuelos':'fa-hook','Accesorios':'fa-toolbox','Carnadas':'fa-worm'};
+      c.innerHTML=categorias.map(cat=>'<div class="cat-card" onclick="window.open(\'https://app.elguiaya.com/tienda\',\'_blank\')"><i class="fas '+(iconos[cat.nombre]||'fa-tag')+'"></i><span>'+esc(cat.nombre)+'</span></div>').join('');
+    }
+
+    function renderBanners(t){
+      const items=banners.filter(b=>b.tipo===t);
+      if(!items.length)return;
+      const c=document.getElementById('banners-'+(t==='mid'?'mid':'bottom'));c.style.display='grid';
+      c.innerHTML=items.map(b=>'<div class="banner-card" style="background-image:url(\''+b.imagen_url+'\')"><div class="overlay"><h3>'+esc(b.titulo)+'</h3>'+(b.subtitulo?'<p>'+esc(b.subtitulo)+'</p>':'')+'</div></div>').join('');
+    }
+
+    function renderPesca(){
+      const c=document.getElementById('prods-pesca');
+      const items=productos.filter(p=>p.rubro==='pesca').slice(0,4);
+      if(!items.length){c.innerHTML='<p class="empty-msg">Próximamente</p>';return}
+      c.innerHTML=items.map(p=>tarjeta(p)).join('');
+    }
+
+    function renderNovedades(){
+      const c=document.getElementById('novedades');
+      const items=productos.slice(0,4);
+      if(!items.length){c.innerHTML='<p class="empty-msg">Próximamente</p>';return}
+      c.innerHTML=items.map(p=>tarjeta(p)).join('');
+    }
+
+    function renderColecciones(){
+      const c=document.getElementById('colecciones');
+      const cats=categorias.filter(cat=>productos.some(p=>p.categoria_id===cat.id)).slice(0,6);
+      if(!cats.length){c.innerHTML='<p class="empty-msg">Próximamente</p>';return}
+      const iconos={'Pesca Deportiva':'fa-fish','Camping':'fa-campground','Náutica':'fa-ship','Indumentaria':'fa-tshirt'};
+      c.innerHTML=cats.map(cat=>'<div class="cat-card" onclick="window.open(\'https://app.elguiaya.com/tienda\',\'_blank\')"><i class="fas '+(iconos[cat.nombre]||'fa-tag')+'"></i><span>'+esc(cat.nombre)+'</span></div>').join('');
+    }
+
+    function filtrarBusqueda(val){busqueda=val.toLowerCase().trim();renderProductosFiltrados()}
+    function renderProductosFiltrados(){
+      const c=document.getElementById('tab-content');
+      if(!busqueda){renderTabs();return}
+      const items=productos.filter(p=>(p.nombre||'').toLowerCase().includes(busqueda)||(p.descripcion||'').toLowerCase().includes(busqueda)).slice(0,8);
+      if(!items.length){c.innerHTML='<p class="empty-msg">Sin resultados para "'+esc(busqueda)+'"</p>';return}
+      c.innerHTML=items.map(p=>tarjetaMini(p)).join('');
+    }
+
+    function tarjeta(p){
+      const img=p.imagen_url?'<img class="card-img" src="'+esc(p.imagen_url)+'" alt="'+esc(p.nombre)+'" loading="lazy" onerror="this.outerHTML=\'<div class=card-img>Sin imagen</div>\'">':'<div class="card-img">Sin imagen</div>';
+      const stock=(p.stock||0)>0;
+      return '<div class="card">'+img+'<div class="card-body"><span class="badge '+(stock?'badge-stock':'badge-agotado')+'">'+(stock?'En stock':'Agotado')+'</span><h3>'+esc(p.nombre)+'</h3><div class="precio">$'+Number(p.precio).toLocaleString('es-AR',{minimumFractionDigits:2})+'</div></div></div>';
+    }
+    function tarjetaMini(p){
+      const img=p.imagen_url?'<img class="card-img" src="'+esc(p.imagen_url)+'" alt="'+esc(p.nombre)+'" loading="lazy" onerror="this.outerHTML=\'<div class=card-img>Sin imagen</div>\'">':'<div class="card-img">Sin imagen</div>';
+      return '<div class="card">'+img+'<div class="card-body"><h3>'+esc(p.nombre)+'</h3><div class="precio">$'+Number(p.precio).toLocaleString('es-AR',{minimumFractionDigits:2})+'</div></div></div>';
     }
     function esc(t){if(!t)return'';const d=document.createElement('div');d.textContent=t;return d.innerHTML}
-    cargar();
+    iniciar();
   </script>
 </body>
 </html>
