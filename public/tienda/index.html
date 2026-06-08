@@ -19,8 +19,8 @@
     .header-actions a { width: 36px; height: 36px; border-radius: 50%; border: 1px solid #1a2d50; background: #0f1d38; display: flex; align-items: center; justify-content: center; color: #94a3b8; text-decoration: none; transition: all .2s; font-size: .9rem; }
     .header-actions a:hover { background: #10b981; color: #fff; border-color: #10b981; }
 
-    .marquee-bar { overflow: hidden; background: #065f46; padding: 8px 0; white-space: nowrap; }
-    .marquee-bar .inner { display: inline-block; animation: marq 25s linear infinite; font-size: .78rem; color: #a7f3d0; font-weight: 600; letter-spacing: .5px; }
+    .marquee-bar { overflow: hidden; padding: 8px 0; white-space: nowrap; }
+    .marquee-bar .inner { display: inline-block; animation: marq 25s linear infinite; font-size: .78rem; font-weight: 600; letter-spacing: .5px; }
     .marquee-bar .inner span { padding: 0 40px; }
     @keyframes marq { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
 
@@ -386,11 +386,25 @@
 
       let html = '';
 
-      const marquee = bans.filter(b => b.tipo === 'marquee');
-      if (marquee.length) {
-        document.getElementById('marquee').style.display = 'block';
-        const items = marquee.map(m => '<span>✦ ' + esc(m.titulo) + '</span>').join('');
-        document.getElementById('marquee').innerHTML = '<div class="inner">' + items + items + '</div>';
+      const marqueeBans = bans.filter(b => b.tipo === 'marquee');
+      if (marqueeBans.length) {
+        const m = marqueeBans[0];
+        const el = document.getElementById('marquee');
+        el.style.display = 'block';
+        el.style.background = m.background_color || '#065f46';
+
+        const velocidad = Number(m.velocidad) || 5;
+        const duration = Math.max(5, Math.min(60, 100 / velocidad));
+        const txtColor = m.text_color || '#a7f3d0';
+
+        let innerHtml = '';
+        if (m.imagen_url) {
+          innerHtml += '<img src="' + esc(m.imagen_url) + '" style="height:22px;vertical-align:middle;margin:0 16px;display:inline-block">';
+        }
+        const items = marqueeBans.map(b => '<span style="color:' + txtColor + '">✦ ' + esc(b.titulo) + '</span>').join('');
+        innerHtml += items;
+
+        el.innerHTML = '<div class="inner" style="animation-duration:' + duration + 's;color:' + txtColor + '">' + innerHtml + innerHtml + '</div>';
       }
 
       const hero = bans.filter(b => b.tipo === 'hero');
