@@ -55,7 +55,8 @@
     .carousel-dots button { width: 8px; height: 8px; border-radius: 50%; border: 2px solid rgba(255,255,255,.4); background: transparent; cursor: pointer; transition: all .3s; padding: 0; }
     .carousel-dots button.activo { background: #10b981; border-color: #10b981; }
 
-    .banner-fixo { margin: 0 16px 16px; border-radius: 12px; overflow: hidden; height: 160px; background-size: cover; background-position: center; position: relative; cursor: pointer; transition: transform .3s; }
+    .banner-fixo { margin: 16px auto; border-radius: 12px; overflow: hidden; height: 160px; max-width: 1200px; background-size: cover; background-position: center; position: relative; cursor: pointer; transition: transform .3s; }
+    @media (min-width: 768px) { .banner-fixo { height: 220px; } }
     .banner-fixo:hover { transform: scale(1.01); }
     .banner-fixo .overlay { position: absolute; inset: 0; background: linear-gradient(135deg, rgba(0,0,0,.5), transparent); padding: 20px; display: flex; flex-direction: column; justify-content: flex-end; }
     .banner-fixo .overlay h3 { font-size: 1.1rem; font-weight: 700; color: #fff; }
@@ -458,7 +459,7 @@
 
     function cardHtml(p) {
       const img = p.imagen_url ? '<div class="card-img" style="background-image:url(\'' + esc(p.imagen_url) + '\');background-size:cover;background-position:center"></div>' : '<div class="card-img">Sin imagen</div>';
-      return '<div class="card" onclick="abrirProducto(\'' + p.id + '\')">' + img + '<div class="card-body"><h3>' + esc(p.nombre) + '</h3><div class="precio">$' + Number(p.precio).toLocaleString('es-AR', { minimumFractionDigits: 2 }) + '</div><button class="buy-btn">Comprar</button></div></div>';
+      return '<div class="card" onclick="abrirProducto(\'' + p.id + '\')">' + img + '<div class="card-body"><h3>' + esc(p.nombre) + '</h3><div class="precio">$' + Number(p.precio).toLocaleString('es-AR', { minimumFractionDigits: 2 }) + '</div><a class="buy-btn" href="https://app.elguiaya.com/producto/' + p.id + '" target="_blank" onclick="event.stopPropagation()">Comprar</a></div></div>';
     }
 
     let galeriaActual = 0, galeriaImgs = [];
