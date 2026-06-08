@@ -107,6 +107,35 @@
     .modal-body .btn-cerrar { display: block; margin-top: 10px; padding: 10px; border-radius: 10px; border: 1px solid #1a2d50; background: transparent; color: #64748b; font-size: .85rem; text-align: center; cursor: pointer; transition: all .2s; width: 100%; }
     .modal-body .btn-cerrar:hover { color: #f1f5f9; border-color: #475569; }
 
+    /* Institutional modals */
+    .inst-modal { max-width: 640px; }
+    .inst-modal .modal-header { display: flex; align-items: center; gap: 10px; padding: 20px; border-bottom: 1px solid #1a2d50; position: sticky; top: 0; background: #0f1d38; z-index: 1; }
+    .inst-modal .modal-header .icon { width: 32px; height: 32px; border-radius: 50%; background: #10b98120; display: flex; align-items: center; justify-content: center; color: #10b981; font-size: .9rem; }
+    .inst-modal .modal-header h2 { font-size: 1rem; font-weight: 700; color: #f1f5f9; letter-spacing: .5px; flex: 1; }
+    .inst-modal .modal-header .close-btn { background: none; border: none; color: #64748b; font-size: 1.2rem; cursor: pointer; padding: 4px; }
+    .inst-modal .modal-header .close-btn:hover { color: #f1f5f9; }
+    .inst-modal .modal-content { padding: 20px; }
+    .inst-modal .motto { text-align: center; color: #10b981; font-style: italic; font-size: .85rem; font-weight: 600; margin-bottom: 16px; }
+    .inst-modal .section-title { color: #10b981; font-size: .75rem; font-weight: 700; letter-spacing: .5px; margin: 16px 0 6px; }
+    .inst-modal p { color: #cbd5e1; font-size: .82rem; line-height: 1.7; margin-bottom: 8px; }
+    .inst-modal .signature { display: flex; justify-content: space-between; align-items: flex-end; margin-top: 16px; padding-top: 16px; border-top: 1px solid #1a2d50; }
+    .inst-modal .signature .name { color: #f1f5f9; font-weight: 700; font-size: .85rem; }
+    .inst-modal .signature .title { color: #10b981; font-size: .75rem; }
+    .inst-modal .btn-ok { display: block; width: 100%; padding: 12px; border-radius: 12px; border: none; background: #10b981; color: #000; font-weight: 700; font-size: .9rem; cursor: pointer; margin-top: 16px; transition: background .2s; }
+    .inst-modal .btn-ok:hover { background: #059669; }
+    .inst-modal .form-group { margin-bottom: 12px; }
+    .inst-modal .form-group label { display: block; color: #94a3b8; font-size: .72rem; font-weight: 600; margin-bottom: 4px; }
+    .inst-modal .form-group input, .inst-modal .form-group select { width: 100%; padding: 10px 12px; border-radius: 8px; border: 1px solid #1a2d50; background: #0b1628; color: #e2e8f0; font-size: .85rem; outline: none; }
+    .inst-modal .form-group input:focus, .inst-modal .form-group select:focus { border-color: #10b981; }
+    .inst-modal .form-group select option { background: #0b1628; color: #e2e8f0; }
+    .inst-modal .policy-item { margin-bottom: 14px; }
+    .inst-modal .policy-item h4 { color: #10b981; font-size: .8rem; font-weight: 700; margin-bottom: 4px; }
+    .inst-modal .policy-item p { color: #cbd5e1; font-size: .8rem; line-height: 1.5; }
+
+    .footer-link { display: flex; align-items: center; gap: 12px; padding: 12px 0; color: #94a3b8; text-decoration: none; font-size: .85rem; transition: color .2s; cursor: pointer; border: none; background: none; width: 100%; text-align: left; }
+    .footer-link:hover { color: #10b981; }
+    .footer-link i { width: 20px; text-align: center; font-size: .9rem; }
+
     .loading { text-align: center; padding: 80px 16px; }
     .spinner { width: 32px; height: 32px; border: 3px solid #1a2d50; border-top-color: #10b981; border-radius: 50%; animation: spin .8s linear infinite; margin: 0 auto 10px; }
     @keyframes spin { to { transform: rotate(360deg); } }
@@ -181,14 +210,136 @@
     </div>
   </div>
 
+  <!-- Modal Quiénes Somos -->
+  <div class="modal-overlay" id="modal-quienes-somos">
+    <div class="modal inst-modal">
+      <div class="modal-header"><div class="icon"><i class="fas fa-info-circle"></i></div><h2>QUIÉNES SOMOS</h2><button class="close-btn" onclick="cerrarModalInst('quienes-somos')"><i class="fas fa-times"></i></button></div>
+      <div class="modal-content">
+        <div class="motto">"Nacidos en el río, impulsados por la tecnología, guiados por la pasión"</div>
+        <div class="section-title">CÓMO NACIMOS</div>
+        <p>CapitanYA no nació en una oficina fría; nació en el rumor del agua, en el amanecer fresco de un muelle paranaense y en la mirada atenta del guía que conoce el río como la palma de su mano. Nacimos de una necesidad imperiosa: la de unir el mundo tradicional del río y la pesca deportiva con la velocidad y seguridad del siglo XXI.</p>
+        <p>Vimos a capitanes excepcionales batallando con reservas informales por chat, calendarios perdidos en papeles húmedos y comisiones injustas. Vimos a pescadores apasionados buscando aventuras a ciegas, sin saber si la embarcación contaba con las habilitaciones correspondientes o los seguros de navegación al día.</p>
+        <p>Con esa chispa en mente, nos sentamos a escribir las primeras líneas de código. Cada pantalla, cada botón de reserva, cada geofence y cada comisión de referidos fue forjada a mano con un solo norte: devolverle el protagonismo al Capitán y darle la máxima seguridad al Pescador.</p>
+        <div class="section-title">NUESTRA MISIÓN</div>
+        <p>Nuestra misión es democratizar, profesionalizar y simplificar la experiencia náutica y deportiva en la Argentina. Conectamos en tiempo real a pescadores exigentes con capitanes y guías profesionales calificados, garantizando transacciones seguras, transparencia geográfica, y equipamiento de primer nivel a través de nuestra tienda oficial. Existimos para que los guías vivan con orgullo y prosperidad de su vocación, y para que cada salida al agua sea una aventura inolvidable libre de preocupaciones.</p>
+        <div class="section-title">NUESTRA VISIÓN</div>
+        <p>Miramos el horizonte y vemos a CapitanYA como la plataforma náutica y de turismo aventura líder de América Latina. Nos dirigimos hacia un futuro donde la tecnología de geolocalización, la inteligencia artificial en predicciones de pesca y la sustentabilidad ecológica converjan en una sola aplicación. Queremos ser el guardián de la seguridad en el agua, el motor que impulse las economías regionales costeras y el punto de encuentro definitivo de la gran comunidad de amantes de la naturaleza.</p>
+        <div class="signature"><div><div class="name">Sebastián</div><div class="title">Fundador & CEO</div></div></div>
+        <button class="btn-ok" onclick="cerrarModalInst('quienes-somos')">¡A NAVEGAR!</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Trabajá con Nosotros -->
+  <div class="modal-overlay" id="modal-trabaja-nosotros">
+    <div class="modal inst-modal">
+      <div class="modal-header"><div class="icon"><i class="fas fa-briefcase"></i></div><h2>FORMÁ PARTE DE LA FLOTA</h2><button class="close-btn" onclick="cerrarModalInst('trabaja-nosotros')"><i class="fas fa-times"></i></button></div>
+      <div class="modal-content">
+        <div class="motto">"El Futuro de la Navegación te espera"</div>
+        <p>Buscamos personas apasionadas, con espíritu emprendedor y respeto por la naturaleza. Si querés formar parte de la flota de El Guía Ya / CapitanYA, envianos tus datos y nos contactaremos.</p>
+        <form id="form-postulacion" onsubmit="enviarPostulacion(event)">
+          <div class="form-group"><label>Nombre Completo</label><input type="text" id="post-nombre" required></div>
+          <div class="form-group"><label>Email de Contacto</label><input type="email" id="post-email" required></div>
+          <div class="form-group"><label>Teléfono / WhatsApp</label><input type="tel" id="post-telefono" required></div>
+          <div class="form-group"><label>Área de Interés</label><select id="post-area"><option>Promotor de Ventas</option><option>Guía / Capitán</option><option>Logística y Operaciones</option><option>Administración</option><option>Tecnología y Diseño</option></select></div>
+          <button type="submit" class="btn-ok" id="btn-postular"><i class="fas fa-paper-plane"></i> POSTULARME</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Seguridad y Privacidad -->
+  <div class="modal-overlay" id="modal-seguridad">
+    <div class="modal inst-modal">
+      <div class="modal-header"><div class="icon"><i class="fas fa-shield-alt"></i></div><h2>SEGURIDAD Y PRIVACIDAD</h2><button class="close-btn" onclick="cerrarModalInst('seguridad')"><i class="fas fa-times"></i></button></div>
+      <div class="modal-content">
+        <div class="motto">"En CapitánYA, protegemos los datos de la comunidad de pescadores y capitanes con la misma firmeza con la que navegamos el río"</div>
+        <p>Esta política detalla cómo cuidamos tu información en nuestra web y plataforma de control:</p>
+        <div class="policy-item"><h4>Protección en la Tienda</h4><p>Los datos que ingresás para tus compras (nombre, teléfono y dirección de entrega) se utilizan únicamente para procesar el pedido y coordinar el despacho de tus equipos de camping o pesca.</p></div>
+        <div class="policy-item"><h4>Pagos Blindados</h4><p>CapitánYA no almacena, no ve, ni tiene acceso a tus datos de tarjetas de crédito o cuentas bancarias. Todo el flujo de dinero, señas y cobros se gestiona mediante la plataforma segura y encriptada de Mercado Pago.</p></div>
+        <div class="policy-item"><h4>Datos del Centro de Control</h4><p>Los datos de perfiles de capitanes, documentación y estados de viajes se procesan bajo estrictos estándares de seguridad y solo son accesibles por el personal autorizado del Centro Administrativo.</p></div>
+        <div class="policy-item"><h4>Uso de Cookies y Conexión</h4><p>Utilizamos cookies técnicas esenciales para mantener tu sesión abierta en el panel de control y garantizar que tu navegación por la tienda sea rápida y segura. No vendemos tus datos a empresas de publicidad externas.</p></div>
+        <button class="btn-ok" onclick="cerrarModalInst('seguridad')">ENTENDIDO</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Centro de Ayuda -->
+  <div class="modal-overlay" id="modal-ayuda">
+    <div class="modal inst-modal">
+      <div class="modal-header"><div class="icon"><i class="fas fa-life-ring"></i></div><h2>CENTRO DE AYUDA</h2><button class="close-btn" onclick="cerrarModalInst('ayuda')"><i class="fas fa-times"></i></button></div>
+      <div class="modal-content">
+        <div class="motto">"¿Cómo podemos ayudarte hoy, chamigo?"</div>
+        <p>Navegá entre las dudas comunes de compras, pagos y despachos. Si no encontrás lo que buscás, contactanos por WhatsApp.</p>
+        <div class="section-title">ENVÍOS</div>
+        <p><strong>¿Cuánto tarda en llegar mi pedido?</strong> Los envíos a CABA y GBA demoran entre 24 y 48 horas hábiles. Al interior del país, el plazo es de 3 a 5 días hábiles a través de Andreani.</p>
+        <p><strong>¿Cómo realizo el seguimiento de mi envío?</strong> Una vez despachado el producto, te enviaremos un email con el código de seguimiento de Andreani. También podés verlo en la sección "Mis Compras" dentro de tu perfil.</p>
+        <p><strong>¿Puedo retirar mi compra en una sucursal?</strong> Sí, ofrecemos retiro sin cargo en nuestro centro de distribución de San Fernando, Tigre o Rosario, de lunes a viernes de 9:00 a 18:00 hs.</p>
+        <div class="section-title">PAGOS</div>
+        <p><strong>¿Qué medios de pago aceptan?</strong> Aceptamos todas las tarjetas de crédito y débito a través de Mercado Pago. También podés abonar con dinero en cuenta de Mercado Pago o mediante transferencia bancaria con un 10% de descuento.</p>
+        <p><strong>¿Puedo pagar en cuotas?</strong> Sí, ofrecemos hasta 3 cuotas sin interés con bancos seleccionados a través de Mercado Pago.</p>
+        <div class="section-title">CAMBIOS Y DEVOLUCIONES</div>
+        <p><strong>¿Cuál es el plazo para realizar un cambio?</strong> Tenés hasta 30 días corridos desde que recibiste el producto para solicitar un cambio por talle, color o modelo, siempre que el producto esté sin uso y en su empaque original.</p>
+        <p><strong>¿Cómo gestiono una devolución?</strong> Podés iniciar la devolución directamente desde la app en "Mis Compras" o contactando a nuestro soporte.</p>
+        <div class="section-title">CANCELACIONES</div>
+        <p><strong>¿Puedo cancelar un pedido antes de recibirlo?</strong> Sí, siempre y cuando el pedido no haya sido despachado. Podés solicitar la cancelación inmediata desde tu panel de control o por soporte de WhatsApp.</p>
+        <p><strong>¿Cuánto demora en acreditarse mi reembolso?</strong> Una vez aprobada la devolución o cancelación, el reembolso se procesa de inmediato. Si pagaste con dinero en Mercado Pago se acredita al instante; si fue con tarjeta de crédito, puede demorar entre 2 y 10 días hábiles.</p>
+        <a class="btn-ok" href="https://wa.me/5491122334455?text=Hola%20necesito%20ayuda%20con%20una%20compra%20en%20El%20Gu%C3%ADa%20Ya" target="_blank" style="display:block;text-align:center;text-decoration:none"><i class="fab fa-whatsapp"></i> HABLAR CON SOPORTE</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Términos y Condiciones -->
+  <div class="modal-overlay" id="modal-terminos">
+    <div class="modal inst-modal">
+      <div class="modal-header"><div class="icon"><i class="fas fa-file-contract"></i></div><h2>TÉRMINOS Y CONDICIONES</h2><button class="close-btn" onclick="cerrarModalInst('terminos')"><i class="fas fa-times"></i></button></div>
+      <div class="modal-content">
+        <div style="text-align:center;margin-bottom:12px"><div style="color:#10b981;font-weight:700;font-size:.85rem">TÉRMINOS Y CONDICIONES DE USO — CAPITÁN-YA</div><div style="color:#64748b;font-style:italic;font-size:.72rem">Última actualización: 26 de Mayo de 2026</div></div>
+        <p>Bienvenido/a a Capitán-YA, plataforma digital destinada a conectar pescadores con servicios de excursiones de pesca, navegación, experiencias recreativas relacionadas, contenidos informativos, herramientas digitales y productos vinculados a la pesca, camping y actividades al aire libre.</p>
+        <p style="font-weight:700;color:#e2e8f0">Al registrarse, navegar o utilizar la aplicación, el usuario acepta íntegramente los presentes Términos y Condiciones.</p>
+        <div class="policy-item"><h4>1. ACEPTACIÓN DE LOS TÉRMINOS</h4><p>El acceso y utilización de la aplicación implica la aceptación plena de estos Términos y Condiciones, la Política de Privacidad y toda normativa complementaria publicada dentro de la plataforma. Si el usuario no estuviera de acuerdo con cualquiera de estas disposiciones, deberá abstenerse de utilizar la aplicación.</p></div>
+        <div class="policy-item"><h4>2. OBJETO DE LA PLATAFORMA</h4><p>Capitán-YA funciona como una plataforma tecnológica destinada a gestionar solicitudes de salidas de pesca, facilitar cotizaciones entre pescadores y capitanes/guías, administrar reservas y pagos, brindar herramientas de navegación y asistencia digital, y comercializar productos relacionados con pesca, camping, outdoor y actividades recreativas. La plataforma actúa como intermediaria tecnológica y organizativa.</p></div>
+        <div class="policy-item"><h4>3. REGISTRO DE USUARIO</h4><p>Para acceder a determinadas funcionalidades, el usuario deberá registrarse proporcionando información veraz, actualizada y completa. El usuario es responsable de mantener la confidencialidad de sus credenciales, de toda actividad realizada desde su cuenta, y de verificar la exactitud de sus datos personales y de entrega. Capitán-YA podrá suspender cuentas que presenten uso fraudulento, información falsa o conductas abusivas.</p></div>
+        <div class="policy-item"><h4>4. SALIDAS DE PESCA Y RESPONSABILIDADES</h4><p>Las salidas de pesca son coordinadas entre el usuario y el capitán o prestador correspondiente. Capitán-YA realiza esfuerzos razonables para verificar información, pero no garantiza condiciones climáticas favorables, capturas de peces, navegabilidad, disponibilidad absoluta del servicio, ni cambios de último momento por causas ajenas. Los horarios, puntos de encuentro, equipamiento, servicios incluidos y cancelaciones dependerán de cada excursión y/o capitán. Por razones climáticas, de seguridad, veda, crecida, bajante, mantenimiento de embarcaciones u otros factores externos, una salida podrá ser reprogramada o cancelada.</p></div>
+        <div class="policy-item"><h4>5. TIENDA ONLINE — PRODUCTOS DE PESCA Y CAMPING</h4><p>La aplicación podrá ofrecer productos vinculados a pesca deportiva, camping, outdoor, navegación y accesorios recreativos. Las imágenes publicadas son ilustrativas y pueden existir diferencias menores con el producto recibido. La disponibilidad de stock está sujeta a confirmación. Los precios pueden modificarse sin previo aviso hasta el momento de la confirmación efectiva de la compra.</p></div>
+        <div class="policy-item"><h4>6. CONDICIONES DE ENTREGA DE PRODUCTOS</h4><p>Los productos adquiridos dentro de la tienda online NO serán entregados en el lugar de embarque, muelle, puerto, bajada náutica, pesquero, camping o punto de encuentro de las salidas de pesca, salvo que exista una promoción o condición especial expresamente informada por escrito. Toda entrega de productos físicos se realizará exclusivamente mediante operadores logísticos, correos o servicios tradicionales de transporte de paquetería. El usuario acepta que los plazos de entrega son estimativos, que Capitán-YA no garantiza entregas inmediatas ni sincronizadas con excursiones contratadas, y que deberá ingresar correctamente el domicilio de entrega. La contratación de una salida de pesca y la compra de productos en la tienda constituyen operaciones independientes.</p></div>
+        <div class="policy-item"><h4>7. DEVOLUCIONES Y GARANTÍAS</h4><p>Las devoluciones se regirán conforme la normativa de defensa del consumidor vigente en la República Argentina. No podrán devolverse productos usados, dañados por mal uso, alterados o sin embalaje original cuando ello impida su comercialización. El usuario deberá informar cualquier inconveniente dentro de las 48 horas de recibido el pedido, acompañando evidencia fotográfica cuando corresponda.</p></div>
+        <div class="policy-item"><h4>8. PAGOS</h4><p>Los pagos podrán procesarse mediante pasarelas externas como Mercado Pago u otros proveedores autorizados. Capitán-YA no almacena información completa de tarjetas bancarias. Toda operación queda sujeta a validaciones antifraude y autorizaciones del medio de pago correspondiente.</p></div>
+        <div class="policy-item"><h4>9. LIMITACIÓN DE RESPONSABILIDAD</h4><p>Capitán-YA no será responsable por interrupciones temporales del servicio, fallas de conectividad, decisiones de terceros prestadores, incumplimientos de empresas logísticas, condiciones climáticas, daños indirectos o lucro cesante. La responsabilidad máxima de la plataforma estará limitada al monto efectivamente abonado por el usuario en la operación específica objeto del reclamo.</p></div>
+        <div class="policy-item"><h4>10. CONDUCTA DEL USUARIO</h4><p>El usuario se compromete a actuar de buena fe, brindar información veraz, respetar a capitanes, guías y demás usuarios, y no utilizar la app para fines ilegales o fraudulentos. La plataforma podrá suspender o cancelar cuentas ante conductas abusivas.</p></div>
+        <div class="policy-item"><h4>11. MODIFICACIONES</h4><p>Capitán-YA podrá modificar estos términos cuando resulte necesario por cuestiones operativas, legales o comerciales. Las nuevas versiones entrarán en vigencia desde su publicación dentro de la aplicación.</p></div>
+        <div class="policy-item"><h4>12. JURISDICCIÓN Y LEY APLICABLE</h4><p>Los presentes términos se regirán por las leyes de la República Argentina. Ante cualquier conflicto, las partes se someterán a la jurisdicción de los tribunales ordinarios competentes del domicilio legal de la empresa, salvo disposición legal imperativa en contrario.</p></div>
+        <button class="btn-ok" onclick="cerrarModalInst('terminos')">ENTENDIDO</button>
+      </div>
+    </div>
+  </div>
+
   <footer class="footer" style="display:none" id="footer">
     <div class="footer-inner">
-      <div class="footer-col"><h4>El Guía Ya</h4><p>Plataforma náutica argentina para la vinculación segura de pescadores y capitanes.</p></div>
-      <div class="footer-col"><h4>Tienda</h4><a href="https://app.elguiaya.com/tienda" target="_blank">Tienda completa</a><a href="/tienda">Inicio</a></div>
-      <div class="footer-col"><h4>Ayuda</h4><a href="/">Inicio</a><a href="/#how-it-works">Cómo funciona</a></div>
-      <div class="footer-col"><h4>Contacto</h4><p>Buenos Aires, Argentina</p></div>
+      <div class="footer-col">
+        <h4><i class="fas fa-anchor"></i> EL GUÍA YA</h4>
+        <p>Plataforma náutica argentina para la vinculación segura de pescadores y capitanes. Tienda oficial de equipamiento de pesca, camping y outdoor.</p>
+      </div>
+      <div class="footer-col">
+        <h4>INSTITUCIONAL</h4>
+        <button class="footer-link" onclick="abrirModalInst('quienes-somos')"><i class="fas fa-info-circle"></i> Quiénes Somos</button>
+        <button class="footer-link" onclick="abrirModalInst('trabaja-nosotros')"><i class="fas fa-briefcase"></i> Trabajá con Nosotros</button>
+        <button class="footer-link" onclick="abrirModalInst('terminos')"><i class="fas fa-file-contract"></i> Términos y Condiciones</button>
+      </div>
+      <div class="footer-col">
+        <h4>AYUDA</h4>
+        <button class="footer-link" onclick="abrirModalInst('ayuda')"><i class="fas fa-life-ring"></i> Centro de Ayuda</button>
+        <button class="footer-link" onclick="abrirModalInst('seguridad')"><i class="fas fa-shield-alt"></i> Seguridad y Privacidad</button>
+        <a class="footer-link" href="/tienda"><i class="fas fa-store"></i> Tienda</a>
+      </div>
+      <div class="footer-col">
+        <h4>CONTACTO</h4>
+        <p><i class="fas fa-map-marker-alt"></i> Buenos Aires, Argentina</p>
+        <p><i class="fas fa-envelope"></i> info@elguiaya.com</p>
+        <a class="footer-link" href="https://wa.me/5491122334455?text=Hola%20El%20Gu%C3%ADa%20Ya" target="_blank"><i class="fab fa-whatsapp"></i> WhatsApp</a>
+      </div>
     </div>
-    <div class="footer-bot">© 2026 El Guía Ya</div>
+    <div class="footer-bot">© 2026 El Guía Ya — Todos los derechos reservados.</div>
   </footer>
 
   <script>
@@ -359,6 +510,31 @@
       const s = w.querySelectorAll('.carousel-slide'), d = w.querySelectorAll('.carousel-dots button');
       s.forEach(x => x.classList.remove('activo')); d.forEach(x => x.classList.remove('activo'));
       if (s[n]) { s[n].classList.add('activo'); if (d[n]) d[n].classList.add('activo'); }
+    }
+
+    function abrirModalInst(id) { const el = document.getElementById('modal-' + id); if (el) { el.classList.add('open'); document.body.style.overflow = 'hidden'; } }
+    function cerrarModalInst(id) { const el = document.getElementById('modal-' + id); if (el) { el.classList.remove('open'); document.body.style.overflow = ''; } }
+    document.querySelectorAll('.modal-overlay').forEach(el => { el.addEventListener('click', function(e) { if (e.target === this) { this.classList.remove('open'); document.body.style.overflow = ''; } }); });
+
+    async function enviarPostulacion(e) {
+      e.preventDefault();
+      const btn = document.getElementById('btn-postular');
+      btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> ENVIANDO...';
+      try {
+        const r = await fetch(SB_URL + '/rest/v1/postulaciones', {
+          method: 'POST',
+          headers: Object.assign({}, H, { 'Content-Type': 'application/json', 'Prefer': 'return=minimal' }),
+          body: JSON.stringify({ nombre: document.getElementById('post-nombre').value, email: document.getElementById('post-email').value, telefono: document.getElementById('post-telefono').value, area_interes: document.getElementById('post-area').value }),
+        });
+        if (!r.ok) throw new Error('Error al enviar');
+        btn.innerHTML = '<i class="fas fa-check"></i> ¡ENVIADO!';
+        btn.style.background = '#059669';
+        setTimeout(() => { cerrarModalInst('trabaja-nosotros'); btn.disabled = false; btn.innerHTML = '<i class="fas fa-paper-plane"></i> POSTULARME'; btn.style.background = ''; }, 2000);
+      } catch (err) {
+        btn.innerHTML = '<i class="fas fa-exclamation-triangle"></i> ERROR - INTENTÁ DE NUEVO';
+        btn.style.background = '#dc2626';
+        setTimeout(() => { btn.disabled = false; btn.innerHTML = '<i class="fas fa-paper-plane"></i> POSTULARME'; btn.style.background = ''; }, 3000);
+      }
     }
 
     function esc(t) { if (!t) return ''; const d = document.createElement('div'); d.textContent = t; return d.innerHTML; }
