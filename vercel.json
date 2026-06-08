@@ -1,12 +1,7 @@
 {
   "rewrites": [
-    {
-      "source": "/tienda",
-      "destination": "https://app.elguiaya.com/tienda"
-    },
-    {
-      "source": "/tienda/(.*)",
-      "destination": "https://app.elguiaya.com/tienda/$1"
-    }
+    { "source": "/tienda", "destination": "/tienda/index.html" },
+    { "source": "/tienda/", "destination": "/tienda/index.html" },
+    { "source": "/(.*)", "destination": "/index.html" }
   ]
 }
