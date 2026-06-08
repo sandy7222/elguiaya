@@ -2,29 +2,305 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
   <title>Tienda - El Guía Ya</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <style>
-    *{margin:0;padding:0;box-sizing:border-box}
-    body{font-family:system-ui,-apple-system,sans-serif;background:#0b1628;color:#e2e8f0;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;text-align:center}
-    .icon{font-size:4rem;color:#10b981;margin-bottom:20px}
-    h1{font-size:2rem;font-weight:800;margin-bottom:8px}
-    h1 span{color:#10b981}
-    p{color:#64748b;max-width:420px;line-height:1.6;margin-bottom:28px;font-size:.95rem}
-    .btn{display:inline-block;padding:16px 40px;border-radius:14px;background:#10b981;color:#fff;font-weight:700;font-size:1.05rem;text-decoration:none;transition:all .2s;box-shadow:0 8px 24px -4px rgba(16,185,129,.3)}
-    .btn:hover{background:#059669;transform:translateY(-2px);box-shadow:0 12px 32px -6px rgba(16,185,129,.4)}
-    .btn i{margin-right:8px}
-    .back{display:inline-block;margin-top:20px;color:#475569;text-decoration:none;font-size:.85rem;transition:color .2s}
-    .back:hover{color:#10b981}
-    @media(max-width:640px){h1{font-size:1.5rem}.icon{font-size:3rem}}
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: system-ui, -apple-system, sans-serif; background: #0b1628; color: #e2e8f0; min-height: 100vh; overflow-x: hidden; }
+    img { max-width: 100%; display: block; }
+
+    /* ── HEADER ── */
+    .header { background: linear-gradient(135deg, #0b1628, #132244); border-bottom: 1px solid #1a2d50; padding: 12px 16px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; backdrop-filter: blur(12px); }
+    .header-logo { display: flex; align-items: center; gap: 10px; }
+    .header-logo .icon { width: 36px; height: 36px; border-radius: 50%; border: 2px solid #10b981; display: flex; align-items: center; justify-content: center; color: #10b981; font-size: 1.1rem; }
+    .header-logo h1 { font-size: 1.1rem; color: #f1f5f9; font-weight: 700; }
+    .header-logo h1 span { color: #10b981; }
+    .header-actions { display: flex; align-items: center; gap: 6px; }
+    .header-actions a { width: 36px; height: 36px; border-radius: 50%; border: 1px solid #1a2d50; background: #0f1d38; display: flex; align-items: center; justify-content: center; color: #94a3b8; text-decoration: none; transition: all .2s; font-size: .9rem; }
+    .header-actions a:hover { background: #10b981; color: #fff; border-color: #10b981; }
+
+    /* ── MARQUEE ── */
+    .marquee-bar { overflow: hidden; background: #065f46; padding: 8px 0; white-space: nowrap; }
+    .marquee-bar .inner { display: inline-block; animation: marq 25s linear infinite; font-size: .78rem; color: #a7f3d0; font-weight: 600; letter-spacing: .5px; }
+    .marquee-bar .inner span { padding: 0 40px; }
+    @keyframes marq { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+
+    /* ── SEARCH BAR ── */
+    .search-wrap { padding: 12px 16px; max-width: 1200px; margin: 0 auto; }
+    .search-wrap input { width: 100%; padding: 10px 16px; border-radius: 10px; border: 1px solid #1a2d50; background: #0f1d38; color: #e2e8f0; font-size: .88rem; outline: none; transition: border .2s; }
+    .search-wrap input:focus { border-color: #10b981; }
+    .search-wrap input::placeholder { color: #475569; }
+
+    /* ── SECTION TITLE ── */
+    .section-wrap { max-width: 1200px; margin: 0 auto; padding: 0 16px; }
+    .section-title { display: flex; align-items: center; justify-content: space-between; padding: 20px 0 10px; }
+    .section-title h2 { font-size: .82rem; font-weight: 700; color: #94a3b8; letter-spacing: 1px; }
+    .section-title a { font-size: .78rem; color: #10b981; text-decoration: none; font-weight: 600; }
+    .section-title a:hover { text-decoration: underline; }
+
+    /* ── PRODUCT SCROLL ── */
+    .scroll-wrap { padding-bottom: 16px; position: relative; }
+    .scroll-inner { display: flex; gap: 10px; overflow-x: auto; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; padding: 0 16px; scrollbar-width: none; }
+    .scroll-inner::-webkit-scrollbar { display: none; }
+    .scroll-inner .card { flex: 0 0 160px; scroll-snap-align: start; background: #0f1d38; border-radius: 10px; overflow: hidden; border: 1px solid #1a2d50; transition: transform .25s ease, box-shadow .25s ease; cursor: pointer; }
+    .scroll-inner .card:hover { transform: translateY(-6px); box-shadow: 0 12px 28px -10px rgba(0,0,0,.6); }
+    .card-img { width: 100%; height: 140px; object-fit: cover; background: #132244; display: flex; align-items: center; justify-content: center; color: #334155; font-size: .7rem; }
+    .card-body { padding: 8px 10px 10px; }
+    .card-body h3 { font-size: .78rem; font-weight: 600; color: #f1f5f9; margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .card-body .precio { font-size: .92rem; font-weight: 700; color: #10b981; }
+
+    /* ── CARRUSEL ── */
+    .carousel-wrap { position: relative; overflow: hidden; height: 280px; margin: 8px 16px; border-radius: 12px; }
+    .carousel-slide { position: absolute; inset: 0; opacity: 0; transition: opacity .6s; background-size: cover; background-position: center; display: flex; align-items: flex-end; padding: 24px; }
+    .carousel-slide.activo { opacity: 1; }
+    .carousel-slide .overlay { background: linear-gradient(transparent, rgba(0,0,0,.8)); padding: 16px 20px; border-radius: 8px; width: 100%; }
+    .carousel-slide .overlay h2 { font-size: 1.2rem; font-weight: 700; color: #fff; margin-bottom: 2px; }
+    .carousel-slide .overlay p { font-size: .85rem; color: #d1d5db; }
+    .carousel-dots { position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%); display: flex; gap: 6px; }
+    .carousel-dots button { width: 8px; height: 8px; border-radius: 50%; border: 2px solid rgba(255,255,255,.4); background: transparent; cursor: pointer; transition: all .3s; padding: 0; }
+    .carousel-dots button.activo { background: #10b981; border-color: #10b981; }
+
+    /* ── BANNER FIXO ── */
+    .banner-fixo { margin: 0 16px 16px; border-radius: 12px; overflow: hidden; height: 160px; background-size: cover; background-position: center; position: relative; cursor: pointer; transition: transform .3s; }
+    .banner-fixo:hover { transform: scale(1.01); }
+    .banner-fixo .overlay { position: absolute; inset: 0; background: linear-gradient(135deg, rgba(0,0,0,.5), transparent); padding: 20px; display: flex; flex-direction: column; justify-content: flex-end; }
+    .banner-fixo .overlay h3 { font-size: 1.1rem; font-weight: 700; color: #fff; }
+    .banner-fixo .overlay p { font-size: .82rem; color: #d1d5db; margin-top: 2px; }
+
+    /* ── CATEGORY GRID ── */
+    .cat-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 8px; padding: 0 16px 16px; max-width: 1200px; margin: 0 auto; }
+    .cat-grid .item { background: #0f1d38; border-radius: 10px; padding: 14px 8px; text-align: center; border: 1px solid #1a2d50; cursor: pointer; transition: all .25s; }
+    .cat-grid .item:hover { background: #10b981; border-color: #10b981; transform: translateY(-3px); }
+    .cat-grid .item i { font-size: 1.4rem; color: #10b981; margin-bottom: 5px; display: block; }
+    .cat-grid .item:hover i { color: #fff; }
+    .cat-grid .item span { font-size: .72rem; color: #e2e8f0; font-weight: 500; }
+
+    /* ── FOOTER ── */
+    .footer { background: #0b1628; border-top: 1px solid #1a2d50; padding: 24px 16px 16px; margin-top: 24px; }
+    .footer-inner { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 20px; }
+    .footer-col h4 { color: #f1f5f9; font-size: .82rem; font-weight: 600; margin-bottom: 8px; }
+    .footer-col p, .footer-col a { color: #64748b; font-size: .75rem; line-height: 1.7; text-decoration: none; display: block; }
+    .footer-col a:hover { color: #10b981; }
+    .footer-bot { text-align: center; color: #475569; font-size: .72rem; border-top: 1px solid #1a2d50; margin-top: 20px; padding-top: 14px; }
+
+    /* ── STATES ── */
+    .loading { text-align: center; padding: 80px 16px; }
+    .spinner { width: 32px; height: 32px; border: 3px solid #1a2d50; border-top-color: #10b981; border-radius: 50%; animation: spin .8s linear infinite; margin: 0 auto 10px; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .loading p, .error p { color: #64748b; font-size: .82rem; }
+    .error { text-align: center; padding: 60px 16px; color: #ef4444; }
+
+    /* ── RESPONSIVE ── */
+    @media (min-width: 768px) {
+      .scroll-inner .card { flex: 0 0 190px; }
+      .card-img { height: 160px; }
+      .carousel-wrap { height: 340px; margin: 8px auto; max-width: 1200px; }
+      .banner-fixo { max-width: 1200px; margin: 0 auto 16px; height: 200px; }
+      .section-wrap { padding: 0; }
+      .scroll-inner { padding: 0; }
+      .header { padding: 12px 24px; }
+      .cat-grid { padding: 0 0 16px; }
+    }
+    @media (max-width: 400px) {
+      .scroll-inner .card { flex: 0 0 140px; }
+      .card-img { height: 120px; }
+      .carousel-wrap { height: 200px; margin: 6px 8px; }
+    }
   </style>
 </head>
 <body>
-  <div class="icon"><i class="fas fa-store"></i></div>
-  <h1>El Guía <span>Ya</span> · Tienda</h1>
-  <p>Accedé a la tienda completa con todos los productos, categorías, carruseles, blog, carrito de compras y más. Todo lo que manejás desde el administrador.</p>
-  <a class="btn" href="https://app.elguiaya.com/tienda" target="_blank"><i class="fas fa-external-link-alt"></i> Ir a la tienda</a>
-  <a class="back" href="/"><i class="fas fa-arrow-left"></i> Volver al inicio</a>
+
+  <header class="header">
+    <div class="header-logo">
+      <div class="icon"><i class="fas fa-anchor"></i></div>
+      <h1>El Guía <span>Ya</span></h1>
+    </div>
+    <div class="header-actions">
+      <a href="https://app.elguiaya.com/tienda" target="_blank" title="Carrito"><i class="fas fa-shopping-cart"></i></a>
+      <a href="https://app.elguiaya.com/tienda" target="_blank" title="Favoritos"><i class="fas fa-heart"></i></a>
+      <a href="https://app.elguiaya.com/tienda" target="_blank" title="Cuenta"><i class="fas fa-user"></i></a>
+    </div>
+  </header>
+
+  <div id="marquee" class="marquee-bar" style="display:none"></div>
+
+  <div class="search-wrap">
+    <input type="text" id="search" placeholder="Buscar productos..." oninput="onSearch(this.value)">
+  </div>
+
+  <div id="app">
+    <div id="loading" class="loading">
+      <div class="spinner"></div>
+      <p>Cargando tienda...</p>
+    </div>
+    <div id="error" class="error" style="display:none">
+      <p>Error al cargar la tienda.</p>
+    </div>
+    <div id="content" style="display:none"></div>
+  </div>
+
+  <footer class="footer" style="display:none" id="footer">
+    <div class="footer-inner">
+      <div class="footer-col"><h4>El Guía Ya</h4><p>Plataforma náutica argentina para la vinculación segura de pescadores y capitanes.</p></div>
+      <div class="footer-col"><h4>Tienda</h4><a href="https://app.elguiaya.com/tienda" target="_blank">Tienda completa</a><a href="/tienda">Inicio</a></div>
+      <div class="footer-col"><h4>Ayuda</h4><a href="/">Inicio</a><a href="/#how-it-works">Cómo funciona</a></div>
+      <div class="footer-col"><h4>Contacto</h4><p>Buenos Aires, Argentina</p></div>
+    </div>
+    <div class="footer-bot">© 2026 El Guía Ya — Todos los derechos reservados</div>
+  </footer>
+
+  <script>
+    const SB_URL = 'https://ymgsxwfwntbqvguvbhoa.supabase.co';
+    const SB_KEY = 'sb_publishable_VWBnZN0tTUA_8zeULPU8Jg_hmsJauq6';
+    const H = { 'apikey': SB_KEY, 'Authorization': 'Bearer ' + SB_KEY, 'Accept': 'application/json' };
+
+    async function api(table, opts) {
+      let url = SB_URL + '/rest/v1/' + table + '?select=*';
+      if (opts) {
+        if (opts.filters) opts.filters.forEach(f => { url += '&' + f.col + '=' + f.op + '.' + encodeURIComponent(f.val); });
+        if (opts.order) url += '&order=' + opts.order.col + (opts.order.asc ? '.asc' : '.desc');
+        if (opts.limit) url += '&limit=' + opts.limit;
+      }
+      const r = await fetch(url, { headers: H });
+      if (!r.ok) throw new Error(await r.text());
+      return r.json();
+    }
+
+    let prods = [], cats = [], bans = [], blogs = [], carruselInterval;
+
+    async function init() {
+      try {
+        [prods, cats, bans, blogs] = await Promise.all([
+          api('productos', { filters: [{ col: 'activo', op: 'eq', val: true }], order: { col: 'created_at', asc: false } }),
+          api('categorias', { filters: [{ col: 'activa', op: 'eq', val: true }], order: { col: 'nombre', asc: true } }),
+          api('banners_promo', { filters: [{ col: 'activo', op: 'eq', val: true }], order: { col: 'orden', asc: true } }),
+          api('blog_articulos', { filters: [{ col: 'activo', op: 'eq', val: true }], order: { col: 'created_at', asc: false }, limit: 4 }),
+        ]);
+        render();
+      } catch (e) {
+        console.error(e);
+        document.getElementById('loading').style.display = 'none';
+        document.getElementById('error').style.display = 'block';
+      }
+    }
+
+    function render() {
+      document.getElementById('loading').style.display = 'none';
+      document.getElementById('error').style.display = 'none';
+      document.getElementById('footer').style.display = 'block';
+
+      let html = '';
+
+      // Marquee
+      const marquee = bans.filter(b => b.tipo === 'marquee');
+      if (marquee.length) {
+        document.getElementById('marquee').style.display = 'block';
+        const items = marquee.map(m => '<span>✦ ' + esc(m.titulo) + '</span>').join('');
+        document.getElementById('marquee').innerHTML = '<div class="inner">' + items + items + '</div>';
+      }
+
+      // Hero carousel
+      const hero = bans.filter(b => b.tipo === 'hero');
+      if (hero.length) {
+        html += '<div class="carousel-wrap" id="hero">';
+        hero.forEach((b, i) => {
+          html += '<div class="carousel-slide' + (i === 0 ? ' activo' : '') + '" style="background-image:url(\'' + b.imagen_url + '\')"><div class="overlay"><h2>' + esc(b.titulo) + '</h2>' + (b.subtitulo ? '<p>' + esc(b.subtitulo) + '</p>' : '') + '</div></div>';
+        });
+        html += '<div class="carousel-dots">' + hero.map((_, i) => '<button class="' + (i === 0 ? 'activo' : '') + '" onclick="goSlide(' + i + ')"></button>').join('') + '</div>';
+        html += '</div>';
+        if (hero.length > 1) carruselInterval = setInterval(nextSlide, 5000);
+      }
+
+      // Category sections (each with horizontal product scroll)
+      const activeCats = cats.filter(c => prods.some(p => p.categoria_id === c.id));
+      activeCats.forEach((cat, idx) => {
+        const catProds = prods.filter(p => p.categoria_id === cat.id);
+        if (!catProds.length) return;
+        html += '<div class="section-wrap">';
+        html += '<div class="section-title"><h2>' + esc(cat.nombre.toUpperCase()) + '</h2><a href="https://app.elguiaya.com/tienda" target="_blank">Ver todos</a></div>';
+        html += '<div class="scroll-wrap"><div class="scroll-inner">';
+        catProds.forEach(p => { html += cardHtml(p); });
+        html += '</div></div></div>';
+
+        // Insert mid banners after first category
+        if (idx === 0) {
+          const mid = bans.filter(b => b.tipo === 'middle');
+          if (mid.length) {
+            mid.forEach(b => {
+              html += '<div class="section-wrap"><div class="section-title"><h2>DESTACADOS DE LA TEMPORADA</h2></div></div>';
+              html += '<div class="banner-fixo" style="background-image:url(\'' + b.imagen_url + '\')"><div class="overlay"><h3>' + esc(b.titulo) + '</h3>' + (b.subtitulo ? '<p>' + esc(b.subtitulo) + '</p>' : '') + '</div></div>';
+            });
+          }
+        }
+
+        // Insert bottom banners before last category
+        if (idx === Math.min(activeCats.length - 1, 2)) {
+          const bot = bans.filter(b => b.tipo === 'bottom');
+          if (bot.length) {
+            html += '<div class="section-wrap"><div class="section-title"><h2>COLECCIONES ESPECIALES</h2></div></div>';
+            bot.forEach(b => {
+              html += '<div class="banner-fixo" style="background-image:url(\'' + b.imagen_url + '\')"><div class="overlay"><h3>' + esc(b.titulo) + '</h3>' + (b.subtitulo ? '<p>' + esc(b.subtitulo) + '</p>' : '') + '</div></div>';
+            });
+          }
+        }
+      });
+
+      // Novedades
+      html += '<div class="section-wrap"><div class="section-title"><h2>NOVEDADES / ÚLTIMOS INGRESOS</h2><a href="https://app.elguiaya.com/tienda" target="_blank">Ver todos</a></div>';
+      html += '<div class="scroll-wrap"><div class="scroll-inner">';
+      prods.slice(0, 10).forEach(p => { html += cardHtml(p); });
+      html += '</div></div></div>';
+
+      // Categories grid (explora)
+      html += '<div class="section-wrap"><div class="section-title"><h2>EXPLORA POR CATEGORÍA</h2></div></div>';
+      html += '<div class="cat-grid">';
+      const iconMap = { 'Carpas': 'fa-campground', 'Reels': 'fa-hook', 'Reeles Frontales': 'fa-hook', 'Reeles Rotativos': 'fa-hook', 'Mesas y Sillas': 'fa-chair', 'Cañas': 'fa-fish', 'Señuelos': 'fa-worm', 'Pesca Deportiva': 'fa-fish', 'Camping': 'fa-campground', 'Náutica': 'fa-ship', 'Indumentaria': 'fa-tshirt' };
+      cats.filter(c => prods.some(p => p.categoria_id === c.id)).slice(0, 8).forEach(c => {
+        html += '<div class="item" onclick="window.open(\'https://app.elguiaya.com/tienda\',\'_blank\')"><i class="fas ' + (iconMap[c.nombre] || 'fa-tag') + '"></i><span>' + esc(c.nombre) + '</span></div>';
+      });
+      html += '</div>';
+
+      document.getElementById('content').innerHTML = html;
+      document.getElementById('content').style.display = 'block';
+    }
+
+    function cardHtml(p) {
+      const img = p.imagen_url ? '<div class="card-img" style="background-image:url(\'' + esc(p.imagen_url) + '\');background-size:cover;background-position:center" onclick="window.open(\'https://app.elguiaya.com/tienda\',\'_blank\')"></div>' : '<div class="card-img" onclick="window.open(\'https://app.elguiaya.com/tienda\',\'_blank\')">Sin imagen</div>';
+      return '<div class="card">' + img + '<div class="card-body" onclick="window.open(\'https://app.elguiaya.com/tienda\',\'_blank\')"><h3>' + esc(p.nombre) + '</h3><div class="precio">$' + Number(p.precio).toLocaleString('es-AR', { minimumFractionDigits: 2 }) + '</div></div></div>';
+    }
+
+    function onSearch(val) {
+      val = val.toLowerCase().trim();
+      const c = document.getElementById('content');
+      if (!val) { render(); return; }
+      const filt = prods.filter(p => (p.nombre || '').toLowerCase().includes(val) || (p.descripcion || '').toLowerCase().includes(val));
+      if (!filt.length) { c.innerHTML = '<div class="section-wrap" style="padding:60px 16px;text-align:center;color:#64748b"><p>Sin resultados para "' + esc(val) + '"</p></div>'; return; }
+      let h = '<div class="section-wrap"><div class="section-title"><h2>RESULTADOS: ' + filt.length + '</h2></div><div class="scroll-wrap"><div class="scroll-inner">';
+      filt.slice(0, 20).forEach(p => { h += cardHtml(p); });
+      h += '</div></div></div>';
+      c.innerHTML = h;
+    }
+
+    function goSlide(n) {
+      const w = document.getElementById('hero');
+      if (!w) return;
+      const s = w.querySelectorAll('.carousel-slide'), d = w.querySelectorAll('.carousel-dots button');
+      s.forEach(x => x.classList.remove('activo'));
+      d.forEach(x => x.classList.remove('activo'));
+      if (s[n]) { s[n].classList.add('activo'); if (d[n]) d[n].classList.add('activo'); }
+    }
+    function nextSlide() {
+      const w = document.getElementById('hero');
+      if (!w) return;
+      const s = w.querySelectorAll('.carousel-slide');
+      if (!s.length) return;
+      const cur = Array.from(s).findIndex(x => x.classList.contains('activo'));
+      goSlide((cur + 1) % s.length);
+    }
+    function esc(t) { if (!t) return ''; const d = document.createElement('div'); d.textContent = t; return d.innerHTML; }
+
+    init();
+  </script>
 </body>
 </html>
