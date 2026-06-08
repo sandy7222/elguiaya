@@ -4,372 +4,325 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
   <title>Tienda - El Guía Ya</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: system-ui, -apple-system, sans-serif; background: #0f172a; color: #e2e8f0; min-height: 100vh; overflow-x: hidden; }
-    img { max-width: 100%; }
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{font-family:system-ui,-apple-system,sans-serif;background:#0f172a;color:#e2e8f0;min-height:100vh;overflow-x:hidden}
+    img{max-width:100%}
 
     /* Header */
-    .header { background: linear-gradient(135deg, #0f172a, #1e293b); border-bottom: 1px solid #1e293b; padding: 16px 24px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; position: sticky; top: 0; z-index: 50; backdrop-filter: blur(12px); }
-    .header h1 { font-size: 1.5rem; color: #10b981; font-weight: 800; letter-spacing: -0.5px; }
-    .header h1 span { color: #f59e0b; }
-    .header a { color: #94a3b8; text-decoration: none; font-size: 0.875rem; transition: color 0.2s; }
-    .header a:hover { color: #10b981; }
+    .header{background:linear-gradient(135deg,#0f172a,#1e293b);border-bottom:1px solid #1e293b;padding:14px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;position:sticky;top:0;z-index:50;backdrop-filter:blur(12px)}
+    .header h1{font-size:1.4rem;color:#10b981;font-weight:800;letter-spacing:-0.5px}
+    .header h1 span{color:#f59e0b}
+    .header a{color:#94a3b8;text-decoration:none;font-size:.85rem;transition:color .2s}
+    .header a:hover{color:#10b981}
+
+    /* Action bar */
+    .action-bar{display:flex;align-items:center;gap:8px;padding:0 24px 16px;max-width:1200px;margin:0 auto;flex-wrap:wrap}
+    .action-bar .btn-icon{display:flex;align-items:center;gap:6px;padding:8px 14px;border-radius:10px;border:1px solid #334155;background:#1e293b;color:#94a3b8;cursor:pointer;font-size:.82rem;transition:all .2s}
+    .action-bar .btn-icon:hover{background:#10b981;color:#fff;border-color:#10b981}
+    .action-bar .btn-icon i{font-size:1rem}
 
     /* Marquee */
-    .marquee-wrap { overflow: hidden; background: linear-gradient(90deg, #065f46, #047857); padding: 10px 0; white-space: nowrap; }
-    .marquee-inner { display: inline-block; animation: scrollMarquee 20s linear infinite; font-size: 0.9rem; color: #a7f3d0; font-weight: 500; }
-    .marquee-inner span { padding: 0 48px; }
-    @keyframes scrollMarquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
-
-    /* Hero Carousel */
-    .carousel-wrap { position: relative; overflow: hidden; height: 360px; }
-    .carousel-slide { position: absolute; inset: 0; opacity: 0; transition: opacity 0.6s ease; background-size: cover; background-position: center; display: flex; align-items: center; padding: 48px; }
-    .carousel-slide.activo { opacity: 1; }
-    .carousel-overlay { background: linear-gradient(90deg, rgba(0,0,0,0.75), transparent); padding: 32px 40px; border-radius: 16px; max-width: 500px; }
-    .carousel-overlay h2 { font-size: 2rem; font-weight: 700; color: #fff; margin-bottom: 8px; }
-    .carousel-overlay p { font-size: 1.1rem; color: #d1d5db; }
-    .carousel-dots { position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); display: flex; gap: 10px; }
-    .carousel-dots button { width: 12px; height: 12px; border-radius: 50%; border: 2px solid rgba(255,255,255,0.5); background: transparent; cursor: pointer; transition: all 0.3s; }
-    .carousel-dots button.activo { background: #10b981; border-color: #10b981; }
+    .marquee-wrap{overflow:hidden;background:linear-gradient(90deg,#065f46,#047857);padding:10px 0;white-space:nowrap}
+    .marquee-inner{display:inline-block;animation:scrollMarquee 22s linear infinite;font-size:.88rem;color:#a7f3d0;font-weight:500}
+    .marquee-inner span{padding:0 48px}
+    @keyframes scrollMarquee{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
 
     /* Search */
-    .search-wrap { max-width: 600px; margin: 24px auto; padding: 0 24px; }
-    .search-wrap input { width: 100%; padding: 14px 20px; border-radius: 12px; border: 1px solid #334155; background: #1e293b; color: #e2e8f0; font-size: 1rem; outline: none; transition: border 0.2s; }
-    .search-wrap input:focus { border-color: #10b981; }
-    .search-wrap input::placeholder { color: #64748b; }
+    .search-wrap{max-width:600px;margin:16px auto;padding:0 24px}
+    .search-wrap input{width:100%;padding:12px 18px;border-radius:12px;border:1px solid #334155;background:#1e293b;color:#e2e8f0;font-size:.95rem;outline:none;transition:border .2s}
+    .search-wrap input:focus{border-color:#10b981}
+    .search-wrap input::placeholder{color:#64748b}
 
-    /* Sections */
-    .section-title { font-size: 1.3rem; font-weight: 700; color: #f1f5f9; padding: 32px 24px 16px; max-width: 1200px; margin: 0 auto; }
-    .section-title span { color: #10b981; }
+    /* Tabs */
+    .tabs-wrap{padding:0 24px;max-width:1200px;margin:0 auto}
+    .tabs-hdr{display:flex;gap:4px;background:#1e293b;border-radius:12px;padding:4px;width:fit-content}
+    .tabs-hdr button{padding:8px 20px;border-radius:10px;border:none;background:transparent;color:#94a3b8;cursor:pointer;font-size:.85rem;font-weight:500;transition:all .2s}
+    .tabs-hdr button.activo{background:#10b981;color:#fff}
+    .tabs-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;padding:16px 0 24px}
+    .tabs-grid .card{background:#1e293b;border-radius:12px;overflow:hidden;border:1px solid #334155;transition:transform .2s,box-shadow .2s;display:flex;flex-direction:column}
+    .tabs-grid .card:hover{transform:translateY(-3px);box-shadow:0 8px 20px -6px rgba(0,0,0,.4)}
+    .tabs-grid .card-img{width:100%;height:140px;object-fit:cover;background:#334155;display:flex;align-items:center;justify-content:center;color:#475569;font-size:.75rem}
+    .tabs-grid .card-body{padding:10px;flex:1;display:flex;flex-direction:column}
+    .tabs-grid .card-body h3{font-size:.85rem;font-weight:600;color:#f1f5f9;margin-bottom:2px}
+    .tabs-grid .card-body .precio{font-size:1rem;font-weight:700;color:#10b981;margin-top:auto}
+    .tabs-grid .card-blog{background:#1e293b;border-radius:12px;overflow:hidden;border:1px solid #334155;padding:16px;display:flex;flex-direction:column}
+    .tabs-grid .card-blog h3{font-size:.9rem;color:#f1f5f9;margin-bottom:6px;line-height:1.3}
+    .tabs-grid .card-blog p{font-size:.78rem;color:#64748b;flex:1;line-height:1.4}
+    .tabs-grid .card-blog .tag{display:inline-block;padding:2px 8px;border-radius:999px;background:#065f46;color:#6ee7b7;font-size:.7rem;font-weight:600;margin-bottom:8px;width:fit-content}
 
-    /* Category pills */
-    .filtros { display: flex; gap: 8px; padding: 0 24px 24px; flex-wrap: wrap; justify-content: center; }
-    .filtros button { padding: 8px 20px; border-radius: 999px; border: 1px solid #334155; background: transparent; color: #94a3b8; cursor: pointer; font-size: 0.875rem; transition: all 0.2s; white-space: nowrap; }
-    .filtros button:hover, .filtros button.activo { background: #10b981; color: #fff; border-color: #10b981; }
+    /* Section title */
+    .section-title{font-size:1.2rem;font-weight:700;color:#f1f5f9;padding:28px 24px 14px;max-width:1200px;margin:0 auto}
+    .section-title span{color:#10b981}
+    .section-title i{color:#f59e0b;margin-right:8px}
 
-    /* Products grid */
-    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 20px; padding: 0 24px 32px; max-width: 1200px; margin: 0 auto; }
-    .card { background: #1e293b; border-radius: 16px; overflow: hidden; border: 1px solid #334155; transition: transform 0.2s, box-shadow 0.2s; display: flex; flex-direction: column; }
-    .card:hover { transform: translateY(-4px); box-shadow: 0 12px 24px -8px rgba(0,0,0,0.4); }
-    .card-img { width: 100%; height: 200px; object-fit: cover; background: #334155; display: flex; align-items: center; justify-content: center; color: #475569; font-size: 0.8rem; }
-    .card-body { padding: 16px; flex: 1; display: flex; flex-direction: column; }
-    .card-body h3 { font-size: 1rem; font-weight: 600; color: #f1f5f9; margin-bottom: 4px; }
-    .card-body .desc { font-size: 0.8rem; color: #64748b; margin-bottom: 12px; line-height: 1.4; flex: 1; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
-    .card-body .precio { font-size: 1.25rem; font-weight: 700; color: #10b981; margin-bottom: 12px; }
-    .card-body .btn { width: 100%; padding: 10px; border-radius: 10px; border: none; background: #10b981; color: #fff; font-weight: 600; font-size: 0.875rem; cursor: pointer; transition: background 0.2s; }
-    .card-body .btn:hover { background: #059669; }
-    .card-body .btn:disabled { background: #334155; color: #64748b; cursor: not-allowed; }
-    .badge { display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: 0.7rem; font-weight: 600; margin-bottom: 8px; width: fit-content; }
-    .badge-stock { background: #065f46; color: #6ee7b7; }
-    .badge-agotado { background: #7f1d1d; color: #fca5a5; }
+    /* Carousel */
+    .carousel-wrap{position:relative;overflow:hidden;height:340px;margin:0 24px;border-radius:16px;max-width:1200px;margin-left:auto;margin-right:auto}
+    .carousel-slide{position:absolute;inset:0;opacity:0;transition:opacity .6s ease;background-size:cover;background-position:center;display:flex;align-items:center;padding:40px}
+    .carousel-slide.activo{opacity:1}
+    .carousel-overlay{background:linear-gradient(90deg,rgba(0,0,0,.75),transparent);padding:28px 36px;border-radius:14px;max-width:480px}
+    .carousel-overlay h2{font-size:1.6rem;font-weight:700;color:#fff;margin-bottom:6px}
+    .carousel-overlay p{font-size:1rem;color:#d1d5db}
+    .carousel-dots{position:absolute;bottom:16px;left:50%;transform:translateX(-50%);display:flex;gap:8px}
+    .carousel-dots button{width:10px;height:10px;border-radius:50%;border:2px solid rgba(255,255,255,.5);background:transparent;cursor:pointer;transition:all .3s}
+    .carousel-dots button.activo{background:#10b981;border-color:#10b981}
 
-    /* Middle banners */
-    .banners-mid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; padding: 0 24px 32px; max-width: 1200px; margin: 0 auto; }
-    .banner-card { border-radius: 16px; overflow: hidden; position: relative; height: 200px; background-size: cover; background-position: center; cursor: pointer; transition: transform 0.3s; }
-    .banner-card:hover { transform: scale(1.02); }
-    .banner-card .overlay { position: absolute; inset: 0; background: linear-gradient(135deg, rgba(0,0,0,0.6), transparent); padding: 24px; display: flex; flex-direction: column; justify-content: flex-end; }
-    .banner-card .overlay h3 { font-size: 1.3rem; font-weight: 700; color: #fff; }
-    .banner-card .overlay p { font-size: 0.9rem; color: #d1d5db; margin-top: 4px; }
+    /* Categories grid */
+    .cat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:12px;padding:0 24px 24px;max-width:1200px;margin:0 auto}
+    .cat-card{background:#1e293b;border-radius:12px;padding:20px 12px;text-align:center;border:1px solid #334155;cursor:pointer;transition:all .2s}
+    .cat-card:hover{background:#10b981;border-color:#10b981;transform:translateY(-2px)}
+    .cat-card i{font-size:1.8rem;color:#10b981;margin-bottom:8px;display:block}
+    .cat-card:hover i{color:#fff}
+    .cat-card span{font-size:.82rem;color:#e2e8f0;font-weight:500}
 
-    /* Bottom banners */
-    .banners-bottom { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; padding: 0 24px 32px; max-width: 1200px; margin: 0 auto; }
+    /* Banners */
+    .banners-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px;padding:0 24px 24px;max-width:1200px;margin:0 auto}
+    .banner-card{border-radius:14px;overflow:hidden;position:relative;height:180px;background-size:cover;background-position:center;cursor:pointer;transition:transform .3s}
+    .banner-card:hover{transform:scale(1.02)}
+    .banner-card .overlay{position:absolute;inset:0;background:linear-gradient(135deg,rgba(0,0,0,.6),transparent);padding:20px;display:flex;flex-direction:column;justify-content:flex-end}
+    .banner-card .overlay h3{font-size:1.15rem;font-weight:700;color:#fff}
+    .banner-card .overlay p{font-size:.85rem;color:#d1d5db;margin-top:4px}
+
+    /* Product section grid */
+    .prod-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px;padding:0 24px 24px;max-width:1200px;margin:0 auto}
+    .prod-grid .card{background:#1e293b;border-radius:14px;overflow:hidden;border:1px solid #334155;transition:transform .2s,box-shadow .2s;display:flex;flex-direction:column}
+    .prod-grid .card:hover{transform:translateY(-3px);box-shadow:0 10px 22px -8px rgba(0,0,0,.4)}
+    .prod-grid .card-img{width:100%;height:170px;object-fit:cover;background:#334155;display:flex;align-items:center;justify-content:center;color:#475569;font-size:.75rem}
+    .prod-grid .card-body{padding:12px;flex:1;display:flex;flex-direction:column}
+    .prod-grid .card-body h3{font-size:.88rem;font-weight:600;color:#f1f5f9;margin-bottom:2px}
+    .prod-grid .card-body .precio{font-size:1.1rem;font-weight:700;color:#10b981;margin-top:auto}
+    .prod-grid .card-body .btn{margin-top:8px;padding:8px;border-radius:8px;border:none;background:#10b981;color:#fff;font-weight:600;font-size:.8rem;cursor:pointer;transition:background .2s}
+    .prod-grid .card-body .btn:hover{background:#059669}
+    .badge{display:inline-block;padding:2px 7px;border-radius:999px;font-size:.65rem;font-weight:600;margin-bottom:6px;width:fit-content}
+    .badge-stock{background:#065f46;color:#6ee7b7}
+    .badge-agotado{background:#7f1d1d;color:#fca5a5}
 
     /* States */
-    .empty { text-align: center; padding: 64px 24px; color: #475569; }
-    .empty svg { width: 64px; height: 64px; margin: 0 auto 16px; opacity: 0.4; }
-    .loading { text-align: center; padding: 64px; }
-    .spinner { width: 40px; height: 40px; border: 4px solid #334155; border-top-color: #10b981; border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 16px; }
-    @keyframes spin { to { transform: rotate(360deg); } }
-    .error { text-align: center; padding: 64px 24px; color: #ef4444; }
+    .empty{text-align:center;padding:48px 24px;color:#475569}
+    .loading{text-align:center;padding:64px}
+    .spinner{width:36px;height:36px;border:4px solid #334155;border-top-color:#10b981;border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 14px}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    .error{text-align:center;padding:48px 24px;color:#ef4444}
 
     /* Footer */
-    .footer { background: #0f172a; border-top: 1px solid #1e293b; padding: 40px 24px 24px; margin-top: 32px; }
-    .footer-inner { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 32px; }
-    .footer-col h4 { color: #f1f5f9; font-size: 0.95rem; font-weight: 600; margin-bottom: 12px; }
-    .footer-col p, .footer-col a { color: #64748b; font-size: 0.85rem; line-height: 1.8; text-decoration: none; display: block; }
-    .footer-col a:hover { color: #10b981; }
-    .footer-bottom { text-align: center; color: #475569; font-size: 0.8rem; border-top: 1px solid #1e293b; margin-top: 32px; padding-top: 20px; }
+    .footer{background:#0f172a;border-top:1px solid #1e293b;padding:36px 24px 20px;margin-top:32px}
+    .footer-inner{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:28px}
+    .footer-col h4{color:#f1f5f9;font-size:.9rem;font-weight:600;margin-bottom:10px}
+    .footer-col p,.footer-col a{color:#64748b;font-size:.82rem;line-height:1.8;text-decoration:none;display:block}
+    .footer-col a:hover{color:#10b981}
+    .footer-bottom{text-align:center;color:#475569;font-size:.78rem;border-top:1px solid #1e293b;margin-top:28px;padding-top:18px}
 
     /* Responsive */
-    @media (max-width: 640px) {
-      .carousel-wrap { height: 260px; }
-      .carousel-slide { padding: 24px; }
-      .carousel-overlay { padding: 20px 24px; }
-      .carousel-overlay h2 { font-size: 1.3rem; }
-      .carousel-overlay p { font-size: 0.9rem; }
-      .grid { grid-template-columns: repeat(2, 1fr); gap: 10px; padding: 0 12px 24px; }
-      .card-img { height: 130px; }
-      .card-body { padding: 10px; }
-      .card-body h3 { font-size: 0.85rem; }
-      .card-body .precio { font-size: 1rem; }
-      .card-body .desc { font-size: 0.75rem; -webkit-line-clamp: 2; }
-      .banners-mid, .banners-bottom { grid-template-columns: 1fr; padding: 0 12px 24px; }
-      .banner-card { height: 160px; }
-      .section-title { font-size: 1.1rem; padding: 24px 12px 12px; }
-      .search-wrap { margin: 16px auto; padding: 0 12px; }
-      .filtros { padding: 0 12px 16px; gap: 6px; }
-      .filtros button { font-size: 0.75rem; padding: 6px 12px; }
-      .footer-inner { grid-template-columns: 1fr 1fr; gap: 24px; }
-      .header { padding: 12px 16px; }
-      .header h1 { font-size: 1.2rem; }
+    @media(max-width:640px){
+      .carousel-wrap{height:220px;margin:0 12px;border-radius:12px}
+      .carousel-slide{padding:20px}
+      .carousel-overlay{padding:16px 20px}
+      .carousel-overlay h2{font-size:1.15rem}
+      .carousel-overlay p{font-size:.82rem}
+      .tabs-grid{grid-template-columns:repeat(2,1fr)}
+      .prod-grid{grid-template-columns:repeat(2,1fr);gap:10px;padding:0 12px 20px}
+      .prod-grid .card-img{height:130px}
+      .cat-grid{grid-template-columns:repeat(3,1fr);gap:8px;padding:0 12px 16px}
+      .cat-card{padding:14px 8px}
+      .cat-card i{font-size:1.4rem}
+      .banners-grid{padding:0 12px 16px;grid-template-columns:1fr}
+      .banner-card{height:150px}
+      .section-title{font-size:1rem;padding:20px 12px 10px}
+      .search-wrap{padding:0 12px}
+      .action-bar{padding:0 12px 12px;gap:6px}
+      .action-bar .btn-icon{padding:6px 10px;font-size:.78rem}
+      .header{padding:10px 16px}
+      .header h1{font-size:1.1rem}
+      .tabs-wrap{padding:0 12px}
+      .tabs-hdr button{padding:6px 14px;font-size:.8rem}
     }
   </style>
 </head>
 <body>
   <header class="header">
     <h1>El Guía <span>Ya</span> · Tienda</h1>
-    <a href="/">← Volver al inicio</a>
+    <a href="/"><i class="fas fa-arrow-left"></i> Inicio</a>
   </header>
 
   <div id="marquee" class="marquee-wrap" style="display:none"></div>
-  <div id="carousel" class="carousel-wrap" style="display:none"></div>
 
   <div class="search-wrap">
     <input type="text" id="buscador" placeholder="Buscar productos..." oninput="buscarProductos(this.value)">
   </div>
 
-  <div id="filtros" class="filtros"></div>
-  <div id="productos" class="grid"></div>
-
-  <div id="banners-mid" class="banners-mid" style="display:none"></div>
-  <div id="banners-bottom" class="banners-bottom" style="display:none"></div>
-
-  <div id="empty" class="empty" style="display:none">
-    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
-    <p>No hay productos disponibles.</p>
+  <div class="action-bar">
+    <button class="btn-icon"><i class="fas fa-shopping-cart"></i> Carrito</button>
+    <button class="btn-icon"><i class="fas fa-heart"></i> Favoritos</button>
+    <button class="btn-icon"><i class="fas fa-user"></i> Ingresar</button>
   </div>
+
+  <div id="tabs-seccion" class="tabs-wrap" style="display:none">
+    <div class="tabs-hdr">
+      <button class="activo" onclick="cambiarTab('productos')">Productos</button>
+      <button onclick="cambiarTab('blog')">Blog</button>
+    </div>
+    <div id="tab-content" class="tabs-grid"></div>
+  </div>
+
+  <div id="carousel" class="carousel-wrap" style="display:none"></div>
+
+  <h2 class="section-title"><i class="fas fa-th-large"></i>Explora por <span>Categorías</span></h2>
+  <div id="cat-grid" class="cat-grid"></div>
+
+  <div id="banners-mid" class="banners-grid" style="display:none"></div>
+
+  <h2 class="section-title"><i class="fas fa-fish"></i>Accesorios de <span>Pesca</span></h2>
+  <div id="prods-pesca" class="prod-grid"></div>
+
+  <div id="banners-bottom" class="banners-grid" style="display:none"></div>
+
+  <h2 class="section-title"><i class="fas fa-star"></i>Colecciones <span>Especiales</span></h2>
+  <div id="colecciones" class="cat-grid"></div>
+
+  <h2 class="section-title"><i class="fas fa-clock"></i>Novedades y nuevas <span>colecciones</span></h2>
+  <div id="novedades" class="prod-grid"></div>
+
   <div id="loading" class="loading">
     <div class="spinner"></div>
     <p>Cargando tienda...</p>
   </div>
-  <div id="error" class="error" style="display:none">
-    <p>Error al cargar la tienda. Intentalo de nuevo más tarde.</p>
-  </div>
+  <div id="empty" class="empty" style="display:none"><p>No hay productos disponibles.</p></div>
+  <div id="error" class="error" style="display:none"><p>Error al cargar la tienda. Intentalo de nuevo más tarde.</p></div>
 
   <footer class="footer">
     <div class="footer-inner">
-      <div class="footer-col">
-        <h4>El Guía Ya</h4>
-        <p>Plataforma náutica argentina para la vinculación segura de pescadores y capitanes.</p>
-      </div>
-      <div class="footer-col">
-        <h4>Tienda</h4>
-        <a href="/tienda">Productos</a>
-        <a href="https://app.elguiaya.com/tienda">Tienda completa</a>
-      </div>
-      <div class="footer-col">
-        <h4>Ayuda</h4>
-        <a href="/">Inicio</a>
-        <a href="/#how-it-works">Cómo funciona</a>
-      </div>
-      <div class="footer-col">
-        <h4>Contacto</h4>
-        <p>Buenos Aires, Argentina</p>
-        <p>info@elguiaya.com</p>
-      </div>
+      <div class="footer-col"><h4>El Guía Ya</h4><p>Plataforma náutica argentina para la vinculación segura de pescadores y capitanes.</p></div>
+      <div class="footer-col"><h4>Tienda</h4><a href="/tienda">Productos</a><a href="https://app.elguiaya.com/tienda">Tienda completa</a></div>
+      <div class="footer-col"><h4>Ayuda</h4><a href="/">Inicio</a><a href="/#how-it-works">Cómo funciona</a></div>
+      <div class="footer-col"><h4>Contacto</h4><p>Buenos Aires, Argentina</p><p>info@elguiaya.com</p></div>
     </div>
     <div class="footer-bottom">© 2026 El Guía Ya — Plataforma Náutica Argentina</div>
   </footer>
 
   <script>
-    const SUPABASE_URL = 'https://ymgsxwfwntbqvguvbhoa.supabase.co';
-    const SUPABASE_ANON_KEY = 'sb_publishable_VWBnZN0tTUA_8zeULPU8Jg_hmsJauq6';
-    const headers = { 'apikey': SUPABASE_ANON_KEY, 'Authorization': `Bearer ${SUPABASE_ANON_KEY}` };
+    const SB_URL='https://ymgsxwfwntbqvguvbhoa.supabase.co', SB_KEY='sb_publishable_VWBnZN0tTUA_8zeULPU8Jg_hmsJauq6';
+    const hdrs={'apikey':SB_KEY,'Authorization':`Bearer ${SB_KEY}`};
+    async function sbGet(t,o={}){let u=SB_URL+'/rest/v1/'+t+'?select=*';if(o.eq)u+='&'+o.eq.col+'=eq.'+encodeURIComponent(o.eq.val);if(o.order)u+='&order='+o.order.col+(o.order.asc?'':'.desc');if(o.limit)u+='&limit='+o.limit;const r=await fetch(u,{headers:hdrs});if(!r.ok)throw new Error('Supabase error: '+r.status);return r.json()}
 
-    async function supabaseGet(table, opts = {}) {
-      let url = `${SUPABASE_URL}/rest/v1/${table}?select=*`;
-      if (opts.eq) url += `&${opts.eq.col}=eq.${encodeURIComponent(opts.eq.val)}`;
-      if (opts.order) url += `&order=${opts.order.col}${opts.order.asc ? '' : '.desc'}`;
-      if (opts.limit) url += `&limit=${opts.limit}`;
-      const r = await fetch(url, { headers });
-      if (!r.ok) throw new Error(`Supabase error: ${r.status}`);
-      return r.json();
-    }
+    let productos=[], categorias=[], banners=[], blogs=[], tabActivo='productos';
 
-    let productos = [];
-    let categorias = [];
-    let banners = [];
-    let filtroActivo = 'todas';
-    let busqueda = '';
-
-    async function cargarDatos() {
-      mostrarLoading(true);
-      try {
-        const [prod, cat, ban] = await Promise.all([
-          supabaseGet('productos', { eq: { col: 'activo', val: true }, order: { col: 'created_at', asc: false } }),
-          supabaseGet('categorias', { eq: { col: 'activa', val: true }, order: { col: 'nombre', asc: true } }),
-          supabaseGet('banners_promo', { eq: { col: 'activo', val: true }, order: { col: 'orden', asc: true } }),
+    async function cargarDatos(){
+      document.getElementById('loading').style.display='block';
+      try{
+        [productos,categorias,banners,blogs]=await Promise.all([
+          sbGet('productos',{eq:{col:'activo',val:true},order:{col:'created_at',asc:false}}),
+          sbGet('categorias',{eq:{col:'activa',val:true},order:{col:'nombre',asc:true}}),
+          sbGet('banners_promo',{eq:{col:'activo',val:true},order:{col:'orden',asc:true}}),
+          sbGet('blog_articulos',{eq:{col:'activo',val:true},order:{col:'created_at',asc:false}}),
         ]);
-        productos = prod;
-        categorias = cat;
-        banners = ban;
-        mostrarLoading(false);
-        renderizarMarquee();
-        renderizarCarousel();
-        renderizarBannersMedio();
-        renderizarBannersBottom();
-        renderizarFiltros();
-        renderizarProductos();
-      } catch (e) {
-        console.error(e);
-        mostrarLoading(false);
-        document.getElementById('error').style.display = 'block';
-      }
+        document.getElementById('loading').style.display='none';
+        renderMarquee(); renderCarousel(); renderCategorias();
+        renderBanners('mid'); renderBanners('bottom');
+        renderProdsPesca(); renderNovedades(); renderColecciones();
+        renderTabProductos();
+        document.getElementById('tabs-seccion').style.display='block';
+      }catch(e){console.error(e);document.getElementById('loading').style.display='none';document.getElementById('error').style.display='block'}
     }
 
-    function renderizarMarquee() {
-      const marquee = banners.filter(b => b.tipo === 'marquee');
-      if (!marquee.length) return;
-      const c = document.getElementById('marquee');
-      c.style.display = 'block';
-      const items = marquee.map(m => `<span>✦ ${escapeHtml(m.titulo)}</span>`).join('');
-      c.innerHTML = `<div class="marquee-inner">${items}${items}</div>`;
+    function renderMarquee(){
+      const m=banners.filter(b=>b.tipo==='marquee');
+      if(!m.length)return;
+      const c=document.getElementById('marquee');c.style.display='block';
+      c.innerHTML='<div class="marquee-inner">'+m.map(x=>'<span>✦ '+esc(x.titulo)+'</span>').join('')+m.map(x=>'<span>✦ '+esc(x.titulo)+'</span>').join('')+'</div>';
     }
 
-    function renderizarCarousel() {
-      const hero = banners.filter(b => b.tipo === 'hero');
-      if (!hero.length) return;
-      const c = document.getElementById('carousel');
-      c.style.display = 'block';
-      let slides = hero.map((b, i) => `
-        <div class="carousel-slide${i === 0 ? ' activo' : ''}" style="background-image:url('${b.imagen_url}')">
-          <div class="carousel-overlay">
-            <h2>${escapeHtml(b.titulo)}</h2>
-            ${b.subtitulo ? `<p>${escapeHtml(b.subtitulo)}</p>` : ''}
-          </div>
-        </div>
-      `).join('');
-      let dots = hero.map((_, i) => `<button class="${i === 0 ? 'activo' : ''}" onclick="irASlide(${i})"></button>`).join('');
-      c.innerHTML = slides + `<div class="carousel-dots">${dots}</div>`;
-      if (hero.length > 1) inicioCarousel = setInterval(() => avanzarSlide(), 5000);
+    function renderCarousel(){
+      const h=banners.filter(b=>b.tipo==='hero');
+      if(!h.length)return;
+      const c=document.getElementById('carousel');c.style.display='block';
+      c.innerHTML=h.map((b,i)=>'<div class="carousel-slide'+(i===0?' activo':'')+'" style="background-image:url(\''+b.imagen_url+'\')"><div class="carousel-overlay"><h2>'+esc(b.titulo)+'</h2>'+(b.subtitulo?'<p>'+esc(b.subtitulo)+'</p>':'')+'</div></div>').join('')+
+        '<div class="carousel-dots">'+h.map((_,i)=>'<button class="'+(i===0?'activo':'')+'" onclick="irSlide('+i+')"></button>').join('')+'</div>';
+      if(h.length>1)setInterval(()=>{const s=document.querySelectorAll('.carousel-slide'),d=document.querySelectorAll('.carousel-dots button');if(!s.length)return;let idx=Array.from(s).findIndex(x=>x.classList.contains('activo'));const n=(idx+1)%s.length;s.forEach(x=>x.classList.remove('activo'));d.forEach(x=>x.classList.remove('activo'));s[n].classList.add('activo');d[n].classList.add('activo')},5000)
+    }
+    function irSlide(n){const c=document.getElementById('carousel');if(!c)return;const s=c.querySelectorAll('.carousel-slide'),d=c.querySelectorAll('.carousel-dots button');s.forEach(x=>x.classList.remove('activo'));d.forEach(x=>x.classList.remove('activo'));s[n].classList.add('activo');d[n].classList.add('activo')}
+
+    function renderCategorias(){
+      const c=document.getElementById('cat-grid');
+      if(!categorias.length){c.innerHTML='<p style="color:#475569;grid-column:1/-1;text-align:center">Sin categorías</p>';return}
+      c.innerHTML=categorias.map(cat=>{
+        const iconos={'Pesca Deportiva':'fa-fish','Camping':'fa-campground','Náutica':'fa-ship','Indumentaria':'fa-tshirt','Electrónica':'fa-microchip','Señuelos':'fa-hook'};
+        const icon=iconos[cat.nombre]||'fa-tag';
+        return '<div class="cat-card" onclick="filtrarCategoria(\''+cat.id+'\')"><i class="fas '+icon+'"></i><span>'+esc(cat.nombre)+'</span></div>'
+      }).join('');
+    }
+    function filtrarCategoria(id){
+      document.getElementById('buscador').value='';
+      const btn=document.querySelector('#filtros button[data-filtro="'+id+'"]');
+      if(btn)btn.click();
+      else window.location.href='/tienda#'+id;
     }
 
-    let slideIdx = 0;
-    let inicioCarousel = null;
-
-    function irASlide(n) {
-      const c = document.getElementById('carousel');
-      if (!c) return;
-      const slides = c.querySelectorAll('.carousel-slide');
-      const dots = c.querySelectorAll('.carousel-dots button');
-      slides.forEach(s => s.classList.remove('activo'));
-      dots.forEach(d => d.classList.remove('activo'));
-      slideIdx = n;
-      slides[n].classList.add('activo');
-      dots[n].classList.add('activo');
+    function renderBanners(tipo){
+      const items=banners.filter(b=>b.tipo===tipo);
+      if(!items.length)return;
+      const c=document.getElementById('banners-'+(tipo==='mid'?'mid':'bottom'));c.style.display='grid';
+      c.innerHTML=items.map(b=>'<div class="banner-card" style="background-image:url(\''+b.imagen_url+'\')"><div class="overlay"><h3>'+esc(b.titulo)+'</h3>'+(b.subtitulo?'<p>'+esc(b.subtitulo)+'</p>':'')+'</div></div>').join('');
     }
 
-    function avanzarSlide() {
-      const c = document.getElementById('carousel');
-      if (!c) return;
-      const total = c.querySelectorAll('.carousel-slide').length;
-      irASlide((slideIdx + 1) % total);
+    function renderProdsPesca(){
+      const c=document.getElementById('prods-pesca');
+      const items=productos.filter(p=>p.rubro==='pesca').slice(0,4);
+      if(!items.length){c.innerHTML='<p style="color:#475569;grid-column:1/-1;text-align:center">Próximamente</p>';return}
+      c.innerHTML=items.map(p=>renderCard(p)).join('');
     }
 
-    function renderizarBannersMedio() {
-      const mid = banners.filter(b => b.tipo === 'middle');
-      if (!mid.length) return;
-      const c = document.getElementById('banners-mid');
-      c.style.display = 'grid';
-      c.innerHTML = mid.map(b => `
-        <div class="banner-card" style="background-image:url('${b.imagen_url}')">
-          <div class="overlay">
-            <h3>${escapeHtml(b.titulo)}</h3>
-            ${b.subtitulo ? `<p>${escapeHtml(b.subtitulo)}</p>` : ''}
-          </div>
-        </div>
-      `).join('');
+    function renderNovedades(){
+      const c=document.getElementById('novedades');
+      const items=productos.filter(p=>p.destacado||true).slice(0,4);
+      if(!items.length){c.innerHTML='<p style="color:#475569;grid-column:1/-1;text-align:center">Próximamente</p>';return}
+      c.innerHTML=items.map(p=>renderCard(p)).join('');
     }
 
-    function renderizarBannersBottom() {
-      const bot = banners.filter(b => b.tipo === 'bottom');
-      if (!bot.length) return;
-      const c = document.getElementById('banners-bottom');
-      c.style.display = 'grid';
-      c.innerHTML = bot.map(b => `
-        <div class="banner-card" style="background-image:url('${b.imagen_url}')">
-          <div class="overlay">
-            <h3>${escapeHtml(b.titulo)}</h3>
-            ${b.subtitulo ? `<p>${escapeHtml(b.subtitulo)}</p>` : ''}
-          </div>
-        </div>
-      `).join('');
-    }
-
-    function renderizarFiltros() {
-      const container = document.getElementById('filtros');
-      const rubrosUnicos = [...new Set(productos.filter(p => p.rubro).map(p => p.rubro))];
-      let html = '<button class="activo" data-filtro="todas">Todas</button>';
-      rubrosUnicos.forEach(r => {
-        if (r) html += `<button data-filtro="${r}">${r.charAt(0).toUpperCase() + r.slice(1)}</button>`;
-      });
-      categorias.forEach(c => {
-        if (productos.some(p => p.categoria_id === c.id)) {
-          html += `<button data-filtro="${c.id}">${escapeHtml(c.nombre)}</button>`;
-        }
-      });
-      container.innerHTML = html;
-      container.querySelectorAll('button').forEach(btn => {
-        btn.addEventListener('click', () => {
-          container.querySelectorAll('button').forEach(b => b.classList.remove('activo'));
-          btn.classList.add('activo');
-          filtroActivo = btn.dataset.filtro;
-          renderizarProductos();
-        });
-      });
-    }
-
-    function buscarProductos(valor) {
-      busqueda = valor.toLowerCase().trim();
-      renderizarProductos();
-    }
-
-    function renderizarProductos() {
-      const container = document.getElementById('productos');
-      const empty = document.getElementById('empty');
-      let filtrados = productos;
-      if (busqueda) {
-        filtrados = filtrados.filter(p =>
-          (p.nombre || '').toLowerCase().includes(busqueda) ||
-          (p.descripcion || '').toLowerCase().includes(busqueda)
-        );
-      }
-      if (filtroActivo !== 'todas') {
-        filtrados = filtrados.filter(p => {
-          const esRubro = ['pesca', 'camping'].includes(filtroActivo);
-          return esRubro ? p.rubro === filtroActivo : p.categoria_id === filtroActivo;
-        });
-      }
-      if (filtrados.length === 0) {
-        container.innerHTML = '';
-        empty.style.display = 'block';
-        return;
-      }
-      empty.style.display = 'none';
-      container.innerHTML = filtrados.map(p => {
-        const img = p.imagen_url
-          ? `<img class="card-img" src="${escapeHtml(p.imagen_url)}" alt="${escapeHtml(p.nombre)}" loading="lazy" onerror="this.closest('.card').querySelector('.card-img').outerHTML='<div class=card-img>Sin imagen</div>'">`
-          : `<div class="card-img">Sin imagen</div>`;
-        const stock = (p.stock || 0) > 0;
-        return `
-          <div class="card">
-            ${img}
-            <div class="card-body">
-              <span class="badge ${stock ? 'badge-stock' : 'badge-agotado'}">${stock ? 'En stock' : 'Agotado'}</span>
-              <h3>${escapeHtml(p.nombre)}</h3>
-              <p class="desc">${escapeHtml((p.descripcion || '').slice(0, 120))}</p>
-              <div class="precio">$${Number(p.precio).toLocaleString('es-AR', { minimumFractionDigits: 2 })}</div>
-              <button class="btn" onclick="comprar('${p.id}')" ${stock ? '' : 'disabled'}>${stock ? 'Comprar' : 'Sin stock'}</button>
-            </div>
-          </div>`;
+    function renderColecciones(){
+      const c=document.getElementById('colecciones');
+      const catsConProds=categorias.filter(cat=>productos.some(p=>p.categoria_id===cat.id));
+      if(!catsConProds.length){c.innerHTML='<p style="color:#475569;grid-column:1/-1;text-align:center">Próximamente</p>';return}
+      c.innerHTML=catsConProds.slice(0,6).map(cat=>{
+        const iconos={'Pesca Deportiva':'fa-fish','Camping':'fa-campground','Náutica':'fa-ship','Indumentaria':'fa-tshirt'};
+        return '<div class="cat-card" onclick="filtrarCategoria(\''+cat.id+'\')"><i class="fas '+(iconos[cat.nombre]||'fa-tag')+'"></i><span>'+esc(cat.nombre)+'</span></div>'
       }).join('');
     }
 
-    function comprar() { window.location.href = 'https://app.elguiaya.com/tienda'; }
-    function escapeHtml(text) { if (!text) return ''; const d = document.createElement('div'); d.textContent = text; return d.innerHTML; }
-    function mostrarLoading(show) { document.getElementById('loading').style.display = show ? 'block' : 'none'; }
+    function cambiarTab(tab){
+      tabActivo=tab;
+      document.querySelectorAll('.tabs-hdr button').forEach(b=>b.classList.remove('activo'));
+      document.querySelectorAll('.tabs-hdr button')[tab==='productos'?0:1].classList.add('activo');
+      if(tab==='productos')renderTabProductos();else renderTabBlog();
+    }
 
+    function renderTabProductos(){
+      const c=document.getElementById('tab-content');
+      const items=productos.slice(0,4);
+      if(!items.length){c.innerHTML='<p style="color:#475569;grid-column:1/-1;text-align:center">Sin productos</p>';return}
+      c.innerHTML=items.map(p=>{
+        const img=p.imagen_url?'<img class="card-img" src="'+esc(p.imagen_url)+'" alt="'+esc(p.nombre)+'" loading="lazy" onerror="this.outerHTML=\'<div class=card-img>Sin imagen</div>\'">':'<div class="card-img">Sin imagen</div>';
+        return '<div class="card">'+img+'<div class="card-body"><h3>'+esc(p.nombre)+'</h3><div class="precio">$'+Number(p.precio).toLocaleString('es-AR',{minimumFractionDigits:2})+'</div></div></div>'
+      }).join('');
+    }
+
+    function renderTabBlog(){
+      const c=document.getElementById('tab-content');
+      const items=blogs.slice(0,4);
+      if(!items.length){c.innerHTML='<p style="color:#475569;grid-column:1/-1;text-align:center">Sin artículos</p>';return}
+      c.innerHTML=items.map(b=>{
+        const img=b.imagen_portada?'<img class="card-img" src="'+esc(b.imagen_portada)+'" alt="'+esc(b.titulo)+'" loading="lazy" onerror="this.outerHTML=\'<div class=card-img>Blog</div>\'">':'<div class="card-img">Blog</div>';
+        return '<div class="card">'+img+'<div class="card-body"><span class="tag">'+esc(b.categoria||'Artículo')+'</span><h3>'+esc(b.titulo)+'</h3><p class="precio" style="font-size:.78rem;color:#64748b;margin-top:4px">'+esc((b.resumen||'').slice(0,80))+'...</p></div></div>'
+      }).join('');
+    }
+
+    function renderCard(p){
+      const img=p.imagen_url?'<img class="card-img" src="'+esc(p.imagen_url)+'" alt="'+esc(p.nombre)+'" loading="lazy" onerror="this.outerHTML=\'<div class=card-img>Sin imagen</div>\'">':'<div class="card-img">Sin imagen</div>';
+      const stock=(p.stock||0)>0;
+      return '<div class="card">'+img+'<div class="card-body"><span class="badge '+(stock?'badge-stock':'badge-agotado')+'">'+(stock?'En stock':'Agotado')+'</span><h3>'+esc(p.nombre)+'</h3><div class="precio">$'+Number(p.precio).toLocaleString('es-AR',{minimumFractionDigits:2})+'</div></div></div>';
+    }
+
+    function esc(t){if(!t)return'';const d=document.createElement('div');d.textContent=t;return d.innerHTML}
     cargarDatos();
   </script>
 </body>
