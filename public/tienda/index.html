@@ -76,15 +76,32 @@
     .footer-bot { text-align: center; color: #475569; font-size: .72rem; border-top: 1px solid #1a2d50; margin-top: 20px; padding-top: 14px; }
 
     /* Modal de detalle de producto */
-    .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,.8); z-index: 200; display: flex; align-items: center; justify-content: center; padding: 16px; opacity: 0; visibility: hidden; transition: all .3s; }
+    .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,.85); z-index: 200; display: flex; align-items: center; justify-content: center; padding: 16px; opacity: 0; visibility: hidden; transition: all .3s; }
     .modal-overlay.open { opacity: 1; visibility: visible; }
-    .modal { background: #0f1d38; border-radius: 16px; max-width: 480px; width: 100%; max-height: 90vh; overflow-y: auto; border: 1px solid #1a2d50; transform: scale(.9); transition: transform .3s; }
+    .modal { background: #0f1d38; border-radius: 16px; max-width: 520px; width: 100%; max-height: 92vh; overflow-y: auto; border: 1px solid #1a2d50; transform: scale(.9); transition: transform .35s; scrollbar-width: thin; }
     .modal-overlay.open .modal { transform: scale(1); }
-    .modal-img { width: 100%; height: 280px; object-fit: cover; background: #132244; border-radius: 16px 16px 0 0; }
+    .modal::-webkit-scrollbar { width: 4px; }
+    .modal::-webkit-scrollbar-thumb { background: #1a2d50; border-radius: 4px; }
+    .modal-gallery { position: relative; width: 100%; height: 300px; background: #132244; }
+    .modal-gallery img { width: 100%; height: 100%; object-fit: contain; }
+    .modal-gallery .nav-btn { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,.5); border: none; color: #fff; width: 32px; height: 32px; border-radius: 50%; cursor: pointer; font-size: .9rem; display: flex; align-items: center; justify-content: center; transition: background .2s; }
+    .modal-gallery .nav-btn:hover { background: #10b981; }
+    .modal-gallery .prev-btn { left: 8px; }
+    .modal-gallery .next-btn { right: 8px; }
+    .modal-thumbs { display: flex; gap: 6px; padding: 8px 16px; overflow-x: auto; background: #0b1628; scrollbar-width: none; }
+    .modal-thumbs::-webkit-scrollbar { display: none; }
+    .modal-thumbs .thumb { width: 56px; height: 56px; flex: 0 0 56px; border-radius: 8px; cursor: pointer; border: 2px solid transparent; object-fit: cover; transition: border .2s; }
+    .modal-thumbs .thumb.activo { border-color: #10b981; }
     .modal-body { padding: 20px; }
-    .modal-body h2 { font-size: 1.2rem; font-weight: 700; color: #f1f5f9; margin-bottom: 8px; }
-    .modal-body .desc { font-size: .85rem; color: #94a3b8; line-height: 1.6; margin-bottom: 16px; }
-    .modal-body .precio-lg { font-size: 1.6rem; font-weight: 800; color: #10b981; margin-bottom: 20px; }
+    .modal-body h2 { font-size: 1.2rem; font-weight: 700; color: #f1f5f9; margin-bottom: 6px; }
+    .modal-body .rubro-badge { display: inline-block; background: #10b98120; color: #10b981; font-size: .65rem; font-weight: 700; letter-spacing: 1px; padding: 3px 8px; border-radius: 6px; margin-bottom: 10px; }
+    .modal-body .desc { font-size: .82rem; color: #94a3b8; line-height: 1.7; margin-bottom: 12px; }
+    .modal-body .precio-lg { font-size: 1.5rem; font-weight: 800; color: #10b981; margin-bottom: 16px; }
+    .modal-body .section-label { font-size: .7rem; font-weight: 700; color: #64748b; letter-spacing: 1px; margin: 16px 0 8px; }
+    .modal-body .caracts { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 16px; }
+    .modal-body .caracts .item { background: #0b1628; border-radius: 8px; padding: 8px 10px; border: 1px solid #1a2d50; }
+    .modal-body .caracts .item .label { font-size: .65rem; color: #64748b; font-weight: 600; text-transform: uppercase; letter-spacing: .5px; }
+    .modal-body .caracts .item .val { font-size: .82rem; color: #e2e8f0; font-weight: 600; margin-top: 1px; }
     .modal-body .btn-comprar { display: block; width: 100%; padding: 14px; border-radius: 12px; border: none; background: #10b981; color: #fff; font-weight: 700; font-size: 1rem; text-align: center; text-decoration: none; cursor: pointer; transition: background .2s; }
     .modal-body .btn-comprar:hover { background: #059669; }
     .modal-body .btn-cerrar { display: block; margin-top: 10px; padding: 10px; border-radius: 10px; border: 1px solid #1a2d50; background: transparent; color: #64748b; font-size: .85rem; text-align: center; cursor: pointer; transition: all .2s; width: 100%; }
@@ -145,10 +162,18 @@
 
   <div class="modal-overlay" id="modal">
     <div class="modal">
-      <img class="modal-img" id="modal-img" src="" alt="">
+      <div class="modal-gallery" id="modal-gallery">
+        <img id="modal-img" src="" alt="">
+        <button class="nav-btn prev-btn" id="gallery-prev" onclick="galeriaPrev()"><i class="fas fa-chevron-left"></i></button>
+        <button class="nav-btn next-btn" id="gallery-next" onclick="galeriaNext()"><i class="fas fa-chevron-right"></i></button>
+      </div>
+      <div class="modal-thumbs" id="modal-thumbs"></div>
       <div class="modal-body">
+        <span class="rubro-badge" id="modal-rubro"></span>
         <h2 id="modal-title"></h2>
         <p class="desc" id="modal-desc"></p>
+        <div class="section-label">CARACTERÍSTICAS</div>
+        <div class="caracts" id="modal-caracts"></div>
         <div class="precio-lg" id="modal-price"></div>
         <a class="btn-comprar" id="modal-btn" href="https://app.elguiaya.com/tienda" target="_blank"><i class="fas fa-shopping-cart"></i> Comprar ahora</a>
         <button class="btn-cerrar" onclick="cerrarModal()">Seguir viendo</button>
@@ -183,7 +208,7 @@
       return r.json();
     }
 
-    let prods = [], cats = [], bans = [], blogs = [];
+    let prods = [], cats = [], bans = [], blogs = [], todosAtributos = {};
 
     async function init() {
       try {
@@ -193,6 +218,12 @@
           api('banners_promo', { filters: [{ col: 'activo', op: 'eq', val: true }], order: { col: 'orden', asc: true } }),
           api('blog_articulos', { filters: [{ col: 'activo', op: 'eq', val: true }], order: { col: 'created_at', asc: false }, limit: 4 }),
         ]);
+        const attrs = await api('producto_atributos', { filters: [{ col: 'producto_id', op: 'in', val: '(' + prods.map(p => '"' + p.id + '"').join(',') + ')' }] });
+        const attrIds = [...new Set(attrs.map(a => a.atributo_id))];
+        const attrDefs = attrIds.length ? await api('atributos', { filters: [{ col: 'id', op: 'in', val: '(' + attrIds.map(id => '"' + id + '"').join(',') + ')' }] }) : [];
+        const defMap = {}; attrDefs.forEach(d => defMap[d.id] = d);
+        attrs.forEach(a => { a.detalle = defMap[a.atributo_id] || null; });
+        prods.forEach(p => { todosAtributos[p.id] = attrs.filter(a => a.producto_id === p.id); });
         render();
       } catch (e) { console.error(e); document.getElementById('loading').style.display = 'none'; document.getElementById('error').style.display = 'block'; }
     }
@@ -257,19 +288,53 @@
       return '<div class="card" onclick="abrirProducto(\'' + p.id + '\')">' + img + '<div class="card-body"><h3>' + esc(p.nombre) + '</h3><div class="precio">$' + Number(p.precio).toLocaleString('es-AR', { minimumFractionDigits: 2 }) + '</div><button class="buy-btn">Comprar</button></div></div>';
     }
 
+    let galeriaActual = 0, galeriaImgs = [];
+
     function abrirProducto(id) {
       const p = prods.find(x => x.id === id);
       if (!p) return;
-      document.getElementById('modal-img').src = p.imagen_url || '';
-      document.getElementById('modal-img').alt = esc(p.nombre);
-      document.getElementById('modal-img').onerror = function() { this.outerHTML = '<div class="modal-img" style="display:flex;align-items:center;justify-content:center;background:#132244;color:#334155">Sin imagen</div>'; };
+      document.getElementById('modal-rubro').textContent = p.rubro || 'GENERAL';
       document.getElementById('modal-title').textContent = p.nombre;
       document.getElementById('modal-desc').textContent = p.descripcion || 'Producto de pesca, camping y náutica de la más alta calidad.';
       document.getElementById('modal-price').textContent = '$' + Number(p.precio).toLocaleString('es-AR', { minimumFractionDigits: 2 });
       document.getElementById('modal-btn').href = 'https://app.elguiaya.com/tienda';
+
+      galeriaImgs = [p.imagen_url, ...(p.galeria_urls || [])].filter(Boolean);
+      galeriaImgs = [...new Set(galeriaImgs)];
+      galeriaActual = 0;
+      const imgEl = document.getElementById('modal-img');
+      imgEl.src = galeriaImgs[0] || '';
+      imgEl.style.display = 'block';
+      document.getElementById('gallery-prev').style.display = galeriaImgs.length > 1 ? 'flex' : 'none';
+      document.getElementById('gallery-next').style.display = galeriaImgs.length > 1 ? 'flex' : 'none';
+
+      const thumbs = document.getElementById('modal-thumbs');
+      thumbs.innerHTML = '';
+      galeriaImgs.forEach((url, i) => {
+        const t = document.createElement('img');
+        t.className = 'thumb' + (i === 0 ? ' activo' : '');
+        t.src = url;
+        t.onclick = function() { galeriaIrA(i); };
+        thumbs.appendChild(t);
+      });
+      thumbs.style.display = galeriaImgs.length > 1 ? 'flex' : 'none';
+
+      const attrs = todosAtributos[p.id] || [];
+      const caracts = document.getElementById('modal-caracts');
+      if (attrs.length) {
+        caracts.innerHTML = attrs.map(a => '<div class="item"><div class="label">' + esc(a.detalle?.nombre || 'Atributo') + '</div><div class="val">' + esc(a.valor) + (a.detalle?.unidad ? ' ' + esc(a.detalle.unidad) : '') + '</div></div>').join('');
+        caracts.style.display = 'grid';
+      } else {
+        caracts.style.display = 'none';
+      }
+
       document.getElementById('modal').classList.add('open');
       document.body.style.overflow = 'hidden';
     }
+
+    function galeriaIrA(i) { galeriaActual = i; document.getElementById('modal-img').src = galeriaImgs[i]; const ts = document.querySelectorAll('#modal-thumbs .thumb'); ts.forEach((t, idx) => t.classList.toggle('activo', idx === i)); }
+    function galeriaPrev() { const n = (galeriaActual - 1 + galeriaImgs.length) % galeriaImgs.length; galeriaIrA(n); }
+    function galeriaNext() { const n = (galeriaActual + 1) % galeriaImgs.length; galeriaIrA(n); }
 
     function cerrarModal() {
       document.getElementById('modal').classList.remove('open');
