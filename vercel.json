@@ -1,12 +1,1 @@
-{
-  "rewrites": [
-    {
-      "source": "/tienda",
-      "destination": "https://elguiaya-plataforma.vercel.app/tienda"
-    },
-    {
-      "source": "/tienda/(.*)",
-      "destination": "https://elguiaya-plataforma.vercel.app/tienda/$1"
-    }
-  ]
-}
+{}

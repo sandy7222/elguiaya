@@ -22,7 +22,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onScrollTo, onPreRegister, onDow
     { label: 'Mapa', target: 'interactive-map', icon: MapPin },
     { label: 'Chat El GuIA', target: 'fishing-ai', icon: Sparkles },
     { label: 'Seguridad', target: 'security', icon: Shield },
-    { label: 'Tienda', target: '', icon: ShoppingBag, url: '/tienda' },
+    { label: 'Tienda', target: '', icon: ShoppingBag, url: 'capitanya://tienda' },
   ];
 
   const handleNavClick = (target: string, url?: string) => {
@@ -98,7 +98,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onScrollTo, onPreRegister, onDow
           {navItems.map((item) => (
             <button
               key={item.target}
-              onClick={() => handleNavClick(item.target)}
+              onClick={() => handleNavClick(item.target, item.url)}
               className="w-full text-left py-2.5 px-3 rounded-lg text-slate-300 hover:text-white hover:bg-slate-800 text-base font-medium transition-all flex items-center gap-3 cursor-pointer"
               id={`mob-nav-${item.target}`}
             >
