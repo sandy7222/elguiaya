@@ -22,14 +22,20 @@ export const Navbar: React.FC<NavbarProps> = ({ onScrollTo, onPreRegister, onDow
     { label: 'Mapa', target: 'interactive-map', icon: MapPin },
     { label: 'Chat El GuIA', target: 'fishing-ai', icon: Sparkles },
     { label: 'Seguridad', target: 'security', icon: Shield },
-    { label: 'Tienda', target: '', icon: ShoppingBag },
+    { label: 'Tienda', target: '', icon: ShoppingBag, url: '/tienda' },
   ];
 
-  const handleNavClick = (target: string) => {
-    if (!target) return;
-    onScrollTo(target);
+  const handleNavClick = (target: string, url?: string) => {
+  if (url) {
+    window.location.href = url; // Abre la tienda en la misma pestaña
+    // Si prefieres pestaña nueva, usa: window.open(url, '_blank', 'noopener,noreferrer');
     setIsOpen(false);
-  };
+    return;
+  }
+  if (!target) return;
+  onScrollTo(target);
+  setIsOpen(false);
+};
 
   return (
     <nav className="fixed top-0 left-0 w-full z-50 bg-slate-950/80 backdrop-blur-md border-b border-slate-800" id="navbar-container">
@@ -44,7 +50,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onScrollTo, onPreRegister, onDow
             {navItems.map((item) => (
               <button
                 key={item.target}
-                onClick={() => handleNavClick(item.target)}
+                onClick={() => handleNavClick(item.target, item.url)}
                 className="text-slate-300 hover:text-emerald-400 font-medium text-sm transition-colors duration-200 cursor-pointer flex items-center gap-1.5"
                 id={`nav-link-${item.target}`}
               >
