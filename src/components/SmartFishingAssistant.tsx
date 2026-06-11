@@ -8,230 +8,30 @@ import { Message } from '../types';
 import { Sparkles, MessageCircle, X, Send, Anchor, RefreshCw, Compass, ShieldAlert, Waves, HelpCircle } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 
-// Beautiful high-fidelity SVG robot matching the user's provided design (slate-blue body, orange accents, olive vest, fishing rod & bobber, net, and boots)
 const FloatingRobot: React.FC<{ size?: number; className?: string; isAnimated?: boolean }> = ({ size = 70, className = '', isAnimated = true }) => {
   return (
     <div className={`relative flex flex-col items-center select-none ${className}`} style={{ width: size, height: size + 35 }}>
-      {/* 3D floating effect with translation keyframe animation */}
       <div className={isAnimated ? "animate-[float_3.5s_ease-in-out_infinite]" : ""}>
-        <svg
+        <img
+          src="/asistente.gif"
+          alt="Asistente"
           width={size}
           height={size + 15}
-          viewBox="0 0 120 145"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
           className="drop-shadow-[0_12px_24px_rgba(16,185,129,0.25)]"
-        >
-          {/* Gradients declarations */}
-          <defs>
-            <radialGradient id="eyeGlow" cx="50%" cy="50%" r="50%">
-              <stop offset="0%" stopColor="#ffffff" />
-              <stop offset="30%" stopColor="#38bdf8" />
-              <stop offset="70%" stopColor="#0284c7" />
-              <stop offset="100%" stopColor="#0f172a" />
-            </radialGradient>
-            <linearGradient id="bodyMetallic" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="#64748b" />
-              <stop offset="50%" stopColor="#475569" />
-              <stop offset="100%" stopColor="#334155" />
-            </linearGradient>
-            <linearGradient id="orangeAccent" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="#f97316" />
-              <stop offset="100%" stopColor="#ea580c" />
-            </linearGradient>
-            <linearGradient id="bootsGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-              <stop offset="0%" stopColor="#4d5f30" />
-              <stop offset="100%" stopColor="#2e3a1d" />
-            </linearGradient>
-            <pattern id="netMesh" width="4" height="4" patternUnits="userSpaceOnUse">
-              <path d="M 0 2 L 4 2 M 2 0 L 2 4" stroke="#4a5568" strokeWidth="0.5" strokeOpacity="0.4" />
-            </pattern>
-          </defs>
-
-          {/* 1. Landing Fishing Net on his Back */}
-          <g id="fishing-net">
-            {/* Wooden ring frame */}
-            <path d="M 82 45 C 92 42, 102 55, 96 75 C 92 90, 80 94, 76 80 Z" fill="none" stroke="#854d0e" strokeWidth="2.5" />
-            {/* Net mesh material */}
-            <path d="M 82 45 C 92 42, 102 55, 96 75 C 92 90, 80 94, 76 80 Z" fill="url(#netMesh)" />
-            {/* Net handle connecting behind vest */}
-            <rect x="74" y="74" width="3" height="24" transform="rotate(-15 74 74)" fill="#78350f" rx="1.5" />
-          </g>
-
-          {/* 2. Antennas (With orange rounded tips) */}
-          <g id="antennas">
-            {/* Left Antenna */}
-            <path d="M 46 22 L 36 6" stroke="#94a3b8" strokeWidth="2" strokeLinecap="round" />
-            <circle cx="36" cy="6" r="3.5" fill="url(#orangeAccent)" stroke="#1e293b" strokeWidth="1" />
-            {/* Right Antenna */}
-            <path d="M 74 22 L 84 6" stroke="#94a3b8" strokeWidth="2" strokeLinecap="round" />
-            <circle cx="84" cy="6" r="3.5" fill="url(#orangeAccent)" stroke="#1e293b" strokeWidth="1" />
-          </g>
-
-          {/* 3. Earbolts / Sockets */}
-          <rect x="25" y="32" width="6" height="14" rx="2" fill="url(#orangeAccent)" stroke="#1e293b" strokeWidth="1" />
-          <rect x="89" y="32" width="6" height="14" rx="2" fill="url(#orangeAccent)" stroke="#1e293b" strokeWidth="1" />
-
-          {/* 4. Head Module */}
-          {/* Main Slate Blue Metallic Head */}
-          <rect x="30" y="16" width="60" height="48" rx="18" fill="url(#bodyMetallic)" stroke="#1e293b" strokeWidth="3" />
-          {/* Orange design panel on top peak */}
-          <path d="M 48 16 L 72 16 L 68 23 L 52 23 Z" fill="url(#orangeAccent)" />
-          {/* Inner dark matte glass plate */}
-          <rect x="35" y="21" width="50" height="38" rx="13" fill="#0f172a" />
-
-          {/* 5. Glowing Circular Blue Eyes */}
-          <g id="glowing-eyes">
-            {/* Left Eye */}
-            <circle cx="48" cy="34" r="9" fill="url(#eyeGlow)" />
-            <circle cx="48" cy="34" r="6" fill="none" stroke="#22d3ee" strokeWidth="1" strokeOpacity="0.8" />
-            <circle cx="50" cy="32" r="2.5" fill="#ffffff" /> {/* reflection glint */}
-            
-            {/* Right Eye */}
-            <circle cx="72" cy="34" r="9" fill="url(#eyeGlow)" />
-            <circle cx="72" cy="34" r="6" fill="none" stroke="#22d3ee" strokeWidth="1" strokeOpacity="0.8" />
-            <circle cx="74" cy="32" r="2.5" fill="#ffffff" /> {/* reflection glint */}
-          </g>
-
-          {/* 6. Grill Smile */}
-          <rect x="48" y="47" width="24" height="6" rx="3" fill="#020617" stroke="#475569" strokeWidth="1" />
-          {/* Vertical metal grates */}
-          <line x1="52" y1="47" x2="52" y2="53" stroke="#64748b" strokeWidth="1.2" />
-          <line x1="56" y1="47" x2="56" y2="53" stroke="#64748b" strokeWidth="1.2" />
-          <line x1="60" y1="47" x2="60" y2="53" stroke="#64748b" strokeWidth="1.2" />
-          <line x1="64" y1="47" x2="64" y2="53" stroke="#64748b" strokeWidth="1.2" />
-          <line x1="68" y1="47" x2="68" y2="53" stroke="#64748b" strokeWidth="1.2" />
-
-          {/* 7. Neck joint */}
-          <rect x="54" y="63" width="12" height="6" rx="1" fill="#1e293b" />
-          <line x1="56" y1="66" x2="64" y2="66" stroke="#475569" strokeWidth="1.5" />
-
-          {/* 8. Mechanical Torso (Blue Slate) */}
-          <rect x="36" y="68" width="48" height="36" rx="8" fill="url(#bodyMetallic)" stroke="#1e293b" strokeWidth="2.5" />
-          {/* Orange active shoulder joints */}
-          <circle cx="34" cy="74" r="5" fill="url(#orangeAccent)" stroke="#1e293b" strokeWidth="1" />
-          <circle cx="86" cy="74" r="5" fill="url(#orangeAccent)" stroke="#1e293b" strokeWidth="1" />
-
-          {/* 9. Utility Fishing Vest (Olive green matching the image) */}
-          <g id="fishing-vest">
-            {/* Left Vest lapel body */}
-            <path d="M 36 68 L 58 68 L 54 104 L 36 98 Z" fill="#4d5f30" stroke="#1f2910" strokeWidth="1.5" />
-            {/* Right Vest lapel body */}
-            <path d="M 84 68 L 62 68 L 66 104 L 84 98 Z" fill="#4d5f30" stroke="#1f2910" strokeWidth="1.5" />
-            
-            {/* Central zipper teeth */}
-            <line x1="59.5" y1="68" x2="59.5" y2="104" stroke="#94a3b8" strokeWidth="1.5" strokeDasharray="2,2" />
-            {/* Metal zipper slider head */}
-            <rect x="58" y="72" width="3" height="5" rx="1" fill="#cbd5e1" stroke="#334155" strokeWidth="0.5" />
-
-            {/* Vest chest labels & badges */}
-            {/* Gold ANGLER patch on right chest (viewer's left) */}
-            <rect x="40" y="73" width="13" height="4" rx="0.5" fill="#facc15" stroke="#713f12" strokeWidth="0.5" />
-            <text x="41.5" y="76.2" fill="#713f12" fontSize="2.8" fontWeight="bold" fontFamily="sans-serif">ANGLER</text>
-
-            {/* Dark FISH-BOT label on left chest (viewer's right) */}
-            <rect x="67" y="73" width="13" height="4" rx="0.5" fill="#1e293b" stroke="#0f172a" strokeWidth="0.5" />
-            <text x="68" y="76.2" fill="#38bdf8" fontSize="2.5" fontWeight="bold" fontFamily="sans-serif">FISH-BOT</text>
-
-            {/* Flap pockets (Bottom pockets) */}
-            {/* Left utility pocket */}
-            <rect x="39" y="84" width="14" height="11" rx="2" fill="#3a4724" stroke="#1f2910" strokeWidth="1" />
-            <path d="M 38 84 L 54 84 L 52 87 L 40 87 Z" fill="#2d371b" /> {/* pocket flap */}
-            <circle cx="46" cy="85.5" r="0.8" fill="#e2e8f0" /> {/* silver button snap */}
-
-            {/* Right utility pocket */}
-            <rect x="67" y="84" width="14" height="11" rx="2" fill="#3a4724" stroke="#1f2910" strokeWidth="1" />
-            <path d="M 66 84 L 82 84 L 80 87 L 68 87 Z" fill="#2d371b" /> {/* pocket flap */}
-            <circle cx="74" cy="85.5" r="0.8" fill="#e2e8f0" /> {/* silver button snap */}
-          </g>
-
-          {/* 10. Left Mechanical Arm holding the Fishing Rod */}
-          <g id="fishing-rod-arm">
-            {/* Segmented blue arm */}
-            <path d="M 32 76 L 20 84 L 16 98" fill="none" stroke="url(#bodyMetallic)" strokeWidth="6" strokeLinecap="round" strokeLinejoin="round" />
-            {/* Joint accent rings */}
-            <circle cx="20" cy="84" r="4.5" fill="url(#orangeAccent)" />
-            <circle cx="16" cy="98" r="4.5" fill="url(#orangeAccent)" />
-
-            {/* Fishing Rod Pole (dark vintage brown) */}
-            <line x1="8" y1="125" x2="32" y2="45" stroke="#5c4033" strokeWidth="2.2" strokeLinecap="round" />
-            {/* Cork Fishing rod handle bottom */}
-            <line x1="6" y1="131" x2="10" y2="119" stroke="#b45309" strokeWidth="3" strokeLinecap="round" />
-            
-            {/* Golden Reels mechanism & lever */}
-            <circle cx="12" cy="116" r="3.5" fill="#eab308" stroke="#1e293b" strokeWidth="1" />
-            <rect x="8" y="113" width="7" height="3" rx="1" fill="#facc15" />
-            {/* Fine monofilament line drop */}
-            <path d="M 28 58 Q 5 70, 7 94" fill="none" stroke="#e2e8f0" strokeWidth="0.8" strokeDasharray="3,1" />
-
-            {/* Retro red & white bobber (Boyita) hanging off the line */}
-            <g transform="translate(7, 94)">
-              {/* White lower half */}
-              <path d="M -3 0 Q 0 4, 3 0 Z" fill="#ffffff" stroke="#1e293b" strokeWidth="0.5" />
-              {/* Red top half */}
-              <path d="M -3 0 Q 0 -5, 3 0 Z" fill="#ef4444" stroke="#1e293b" strokeWidth="0.5" />
-              {/* Little antenna tip */}
-              <line x1="0" y1="-5" x2="0" y2="-8" stroke="#f59e0b" strokeWidth="0.8" />
-            </g>
-          </g>
-
-          {/* 11. Right Mechanical Arm (Relaxed) */}
-          <g id="right-arm">
-            {/* Upper arm */}
-            <path d="M 88 76 L 100 86 L 96 98" fill="none" stroke="url(#bodyMetallic)" strokeWidth="6" strokeLinecap="round" strokeLinejoin="round" />
-            {/* Joints */}
-            <circle cx="100" cy="86" r="4.5" fill="url(#orangeAccent)" />
-            <circle cx="96" cy="98" r="4" fill="#64748b" />
-          </g>
-
-          {/* 12. Segmented Metallic Legs & Rain Boots */}
-          <g id="legs-and-boots">
-            {/* Left mechanical leg core */}
-            <path d="M 44 104 L 43 118" stroke="url(#bodyMetallic)" strokeWidth="5.5" strokeLinecap="round" />
-            <circle cx="43.5" cy="114" r="3.5" fill="url(#orangeAccent)" />
-
-            {/* Right mechanical leg core */}
-            <path d="M 76 104 L 77 118" stroke="url(#bodyMetallic)" strokeWidth="5.5" strokeLinecap="round" />
-            <circle cx="76.5" cy="114" r="3.5" fill="url(#orangeAccent)" />
-
-            {/* Khaki-green rubber fisherman's boots */}
-            {/* Left Boot */}
-            <path d="M 34 118 L 50 118 L 48 134 L 32 134 Q 31 138, 35 138 L 49 138 Q 52 138, 51 132 L 51 118 Z" fill="url(#bootsGrad)" stroke="#14532d" strokeWidth="1" />
-            {/* Right Boot */}
-            <path d="M 70 118 L 86 118 L 85 134 L 68 134 Q 67 138, 71 138 L 85 138 Q 88 138, 87 132 L 87 118 Z" fill="url(#bootsGrad)" stroke="#14532d" strokeWidth="1" />
-          </g>
-        </svg>
-
-        {/* Soft interactive floating shadow underneath that shrinks and expands synchronized with the hover */}
+          style={{ objectFit: 'contain' }}
+        />
         <div className="w-[50px] h-[5px] bg-emerald-500/25 rounded-full blur-[2.5px] mx-auto mt-2 animate-[shadowPulse_3.5s_ease-in-out_infinite]" />
       </div>
-
-      {/* Embedded inline CSS for customized rich animations without cluttering tailwind files */}
       <style>{`
         @keyframes float {
-          0% {
-            transform: translateY(0px);
-          }
-          50% {
-            transform: translateY(-12px);
-          }
-          100% {
-            transform: translateY(0px);
-          }
+          0% { transform: translateY(0px); }
+          50% { transform: translateY(-12px); }
+          100% { transform: translateY(0px); }
         }
         @keyframes shadowPulse {
-          0% {
-            transform: scale(1);
-            opacity: 0.9;
-          }
-          50% {
-            transform: scale(0.7);
-            opacity: 0.45;
-          }
-          100% {
-            transform: scale(1);
-            opacity: 0.9;
-          }
+          0% { transform: scale(1); opacity: 0.9; }
+          50% { transform: scale(0.7); opacity: 0.45; }
+          100% { transform: scale(1); opacity: 0.9; }
         }
       `}</style>
     </div>
