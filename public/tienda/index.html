@@ -24,7 +24,7 @@
     .marquee-bar { overflow: hidden; padding: 8px 0; white-space: nowrap; }
     .marquee-bar .inner { display: inline-block; animation: marq 25s linear infinite; font-size: .78rem; font-weight: 600; letter-spacing: .5px; }
     .marquee-bar .inner span { padding: 0 40px; }
-    @keyframes marq { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+    @keyframes marq { 0% { transform: translateX(100vw); } 100% { transform: translateX(-100%); } }
 
     .search-wrap { padding: 12px 16px; max-width: 1200px; margin: 0 auto; }
     .search-wrap input { width: 100%; padding: 10px 16px; border-radius: 10px; border: 1px solid #1a2d50; background: #0f1d38; color: #e2e8f0; font-size: .88rem; outline: none; transition: border .2s; }
@@ -424,7 +424,7 @@
         const items = marqueeBans.map(b => '<span style="color:' + txtColor + '">✦ ' + esc(b.titulo) + '</span>').join('');
         innerHtml += items;
 
-        el.innerHTML = '<div class="inner" style="animation-duration:' + duration + 's;color:' + txtColor + '">' + innerHtml + innerHtml + '</div>';
+        el.innerHTML = '<div class="inner" style="animation-duration:' + duration + 's;color:' + txtColor + '">' + innerHtml + '</div>';
       }
 
       const hero = bans.filter(b => b.tipo === 'hero');
