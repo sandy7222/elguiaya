@@ -113,7 +113,7 @@ export const SmartFishingAssistant: React.FC = () => {
       const errorMessage: Message = {
         id: (Date.now() + 1).toString(),
         sender: 'assistant',
-        text: '¡Chamigo, disculpame! Parece que perdí señal radial con la central en la isla. Revisá si tu clave de Gemini está bien configurada en la terminal, o probá de nuevo en unos minutos. 🧭',
+        text: '¡Chamigo, disculpame! Parece que perdí señal radial con la central en la isla. Revisá la conexión o probá de nuevo en unos minutos. 🧭',
         timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
       };
       setMessages((prev) => [...prev, errorMessage]);
