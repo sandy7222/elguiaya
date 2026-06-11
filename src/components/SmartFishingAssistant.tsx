@@ -150,7 +150,7 @@ export const SmartFishingAssistant: React.FC = () => {
             <span className="absolute top-2 right-4 w-3.5 h-3.5 bg-emerald-500 rounded-full border-2 border-slate-950 animate-ping z-20" />
             <span className="absolute top-2 right-4 w-3.5 h-3.5 bg-emerald-400 rounded-full border-2 border-slate-950 z-20" title="En línea" />
             
-            <FloatingRobot size={80} />
+            <FloatingRobot size={240} />
           </div>
 
           <span className="mt-1 text-[11px] text-slate-300 font-bold bg-slate-950/80 px-2.5 py-1 rounded-full border border-slate-800/80 group-hover:border-emerald-500/40 transition-colors uppercase tracking-wider select-none shadow">
@@ -170,7 +170,7 @@ export const SmartFishingAssistant: React.FC = () => {
             <div className="flex items-center gap-2.5">
               <div className="w-10 h-10 rounded-full bg-emerald-600/10 flex items-center justify-center border border-emerald-500/20 overflow-hidden relative">
                 {/* Miniature animated robot in the title header column */}
-                <FloatingRobot size={40} className="scale-110 translate-y-1" isAnimated={true} />
+                <FloatingRobot size={120} className="scale-110 translate-y-1" isAnimated={true} />
               </div>
               <div className="text-left">
                 <div className="flex items-center gap-1.5">
