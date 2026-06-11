@@ -81,10 +81,15 @@ export const SmartFishingAssistant: React.FC = () => {
     setIsLoading(true);
 
     try {
+      const chatHistory = messages.map(msg => ({
+        role: msg.sender === 'user' ? 'user' : 'assistant',
+        text: msg.text
+      }));
+
       const response = await fetch('/api/gemini/assistant', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ prompt: textToSend })
+        body: JSON.stringify({ prompt: textToSend, chatHistory })
       });
 
       if (!response.ok) {

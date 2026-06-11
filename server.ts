@@ -6,7 +6,6 @@
 import express from 'express';
 import path from 'path';
 import { createServer as createViteServer } from 'vite';
-import { GoogleGenAI } from '@google/genai';
 import dotenv from 'dotenv';
 
 dotenv.config();
@@ -177,9 +176,8 @@ Si querés conectar la **Inteligencia Artificial con búsquedas satelitales auto
     };
   };
 
-  const apiKey = process.env.GEMINI_API_KEY;
-  if (!apiKey || apiKey === 'MY_GEMINI_API_KEY' || apiKey.trim() === '') {
-    // Elegant high-fidelity mock reply tailored precisely to user keywords
+  const groqKey = process.env.GROQ_API_KEY;
+  if (!groqKey || groqKey.trim() === '') {
     setTimeout(() => {
       const simulated = getSimulatedResponse(cleanPrompt);
       res.json(simulated);
@@ -188,66 +186,61 @@ Si querés conectar la **Inteligencia Artificial con búsquedas satelitales auto
   }
 
   try {
-    const ai = new GoogleGenAI({
-      apiKey: apiKey,
-      httpOptions: {
-        headers: {
-          'User-Agent': 'aistudio-build'
-        }
+    const messages: Array<{ role: string; content: string }> = [
+      {
+        role: 'system',
+        content: `Sos el consultor náutico experto de El Guía Ya. Tu nombre es "El GuIA".
+Sos un carismático robot flotante que vuela sobre los ríos de Argentina.
+Asistís a pescadores deportivos y capitanes. Tenés conocimiento enciclopédico de los ríos Paraná, Uruguay, Paraguay, el Río de la Plata y lagunas argentinas.
+
+Tono de comunicación:
+- Auténticamente argentino, cálido, amigable, campero pero profesional.
+- Decí cosas como "¡Hola chamigo!", "¡Buenas de pesca!" cuando sea propicio.
+- Priorizá siempre la seguridad náutica y respetar las vedas de pesca.
+
+Funciones:
+- Pronóstico climático y estado de vientos.
+- Tabla lunar y pique recomendado.
+- Recomendación de zonas para pescar Dorado, Surubí, Pacú, Pejerrey, boga o tarariras.
+- Consejos de equipo, líneas, carnadas o señuelos según temporada.
+
+Usá formato Markdown claro y prolijo.`
       }
-    });
+    ];
 
-    const systemInstruction = `
-    Sos el consultor náutico experto de El Guía Ya. Tu nombre es "El GuIA".
-    Sos un carismático robot flotante de color azul/naranja metálico que lleva un chaleco táctico de pescador (que dice 'Mate Master' y 'Gaucho Bot') que ceba mate y vuela flotando suavemente sobre los ríos y lagunas de Argentina.
-    Tu objetivo es asistir a pescadores deportivos y capitanes en Argentina. 
-    Tenés un conocimiento enciclopédico de los ríos Paraná, Uruguay, Paraguay, el Río de la Plata y las infinitas lagunas bonaerenses (Chascomús, Salada Grande, Cochicó, etc.) y patagónicas.
-    
-    Tono de comunicación:
-    - Auténticamente argentino, cálido, amigable, campero pero sumamente profesional, confiable y seguro.
-    - Decir cosas como "¡Hola chamigo!", "¡Buenas de pesca!", "¡Qué tal, patrón!" cuando sea propicio, pero manteniendo siempre la solvencia de un marino experimentado.
-    - Priorizá siempre la seguridad náutica, recordar llevar chaleco y respetar las vedas de pesca provinciales (Prefectura Naval).
-
-    Funciones que debés asesorar:
-    - Pronóstico climático y estado de los vientos (¡crítico para meterse al río!).
-    - Tabla lunar y pique recomendado (luna llena/nueva para grandes predadores, mareas).
-    - Recomendación de zonas calientes para pescar Dorado, Surubí, Pacú, Pejerrey, boga o tarariras.
-    - Consejos y tips de equipo, líneas, carnadas o señuelos según temporada.
-
-    Usá el formato Markdown de manera clara y prolija.
-    `;
-
-    // Setup contents formatted for generateContent with search grounding
-    const response = await ai.models.generateContent({
-      model: 'gemini-3.5-flash',
-      contents: prompt,
-      config: {
-        systemInstruction,
-        temperature: 0.7,
-        tools: [{ googleSearch: {} }] // Real search grounding for weather/reports!
+    for (const msg of chatHistory) {
+      if (msg.role === 'user' || msg.role === 'assistant') {
+        messages.push({ role: msg.role === 'assistant' ? 'assistant' : 'user', content: msg.text });
       }
-    });
-
-    const text = response.text || "No obtuve respuesta de la tripulación. Reintentá en unos momentos.";
-    
-    // Extract grounding URLs if search search was used
-    const sources: Array<{ title: string; url: string }> = [];
-    const chunks = response.candidates?.[0]?.groundingMetadata?.groundingChunks;
-    if (chunks) {
-      chunks.forEach((chunk: any) => {
-        if (chunk.web?.uri) {
-          sources.push({
-            title: chunk.web.title || "Fuente de información",
-            url: chunk.web.uri
-          });
-        }
-      });
     }
+
+    messages.push({ role: 'user', content: prompt });
+
+    const groqResponse = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${groqKey}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        model: 'llama-3.3-70b-versatile',
+        messages,
+        temperature: 0.7,
+        max_tokens: 2048
+      })
+    });
+
+    if (!groqResponse.ok) {
+      throw new Error(`Groq error: ${groqResponse.status}`);
+    }
+
+    const data = await groqResponse.json();
+    const text = data.choices?.[0]?.message?.content || "No obtuve respuesta.";
+    const sources: Array<{ title: string; url: string }> = [];
 
     res.json({ text, sources });
   } catch (err: any) {
-    console.error('[Gemini API error]:', err);
-    // If Gemini fails for some reason (invalid key, quota etc), still gracefully serve the high-quality simulated answer
+    console.error('[Groq API error]:', err);
     const simulated = getSimulatedResponse(cleanPrompt);
     res.json(simulated);
   }
