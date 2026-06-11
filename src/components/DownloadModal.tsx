@@ -13,7 +13,7 @@ interface DownloadModalProps {
   onClose: () => void;
 }
 
-const APK_URL = 'https://github.com/sandy7222/elguiaya-plataforma/releases/latest/download/ElGuiaYA-latest.apk';
+const APK_URL = 'https://elguia.com/descarga';
 
 export const DownloadModal: React.FC<DownloadModalProps> = ({ isOpen, onClose }) => {
   return (
