@@ -65,6 +65,7 @@
     .banner-fixo .overlay p { font-size: .82rem; color: #d1d5db; margin-top: 2px; }
 
     .cat-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 8px; padding: 0 16px 16px; max-width: 1200px; margin: 0 auto; }
+    .cat-prods-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 10px; padding: 0 0 24px; }
     .cat-grid .item { background: #0f1d38; border-radius: 10px; padding: 14px 8px; text-align: center; border: 1px solid #1a2d50; text-decoration: none; color: inherit; display: block; transition: all .25s; }
     .cat-grid .item:hover { background: #10b981; border-color: #10b981; transform: translateY(-3px); }
     .cat-grid .item i { font-size: 1.4rem; color: #10b981; margin-bottom: 5px; display: block; }
@@ -379,7 +380,7 @@
       return r.json();
     }
 
-    let prods = [], cats = [], bans = [], blogs = [], todosAtributos = {};
+    let prods = [], cats = [], bans = [], blogs = [], todosAtributos = {}, currentCategory = null;
 
     async function init() {
       try {
@@ -405,6 +406,7 @@
       document.getElementById('footer').style.display = 'block';
 
       let html = '';
+      const iconMap = { 'Carpas': 'fa-campground', 'Reels': 'fa-hook', 'Reeles Frontales': 'fa-hook', 'Reeles Rotativos': 'fa-hook', 'Mesas y Sillas': 'fa-chair', 'Cañas': 'fa-fish', 'Señuelos': 'fa-worm', 'Pesca Deportiva': 'fa-fish', 'Camping': 'fa-campground', 'Náutica': 'fa-ship', 'Indumentaria': 'fa-tshirt' };
 
       const marqueeBans = bans.filter(b => b.tipo === 'marquee');
       if (marqueeBans.length) {
@@ -425,6 +427,20 @@
         innerHtml += items;
 
         el.innerHTML = '<div class="inner" style="animation-duration:' + duration + 's;color:' + txtColor + '">' + innerHtml + '</div>';
+      }
+
+      if (currentCategory) {
+        const cat = cats.find(c => c.id === currentCategory);
+        if (cat) {
+          const catProds = prods.filter(p => p.categoria_id === currentCategory);
+          const iconC = iconMap[cat.nombre] || 'fa-tag';
+          html += '<div class="section-wrap" style="padding-top:12px"><div style="display:flex;align-items:center;gap:12px;padding:12px 0"><a href="#" onclick="return volverTienda()" style="color:#94a3b8;font-size:.85rem;text-decoration:none;display:flex;align-items:center;gap:6px;white-space:nowrap" onmouseover="this.style.color=\'#10b981\'" onmouseout="this.style.color=\'#94a3b8\'"><i class="fas fa-arrow-left"></i> Volver</a><div style="flex:1;height:1px;background:#1a2d50"></div><span style="color:#64748b;font-size:.72rem">' + catProds.length + ' producto(s)</span></div><div class="section-title" style="padding-top:0"><h2 style="font-size:1.1rem"><i class="fas ' + iconC + '" style="color:#10b981;margin-right:8px"></i>' + esc(cat.nombre) + '</h2></div><div class="cat-prods-grid">';
+          catProds.forEach(p => { html += cardHtml(p); });
+          html += '</div></div>';
+        }
+        document.getElementById('content').innerHTML = html;
+        document.getElementById('content').style.display = 'block';
+        return;
       }
 
       const hero = bans.filter(b => b.tipo === 'hero');
@@ -458,9 +474,8 @@
       html += '</div></div></div>';
 
       html += '<div class="section-wrap"><div class="section-title"><h2>EXPLORA POR CATEGORÍA</h2></div></div><div class="cat-grid">';
-      const iconMap = { 'Carpas': 'fa-campground', 'Reels': 'fa-hook', 'Reeles Frontales': 'fa-hook', 'Reeles Rotativos': 'fa-hook', 'Mesas y Sillas': 'fa-chair', 'Cañas': 'fa-fish', 'Señuelos': 'fa-worm', 'Pesca Deportiva': 'fa-fish', 'Camping': 'fa-campground', 'Náutica': 'fa-ship', 'Indumentaria': 'fa-tshirt' };
       cats.filter(c => prods.some(p => p.categoria_id === c.id)).slice(0, 8).forEach(c => {
-        html += '<a class="item" href="https://app.elguiaya.com/tienda" target="_blank"><i class="fas ' + (iconMap[c.nombre] || 'fa-tag') + '"></i><span>' + esc(c.nombre) + '</span></a>';
+        html += '<a class="item" href="#" onclick="return mostrarCategoria(\'' + c.id + '\')"><i class="fas ' + (iconMap[c.nombre] || 'fa-tag') + '"></i><span>' + esc(c.nombre) + '</span></a>';
       });
       html += '</div>';
 
@@ -559,12 +574,26 @@
       val = val.toLowerCase().trim();
       const c = document.getElementById('content');
       if (!val) { render(); return; }
-      const filt = prods.filter(p => (p.nombre || '').toLowerCase().includes(val) || (p.descripcion || '').toLowerCase().includes(val));
+      const base = currentCategory ? prods.filter(p => p.categoria_id === currentCategory) : prods;
+      const filt = base.filter(p => (p.nombre || '').toLowerCase().includes(val) || (p.descripcion || '').toLowerCase().includes(val));
       if (!filt.length) { c.innerHTML = '<div class="section-wrap" style="padding:60px 16px;text-align:center;color:#64748b"><p>Sin resultados para "' + esc(val) + '"</p></div>'; return; }
-      let h = '<div class="section-wrap"><div class="section-title"><h2>RESULTADOS: ' + filt.length + '</h2></div><div class="scroll-wrap"><div class="scroll-inner">';
+      let h = currentCategory ? '<div class="section-wrap" style="padding-top:12px"><div style="display:flex;align-items:center;gap:12px;padding:12px 0"><a href="#" onclick="return volverTienda()" style="color:#94a3b8;font-size:.85rem;text-decoration:none;display:flex;align-items:center;gap:6px;white-space:nowrap" onmouseover="this.style.color=\'#10b981\'" onmouseout="this.style.color=\'#94a3b8\'"><i class="fas fa-arrow-left"></i> Volver</a><div style="flex:1;height:1px;background:#1a2d50"></div></div>' : '';
+      h += '<div class="section-wrap"><div class="section-title"><h2>RESULTADOS: ' + filt.length + '</h2></div><div class="cat-prods-grid">';
       filt.slice(0, 20).forEach(p => { h += cardHtml(p); });
       h += '</div></div></div>';
       c.innerHTML = h;
+    }
+
+    function mostrarCategoria(catId) {
+      currentCategory = catId;
+      render();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function volverTienda() {
+      currentCategory = null;
+      render();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
     function goSlide(n) {
