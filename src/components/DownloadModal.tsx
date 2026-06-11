@@ -13,6 +13,8 @@ interface DownloadModalProps {
   onClose: () => void;
 }
 
+const APK_URL = 'https://github.com/sandy7222/elguiaya-plataforma/releases/latest/download/ElGuiaYA-latest.apk';
+
 export const DownloadModal: React.FC<DownloadModalProps> = ({ isOpen, onClose }) => {
   return (
     <AnimatePresence>
@@ -113,7 +115,7 @@ export const DownloadModal: React.FC<DownloadModalProps> = ({ isOpen, onClose })
                 {/* Real QR Code */}
                 <div className="bg-slate-900 p-4 rounded-2xl border border-slate-800 flex flex-col items-center select-none shadow-inner mb-4 mt-2">
                   <div className="w-28 h-28 bg-white rounded-lg p-1 flex items-center justify-center">
-                    <QRCode value="https://elguia.com/descarga" size={104} bgColor="#ffffff" fgColor="#000000" level="M" />
+                    <QRCode value={APK_URL} size={104} bgColor="#ffffff" fgColor="#000000" level="M" />
                   </div>
                   <span className="text-[9px] text-slate-400 font-bold uppercase mt-2 tracking-wider">Escaneá para descargar</span>
                 </div>
@@ -126,8 +128,7 @@ export const DownloadModal: React.FC<DownloadModalProps> = ({ isOpen, onClose })
               {/* Direct Buttons list */}
               <div className="w-full space-y-2" id="download-modal-actions">
                 <a
-                  href="https://elguia.com/descarga"
-                  target="_blank"
+                  href={APK_URL}
                   rel="noreferrer"
                   className="w-full py-2.5 bg-emerald-600 hover:bg-emerald-500 font-bold text-white text-xs rounded-xl transition-all flex items-center justify-center gap-2 border border-emerald-400/20 shadow-lg shadow-emerald-950/40"
                 >
