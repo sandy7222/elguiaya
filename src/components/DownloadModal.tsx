@@ -48,7 +48,7 @@ export const DownloadModal: React.FC<DownloadModalProps> = ({ isOpen, onClose })
                 
                 <h3 className="text-xl md:text-2xl font-black text-white leading-tight">
                   Descargá la App de <br />
-                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-teal-405">El Guía YA</span>
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-emerald-300">El Guía YA</span>
                 </h3>
                 <p className="text-xs text-slate-400 mt-2">
                   La herramienta de navegación y seguridad náutica indispensable para pescar en ríos y lagunas de Argentina.
