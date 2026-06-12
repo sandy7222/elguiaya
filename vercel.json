@@ -1,6 +1,6 @@
 {
   "redirects": [
-    { "source": "/descarga", "destination": "https://github.com/sandy7222/elguiaya-plataforma/releases/latest/download/ElGuiaYA-latest.apk", "permanent": false }
+    { "source": "/descarga{/}?", "destination": "https://github.com/sandy7222/elguiaya-plataforma/releases/latest/download/ElGuiaYA-latest.apk", "permanent": false }
   ],
   "rewrites": [
     { "source": "/tienda", "destination": "/tienda/index.html" },
