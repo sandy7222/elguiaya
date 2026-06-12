@@ -38,8 +38,9 @@ const FloatingRobot: React.FC<{ size?: number; className?: string; isAnimated?: 
   );
 };
 
-export const SmartFishingAssistant: React.FC = () => {
+export const SmartFishingAssistant: React.FC<{ hidden?: boolean }> = ({ hidden }) => {
   const [isOpen, setIsOpen] = useState(false);
+  if (hidden) return null;
   const [messages, setMessages] = useState<Message[]>([
     {
       id: 'default-1',

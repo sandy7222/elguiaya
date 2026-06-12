@@ -77,7 +77,7 @@ export default function App() {
       <Footer onScrollTo={handleScrollTo} />
 
       {/* 🤖 Floating Satellite grounded AI chatbot (Capi) */}
-      <SmartFishingAssistant />
+      <SmartFishingAssistant hidden={isDownloadOpen} />
 
       {/* 📱 Interactive direct app download popover overlay */}
       <DownloadModal isOpen={isDownloadOpen} onClose={() => setIsDownloadOpen(false)} />
