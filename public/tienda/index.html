@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8">
@@ -12,9 +12,11 @@
 
     .header { background: linear-gradient(135deg, #0b2243, #132244); border-bottom: 1px solid #1a2d50; padding: 12px 16px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; backdrop-filter: blur(12px); }
     .header-logo { display: flex; align-items: center; gap: 10px; }
-    .header-logo .icon { width: 36px; height: 36px; border-radius: 50%; border: 2px solid #10b981; display: flex; align-items: center; justify-content: center; color: #10b981; font-size: 1.1rem; }
-    .header-logo h1 { font-size: 1.1rem; color: #f1f5f9; font-weight: 700; }
-    .header-logo h1 span { color: #10b981; }
+    .header-logo svg { flex-shrink: 0; color: #10b981; }
+    .header-logo .brand-text { display: flex; flex-direction: column; }
+    .header-logo .brand-text h1 { font-size: 1.1rem; color: #f1f5f9; font-weight: 700; line-height: 1.2; }
+    .header-logo .brand-text h1 span { color: #10b981; }
+    .header-logo .brand-text .slogan { font-size: .62rem; color: #10b981; font-weight: 500; letter-spacing: .3px; opacity: .85; }
     .header-actions { display: flex; align-items: center; gap: 6px; }
     .header-actions a { width: 36px; height: 36px; border-radius: 50%; border: 1px solid #1a2d50; background: #0f1d38; display: flex; align-items: center; justify-content: center; color: #94a3b8; text-decoration: none; transition: all .2s; font-size: .9rem; }
     .header-actions a:hover { background: #10b981; color: #fff; border-color: #10b981; }
@@ -22,7 +24,7 @@
     .marquee-bar { overflow: hidden; padding: 8px 0; white-space: nowrap; }
     .marquee-bar .inner { display: inline-block; animation: marq 25s linear infinite; font-size: .78rem; font-weight: 600; letter-spacing: .5px; }
     .marquee-bar .inner span { padding: 0 40px; }
-    @keyframes marq { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+    @keyframes marq { 0% { transform: translateX(100vw); } 100% { transform: translateX(-100%); } }
 
     .search-wrap { padding: 12px 16px; max-width: 1200px; margin: 0 auto; }
     .search-wrap input { width: 100%; padding: 10px 16px; border-radius: 10px; border: 1px solid #1a2d50; background: #0f1d38; color: #e2e8f0; font-size: .88rem; outline: none; transition: border .2s; }
@@ -63,6 +65,7 @@
     .banner-fixo .overlay p { font-size: .82rem; color: #d1d5db; margin-top: 2px; }
 
     .cat-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 8px; padding: 0 16px 16px; max-width: 1200px; margin: 0 auto; }
+    .cat-prods-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 10px; padding: 0 0 24px; }
     .cat-grid .item { background: #0f1d38; border-radius: 10px; padding: 14px 8px; text-align: center; border: 1px solid #1a2d50; text-decoration: none; color: inherit; display: block; transition: all .25s; }
     .cat-grid .item:hover { background: #10b981; border-color: #10b981; transform: translateY(-3px); }
     .cat-grid .item i { font-size: 1.4rem; color: #10b981; margin-bottom: 5px; display: block; }
@@ -168,7 +171,10 @@
   <header class="header">
     <div class="header-logo">
       <img src="/logo-mark.svg" alt="El Guía Ya" class="icon" style="width:36px;height:36px;border-radius:50%;border:2px solid #10b981;object-fit:contain;background:#0b2243;padding:4px">
-      <h1>El Guía <span>Ya</span></h1>
+      <div class="brand-text">
+        <h1>El Guía <span>Ya</span></h1>
+        <span class="slogan">Tu mejor amigo de pesca</span>
+      </div>
     </div>
     <div class="header-actions">
       <a href="https://app.elguiaya.com/tienda" target="_blank" title="Carrito"><i class="fas fa-shopping-cart"></i></a>
@@ -368,7 +374,7 @@
       return r.json();
     }
 
-    let prods = [], cats = [], bans = [], blogs = [], todosAtributos = {};
+    let prods = [], cats = [], bans = [], blogs = [], todosAtributos = {}, currentCategory = null;
 
     async function init() {
       try {
@@ -394,6 +400,7 @@
       document.getElementById('footer').style.display = 'block';
 
       let html = '';
+      const iconMap = { 'Carpas': 'fa-campground', 'Reels': 'fa-hook', 'Reeles Frontales': 'fa-hook', 'Reeles Rotativos': 'fa-hook', 'Mesas y Sillas': 'fa-chair', 'Cañas': 'fa-fish', 'Señuelos': 'fa-worm', 'Pesca Deportiva': 'fa-fish', 'Camping': 'fa-campground', 'Náutica': 'fa-ship', 'Indumentaria': 'fa-tshirt' };
 
       const marqueeBans = bans.filter(b => b.tipo === 'marquee');
       if (marqueeBans.length) {
@@ -413,7 +420,21 @@
         const items = marqueeBans.map(b => '<span style="color:' + txtColor + '">✦ ' + esc(b.titulo) + '</span>').join('');
         innerHtml += items;
 
-        el.innerHTML = '<div class="inner" style="animation-duration:' + duration + 's;color:' + txtColor + '">' + innerHtml + innerHtml + '</div>';
+        el.innerHTML = '<div class="inner" style="animation-duration:' + duration + 's;color:' + txtColor + '">' + innerHtml + '</div>';
+      }
+
+      if (currentCategory) {
+        const cat = cats.find(c => c.id === currentCategory);
+        if (cat) {
+          const catProds = prods.filter(p => p.categoria_id === currentCategory);
+          const iconC = iconMap[cat.nombre] || 'fa-tag';
+          html += '<div class="section-wrap" style="padding-top:12px"><div style="display:flex;align-items:center;gap:12px;padding:12px 0"><a href="#" onclick="return volverTienda()" style="color:#94a3b8;font-size:.85rem;text-decoration:none;display:flex;align-items:center;gap:6px;white-space:nowrap" onmouseover="this.style.color=\'#10b981\'" onmouseout="this.style.color=\'#94a3b8\'"><i class="fas fa-arrow-left"></i> Volver</a><div style="flex:1;height:1px;background:#1a2d50"></div><span style="color:#64748b;font-size:.72rem">' + catProds.length + ' producto(s)</span></div><div class="section-title" style="padding-top:0"><h2 style="font-size:1.1rem"><i class="fas ' + iconC + '" style="color:#10b981;margin-right:8px"></i>' + esc(cat.nombre) + '</h2></div><div class="cat-prods-grid">';
+          catProds.forEach(p => { html += cardHtml(p); });
+          html += '</div></div>';
+        }
+        document.getElementById('content').innerHTML = html;
+        document.getElementById('content').style.display = 'block';
+        return;
       }
 
       const hero = bans.filter(b => b.tipo === 'hero');
@@ -447,9 +468,8 @@
       html += '</div></div></div>';
 
       html += '<div class="section-wrap"><div class="section-title"><h2>EXPLORA POR CATEGORÍA</h2></div></div><div class="cat-grid">';
-      const iconMap = { 'Carpas': 'fa-campground', 'Reels': 'fa-hook', 'Reeles Frontales': 'fa-hook', 'Reeles Rotativos': 'fa-hook', 'Mesas y Sillas': 'fa-chair', 'Cañas': 'fa-fish', 'Señuelos': 'fa-worm', 'Pesca Deportiva': 'fa-fish', 'Camping': 'fa-campground', 'Náutica': 'fa-ship', 'Indumentaria': 'fa-tshirt' };
       cats.filter(c => prods.some(p => p.categoria_id === c.id)).slice(0, 8).forEach(c => {
-        html += '<a class="item" href="https://app.elguiaya.com/tienda" target="_blank"><i class="fas ' + (iconMap[c.nombre] || 'fa-tag') + '"></i><span>' + esc(c.nombre) + '</span></a>';
+        html += '<a class="item" href="#" onclick="return mostrarCategoria(\'' + c.id + '\')"><i class="fas ' + (iconMap[c.nombre] || 'fa-tag') + '"></i><span>' + esc(c.nombre) + '</span></a>';
       });
       html += '</div>';
 
@@ -548,12 +568,26 @@
       val = val.toLowerCase().trim();
       const c = document.getElementById('content');
       if (!val) { render(); return; }
-      const filt = prods.filter(p => (p.nombre || '').toLowerCase().includes(val) || (p.descripcion || '').toLowerCase().includes(val));
+      const base = currentCategory ? prods.filter(p => p.categoria_id === currentCategory) : prods;
+      const filt = base.filter(p => (p.nombre || '').toLowerCase().includes(val) || (p.descripcion || '').toLowerCase().includes(val));
       if (!filt.length) { c.innerHTML = '<div class="section-wrap" style="padding:60px 16px;text-align:center;color:#64748b"><p>Sin resultados para "' + esc(val) + '"</p></div>'; return; }
-      let h = '<div class="section-wrap"><div class="section-title"><h2>RESULTADOS: ' + filt.length + '</h2></div><div class="scroll-wrap"><div class="scroll-inner">';
+      let h = currentCategory ? '<div class="section-wrap" style="padding-top:12px"><div style="display:flex;align-items:center;gap:12px;padding:12px 0"><a href="#" onclick="return volverTienda()" style="color:#94a3b8;font-size:.85rem;text-decoration:none;display:flex;align-items:center;gap:6px;white-space:nowrap" onmouseover="this.style.color=\'#10b981\'" onmouseout="this.style.color=\'#94a3b8\'"><i class="fas fa-arrow-left"></i> Volver</a><div style="flex:1;height:1px;background:#1a2d50"></div></div>' : '';
+      h += '<div class="section-wrap"><div class="section-title"><h2>RESULTADOS: ' + filt.length + '</h2></div><div class="cat-prods-grid">';
       filt.slice(0, 20).forEach(p => { h += cardHtml(p); });
       h += '</div></div></div>';
       c.innerHTML = h;
+    }
+
+    function mostrarCategoria(catId) {
+      currentCategory = catId;
+      render();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function volverTienda() {
+      currentCategory = null;
+      render();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
     function goSlide(n) {

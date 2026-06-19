@@ -4,13 +4,16 @@
  */
 
 import React from 'react';
-import { X, Smartphone, ArrowRight, ShieldCheck, Navigation, Anchor, Star, Download, QrCode } from 'lucide-react';
+import { X, Smartphone, ArrowRight, ShieldCheck, Navigation, Anchor, Star, Download } from 'lucide-react';
+import QRCode from 'react-qr-code';
 import { motion, AnimatePresence } from 'motion/react';
 
 interface DownloadModalProps {
   isOpen: boolean;
   onClose: () => void;
 }
+
+const APK_URL = 'https://elguiaya.com/descarga';
 
 export const DownloadModal: React.FC<DownloadModalProps> = ({ isOpen, onClose }) => {
   return (
@@ -45,7 +48,7 @@ export const DownloadModal: React.FC<DownloadModalProps> = ({ isOpen, onClose })
                 
                 <h3 className="text-xl md:text-2xl font-black text-white leading-tight">
                   Descargá la App de <br />
-                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-teal-405">El Guía YA</span>
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-emerald-300">El Guía YA</span>
                 </h3>
                 <p className="text-xs text-slate-400 mt-2">
                   La herramienta de navegación y seguridad náutica indispensable para pescar en ríos y lagunas de Argentina.
@@ -109,14 +112,10 @@ export const DownloadModal: React.FC<DownloadModalProps> = ({ isOpen, onClose })
               </button>
 
               <div className="w-full flex flex-col items-center justify-center" id="qr-container-box">
-                {/* Simulated QR Code Visual */}
+                {/* Real QR Code */}
                 <div className="bg-slate-900 p-4 rounded-2xl border border-slate-800 flex flex-col items-center select-none shadow-inner mb-4 mt-2">
-                  <div className="w-28 h-28 bg-white rounded-lg p-2 flex items-center justify-center relative">
-                    <QrCode className="w-full h-full text-slate-900" />
-                    {/* Tiny logo mark in the center */}
-                    <div className="absolute w-6 h-6 bg-emerald-600 rounded-full border-2 border-white flex items-center justify-center top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[9px] font-bold text-white">
-                      ⚓
-                    </div>
+                  <div className="w-28 h-28 bg-white rounded-lg p-1 flex items-center justify-center">
+                    <QRCode value={APK_URL} size={104} bgColor="#ffffff" fgColor="#000000" level="M" />
                   </div>
                   <span className="text-[9px] text-slate-400 font-bold uppercase mt-2 tracking-wider">Escaneá para descargar</span>
                 </div>
@@ -129,8 +128,7 @@ export const DownloadModal: React.FC<DownloadModalProps> = ({ isOpen, onClose })
               {/* Direct Buttons list */}
               <div className="w-full space-y-2" id="download-modal-actions">
                 <a
-                  href="https://elguiaya.com"
-                  target="_blank"
+                  href={APK_URL}
                   rel="noreferrer"
                   className="w-full py-2.5 bg-emerald-600 hover:bg-emerald-500 font-bold text-white text-xs rounded-xl transition-all flex items-center justify-center gap-2 border border-emerald-400/20 shadow-lg shadow-emerald-950/40"
                 >
