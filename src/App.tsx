@@ -40,7 +40,7 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 text-white font-sans overflow-x-hidden antialiased" id="app-root-container">
+    <div className="min-h-screen bg-[#0b2243] text-white font-sans overflow-x-hidden antialiased" id="app-root-container">
       
       {/* 🧭 Main Header Navbar Navigation */}
       <Navbar onScrollTo={handleScrollTo} onPreRegister={handlePreRegister} onDownloadClick={() => setIsDownloadOpen(true)} />

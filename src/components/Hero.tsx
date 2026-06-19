@@ -14,7 +14,7 @@ interface HeroProps {
 
 export const Hero: React.FC<HeroProps> = ({ onPreRegister, onExploreMap, onDownloadClick }) => {
   return (
-    <div className="relative min-h-screen bg-slate-950 text-white pt-24 pb-16 flex items-center overflow-hidden" id="hero-section">
+    <div className="relative min-h-screen bg-[#0b2243] text-white pt-24 pb-16 flex items-center overflow-hidden" id="hero-section">
       
       {/* 🌊 Ultra-Slow Cinematic Animation waves for background */}
       <div className="absolute inset-0 z-0 pointer-events-none opacity-45" id="cinematic-river-bg">
@@ -143,14 +143,12 @@ export const Hero: React.FC<HeroProps> = ({ onPreRegister, onExploreMap, onDownl
               </div>
 
               {/* In-app Simulator Screen */}
-              <div className="relative w-full h-full bg-slate-950 rounded-[38px] overflow-hidden flex flex-col justify-between p-4 z-20 border border-slate-800" id="phone-screen">
+              <div className="relative w-full h-full bg-[#0b1e3a] rounded-[38px] overflow-hidden flex flex-col justify-between p-4 z-20 border border-slate-800" id="phone-screen">
                 
                 {/* Header bar */}
                 <div className="flex justify-between items-center pt-5 pb-3 px-2 border-b border-slate-800/80" id="sim-header">
                   <div className="flex items-center gap-1.5" id="sim-logo">
-                    <div className="w-5 h-5 bg-emerald-600 rounded-full flex items-center justify-center">
-                      <Anchor className="w-3 h-3 text-white" />
-                    </div>
+                    <img src="/logo-mark.svg" alt="" className="w-5 h-5 flex-shrink-0" style={{ objectFit: 'contain' }} />
                     <span className="text-xs font-bold font-sans tracking-wide">El Guía Ya</span>
                   </div>
                   <div className="w-2.5 h-2.5 bg-emerald-500 rounded-full animate-ping" title="Señal Activa" />
@@ -173,7 +171,7 @@ export const Hero: React.FC<HeroProps> = ({ onPreRegister, onExploreMap, onDownl
                   {/* Simulated Map card */}
                   <div className="rounded-2xl border border-slate-800 bg-slate-900 overflow-hidden relative h-36 flex items-end shadow-inner" id="sim-map-card">
                     {/* Simulated river graphic representing Paraná delta */}
-                    <div className="absolute inset-0 bg-slate-950/40 pointer-events-none z-10" />
+                    <div className="absolute inset-0 bg-[#0b1e3a]/40 pointer-events-none z-10" />
                     <svg className="absolute inset-0 w-full h-full bg-sky-950" viewBox="0 0 200 150">
                       {/* River paths */}
                       <path d="M 0,40 Q 50,80 110,30 T 200,80" fill="none" stroke="#0ea5e9" strokeWidth="18" strokeLinecap="round" opacity="0.6" />
