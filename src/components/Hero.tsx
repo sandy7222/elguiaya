@@ -148,7 +148,7 @@ export const Hero: React.FC<HeroProps> = ({ onPreRegister, onExploreMap, onDownl
                 {/* Header bar */}
                 <div className="flex justify-between items-center pt-5 pb-3 px-2 border-b border-slate-800/80" id="sim-header">
                   <div className="flex items-center gap-1.5" id="sim-logo">
-                    <img src="/logo-mark.svg" alt="" className="w-5 h-5 flex-shrink-0" style={{ objectFit: 'contain' }} />
+                    <img src="/logo-mark.jpg" alt="" className="w-7 h-7 flex-shrink-0 rounded-full" style={{ objectFit: 'contain' }} />
                     <span className="text-xs font-bold font-sans tracking-wide">El Guía Ya</span>
                   </div>
                   <div className="w-2.5 h-2.5 bg-emerald-500 rounded-full animate-ping" title="Señal Activa" />

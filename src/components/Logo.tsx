@@ -32,11 +32,11 @@ export const Logo: React.FC<LogoProps> = ({
   return (
     <div className={`flex items-center gap-3 ${className}`} id="elguiaya-brand-logo">
       <img
-        src="/logo-mark.svg"
+        src="/logo-mark.jpg"
         width={pixelSize}
         height={pixelSize}
         alt="El Guía Ya"
-        className="transition-transform duration-300 hover:rotate-6 flex-shrink-0"
+        className="transition-transform duration-300 hover:rotate-6 flex-shrink-0 rounded-full"
         id="logo-svg-element"
         style={{ objectFit: 'contain' }}
       />
