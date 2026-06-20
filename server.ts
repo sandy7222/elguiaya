@@ -246,6 +246,44 @@ Usá formato Markdown claro y prolijo.`
   }
 });
 
+// API: Registrar descarga y redirigir
+app.get('/api/track-download', async (req, res) => {
+  const source = (req.query.source as string) || 'direct_url';
+  const userAgent = req.headers['user-agent'] || '';
+  
+  // Determinar dispositivo
+  let device = 'Otro';
+  if (/android/i.test(userAgent)) {
+    device = 'Android';
+  } else if (/iphone|ipad|ipod/i.test(userAgent)) {
+    device = 'iOS';
+  }
+  
+  try {
+    const SB_URL = 'https://ymgsxwfwntbqvguvbhoa.supabase.co';
+    const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InltZ3N4d2Z3bnRicXZndXZiaG9hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc3ODgxMzQsImV4cCI6MjA5MzM2NDEzNH0.ZT2xlCIAnSyr_tR9qZAKIB7QAVQjJO2Jv0cwb51f1Uw';
+    
+    await fetch(`${SB_URL}/rest/v1/descargas_app`, {
+      method: 'POST',
+      headers: {
+        'apikey': SB_KEY,
+        'Authorization': `Bearer ${SB_KEY}`,
+        'Content-Type': 'application/json',
+        'Prefer': 'return=minimal'
+      },
+      body: JSON.stringify({
+        origen: source,
+        dispositivo: device
+      })
+    });
+  } catch (err) {
+    console.error('[Track Download Error]:', err);
+  }
+  
+  // Redirigir al APK real en GitHub
+  res.redirect('https://github.com/sandy7222/elguiaya-plataforma/releases/latest/download/ElGuiaYA-latest.apk');
+});
+
 // Vite mode versus Production server mode
 async function startServer() {
   if (process.env.NODE_ENV !== 'production') {

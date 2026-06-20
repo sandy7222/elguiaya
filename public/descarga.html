@@ -314,7 +314,7 @@
 
     <!-- Botón de descarga directa -->
     <a id="btn-apk"
-       href="https://github.com/sandy7222/elguiaya-plataforma/releases/latest/download/ElGuiaYA-latest.apk"
+       href="/api/track-download?source=boton"
        class="btn-download"
        download>
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
@@ -385,12 +385,12 @@
   </footer>
 
   <script>
-    // URL permanente de descarga (siempre apunta a "latest")
-    const APK_URL = 'https://github.com/sandy7222/elguiaya-plataforma/releases/latest/download/ElGuiaYA-latest.apk';
+    // URL de seguimiento que registra la descarga y luego redirige al APK en GitHub
+    const TRACK_URL = window.location.origin + '/api/track-download?source=qr';
 
-    // Generar QR con esa URL
+    // Generar QR con esa URL de seguimiento
     new QRCode(document.getElementById('qr-code'), {
-      text: APK_URL,
+      text: TRACK_URL,
       width: 180,
       height: 180,
       colorDark: '#0a1628',
