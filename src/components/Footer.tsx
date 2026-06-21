@@ -5,7 +5,7 @@
 
 import React from 'react';
 import { Logo } from './Logo';
-import { Anchor, ShieldCheck, Mail, Phone, Waves, Heart } from 'lucide-react';
+import { Mail, Phone } from 'lucide-react';
 
 interface FooterProps {
   onScrollTo: (elementId: string) => void;
@@ -62,15 +62,12 @@ export const Footer: React.FC<FooterProps> = ({ onScrollTo }) => {
 
           {/* Compliance & Emergency col (4 cols) */}
           <div className="md:col-span-4 text-left" id="footer-compliance-col">
-            <h5 className="text-white font-bold text-sm uppercase tracking-wider mb-4 font-sans">Seguridad Fluvial</h5>
-            <p className="text-xs text-slate-350 leading-relaxed mb-4">
-              Asegurado bajo la regulación de Prefectura Naval Argentina y convenios de responsabilidad civil Sancor Seguros.
-            </p>
+            <h5 className="text-white font-bold text-sm uppercase tracking-wider mb-4 font-sans">Atención al Cliente</h5>
 
             <div className="space-y-2 text-xs" id="footer-contact-items">
               <div className="flex items-center gap-2 text-slate-350">
-                <Phone className="w-4 h-4 text-rose-500" />
-                <span>Canal Emergencias PNA VHF 16 / Línea 106</span>
+                <Phone className="w-4 h-4 text-emerald-400" />
+                <span>011-4899 9921</span>
               </div>
               <div className="flex items-center gap-2 text-slate-350">
                 <Mail className="w-4 h-4 text-emerald-400" />
