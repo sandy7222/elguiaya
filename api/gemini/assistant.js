@@ -168,32 +168,36 @@ export default async function handler(req, res) {
   if (req.method === 'OPTIONS') return res.status(200).end();
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
-  const { prompt, chatHistory = [] } = req.body || {};
+  const { prompt, chatHistory = [], debug = false } = req.body || {};
   if (!prompt) return res.status(400).json({ error: 'El mensaje no puede estar vacío.' });
 
   const cleanPrompt = prompt.toLowerCase().trim();
   const geminiKey = process.env.GEMINI_API_KEY;
   const groqKey = process.env.GROQ_API_KEY;
+  const debugInfo = {
+    geminiKeyPresent: !!(geminiKey && geminiKey.trim() !== ''),
+    groqKeyPresent: !!(groqKey && groqKey.trim() !== ''),
+  };
 
   if (geminiKey && geminiKey.trim() !== '') {
     try {
       const text = await callGemini(prompt, chatHistory, geminiKey);
-      return res.json({ text, sources: [], engine: 'gemini' });
+      return res.json({ text, sources: [], engine: 'gemini', ...(debug ? { debug: debugInfo } : {}) });
     } catch (err) {
       console.error('[Gemini API error]:', err);
-      // Sigue al fallback de Groq
+      debugInfo.geminiError = err instanceof Error ? err.message : String(err);
     }
   }
 
   if (groqKey && groqKey.trim() !== '') {
     try {
       const text = await callGroq(prompt, chatHistory, groqKey);
-      return res.json({ text, sources: [], engine: 'groq' });
+      return res.json({ text, sources: [], engine: 'groq', ...(debug ? { debug: debugInfo } : {}) });
     } catch (err) {
       console.error('[Groq API error]:', err);
-      // Sigue al fallback simulado
+      debugInfo.groqError = err instanceof Error ? err.message : String(err);
     }
   }
 
-  return res.json({ text: getMockResponse(cleanPrompt), sources: [], engine: 'mock' });
+  return res.json({ text: getMockResponse(cleanPrompt), sources: [], engine: 'mock', ...(debug ? { debug: debugInfo } : {}) });
 }
