@@ -7,8 +7,84 @@ import express from 'express';
 import path from 'path';
 import { createServer as createViteServer } from 'vite';
 import dotenv from 'dotenv';
+import { GoogleGenAI } from '@google/genai';
 
 dotenv.config();
+
+const SYSTEM_PROMPT = `Sos el consultor náutico experto de El Guía Ya. Tu nombre es "El GuIA".
+Sos un carismático robot flotante que vuela sobre los ríos de Argentina.
+Asistís a pescadores deportivos y capitanes. Tenés conocimiento enciclopédico de los ríos Paraná, Uruguay, Paraguay, el Río de la Plata y lagunas argentinas.
+
+Tono de comunicación:
+- Auténticamente argentino, cálido, amigable, campero pero profesional.
+- Decí cosas como "¡Hola chamigo!", "¡Buenas de pesca!" cuando sea propicio.
+- Priorizá siempre la seguridad náutica y respetar las vedas de pesca.
+
+Funciones:
+- Pronóstico climático y estado de vientos.
+- Tabla lunar y pique recomendado.
+- Recomendación de zonas para pescar Dorado, Surubí, Pacú, Pejerrey, boga o tarariras.
+- Consejos de equipo, líneas, carnadas o señuelos según temporada.
+
+Usá formato Markdown claro y prolijo.`;
+
+async function callGemini(prompt: string, chatHistory: Array<{ role: string; text: string }>, apiKey: string) {
+  const ai = new GoogleGenAI({ apiKey });
+
+  const contents: Array<{ role: string; parts: Array<{ text: string }> }> = [];
+  for (const msg of chatHistory) {
+    if (msg.role === 'user' || msg.role === 'assistant') {
+      contents.push({
+        role: msg.role === 'assistant' ? 'model' : 'user',
+        parts: [{ text: msg.text }],
+      });
+    }
+  }
+  contents.push({ role: 'user', parts: [{ text: prompt }] });
+
+  const response = await ai.models.generateContent({
+    model: 'gemini-2.5-flash',
+    contents,
+    config: { systemInstruction: SYSTEM_PROMPT },
+  });
+
+  const text = response.text;
+  if (!text) throw new Error('Respuesta vacía de Gemini');
+  return text;
+}
+
+async function callGroq(prompt: string, chatHistory: Array<{ role: string; text: string }>, apiKey: string) {
+  const messages: Array<{ role: string; content: string }> = [
+    { role: 'system', content: SYSTEM_PROMPT },
+  ];
+  for (const msg of chatHistory) {
+    if (msg.role === 'user' || msg.role === 'assistant') {
+      messages.push({ role: msg.role === 'assistant' ? 'assistant' : 'user', content: msg.text });
+    }
+  }
+  messages.push({ role: 'user', content: prompt });
+
+  const groqResponse = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${apiKey}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      model: 'llama-3.3-70b-versatile',
+      messages,
+      temperature: 0.7,
+      max_tokens: 2048,
+    }),
+  });
+
+  if (!groqResponse.ok) throw new Error(`Groq error: ${groqResponse.status}`);
+
+  const data = await groqResponse.json();
+  const text = data.choices?.[0]?.message?.content;
+  if (!text) throw new Error('Respuesta vacía de Groq');
+  return text;
+}
 
 const app = express();
 const PORT = 3000;
@@ -176,74 +252,33 @@ Si querés conectar la **Inteligencia Artificial con búsquedas satelitales auto
     };
   };
 
+  const geminiKey = process.env.GEMINI_API_KEY;
   const groqKey = process.env.GROQ_API_KEY;
-  if (!groqKey || groqKey.trim() === '') {
-    setTimeout(() => {
-      const simulated = getSimulatedResponse(cleanPrompt);
-      res.json(simulated);
-    }, 1000);
-    return;
+
+  if (geminiKey && geminiKey.trim() !== '') {
+    try {
+      const text = await callGemini(prompt, chatHistory, geminiKey);
+      res.json({ text, sources: [], engine: 'gemini' });
+      return;
+    } catch (err) {
+      console.error('[Gemini API error]:', err);
+      // Sigue al fallback de Groq
+    }
   }
 
-  try {
-    const messages: Array<{ role: string; content: string }> = [
-      {
-        role: 'system',
-        content: `Sos el consultor náutico experto de El Guía Ya. Tu nombre es "El GuIA".
-Sos un carismático robot flotante que vuela sobre los ríos de Argentina.
-Asistís a pescadores deportivos y capitanes. Tenés conocimiento enciclopédico de los ríos Paraná, Uruguay, Paraguay, el Río de la Plata y lagunas argentinas.
-
-Tono de comunicación:
-- Auténticamente argentino, cálido, amigable, campero pero profesional.
-- Decí cosas como "¡Hola chamigo!", "¡Buenas de pesca!" cuando sea propicio.
-- Priorizá siempre la seguridad náutica y respetar las vedas de pesca.
-
-Funciones:
-- Pronóstico climático y estado de vientos.
-- Tabla lunar y pique recomendado.
-- Recomendación de zonas para pescar Dorado, Surubí, Pacú, Pejerrey, boga o tarariras.
-- Consejos de equipo, líneas, carnadas o señuelos según temporada.
-
-Usá formato Markdown claro y prolijo.`
-      }
-    ];
-
-    for (const msg of chatHistory) {
-      if (msg.role === 'user' || msg.role === 'assistant') {
-        messages.push({ role: msg.role === 'assistant' ? 'assistant' : 'user', content: msg.text });
-      }
+  if (groqKey && groqKey.trim() !== '') {
+    try {
+      const text = await callGroq(prompt, chatHistory, groqKey);
+      res.json({ text, sources: [], engine: 'groq' });
+      return;
+    } catch (err) {
+      console.error('[Groq API error]:', err);
+      // Sigue al fallback simulado
     }
-
-    messages.push({ role: 'user', content: prompt });
-
-    const groqResponse = await fetch('https://api.groq.com/openai/v1/chat/completions', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${groqKey}`,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        model: 'llama-3.3-70b-versatile',
-        messages,
-        temperature: 0.7,
-        max_tokens: 2048
-      })
-    });
-
-    if (!groqResponse.ok) {
-      throw new Error(`Groq error: ${groqResponse.status}`);
-    }
-
-    const data = await groqResponse.json();
-    const text = data.choices?.[0]?.message?.content || "No obtuve respuesta.";
-    const sources: Array<{ title: string; url: string }> = [];
-
-    res.json({ text, sources });
-  } catch (err: any) {
-    console.error('[Groq API error]:', err);
-    const simulated = getSimulatedResponse(cleanPrompt);
-    res.json(simulated);
   }
+
+  const simulated = getSimulatedResponse(cleanPrompt);
+  res.json({ ...simulated, engine: 'mock' });
 });
 
 // API: Registrar descarga y redirigir

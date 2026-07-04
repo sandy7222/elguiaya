@@ -9,6 +9,7 @@ export interface Message {
   text: string;
   timestamp: string;
   sources?: Array<{ title: string; url: string }>;
+  engine?: 'gemini' | 'groq' | 'mock';
 }
 
 export interface Coordinates {

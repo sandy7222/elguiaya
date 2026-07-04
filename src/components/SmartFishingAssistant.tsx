@@ -104,7 +104,8 @@ export const SmartFishingAssistant: React.FC<{ hidden?: boolean }> = ({ hidden }
         sender: 'assistant',
         text: data.text,
         timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-        sources: data.sources || []
+        sources: data.sources || [],
+        engine: data.engine
       };
 
       setMessages((prev) => [...prev, assistantMessage]);
@@ -241,8 +242,22 @@ export const SmartFishingAssistant: React.FC<{ hidden?: boolean }> = ({ hidden }
                 )}
 
                 {/* Time footer */}
-                <span className="text-[9px] text-slate-500 mt-1 pl-1">
+                <span className="text-[9px] text-slate-500 mt-1 pl-1 flex items-center gap-1">
                   {msg.timestamp}
+                  {msg.engine && (
+                    <span
+                      className={`opacity-60 lowercase ${
+                        msg.engine === 'gemini'
+                          ? 'text-sky-400'
+                          : msg.engine === 'groq'
+                          ? 'text-orange-400'
+                          : 'text-slate-500'
+                      }`}
+                      title="Motor de IA que generó esta respuesta"
+                    >
+                      · {msg.engine}
+                    </span>
+                  )}
                 </span>
               </div>
             ))}
