@@ -17,6 +17,7 @@ import { ProjectPhases } from './components/ProjectPhases';
 import { EarlyRegistration } from './components/EarlyRegistration';
 import { Footer } from './components/Footer';
 import { SmartFishingAssistant } from './components/SmartFishingAssistant';
+import { WhatsAppButton } from './components/WhatsAppButton';
 
 export default function App() {
   const [selectedRoleForRegistration, setSelectedRoleForRegistration] = useState<'pescador' | 'capitan'>('pescador');
@@ -76,6 +77,9 @@ export default function App() {
 
       {/* 🤖 Floating Satellite grounded AI chatbot (Capi) */}
       <SmartFishingAssistant />
+
+      {/* 💬 Floating WhatsApp Business contact button */}
+      <WhatsAppButton />
 
     </div>
   );
