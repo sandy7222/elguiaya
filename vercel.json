@@ -1,8 +1,7 @@
 {
-  "redirects": [
-    { "source": "/descarga{/}?", "destination": "/api/track-download?source=direct_url", "permanent": false }
-  ],
   "rewrites": [
+    { "source": "/descarga", "destination": "/descarga.html" },
+    { "source": "/descarga/", "destination": "/descarga.html" },
     { "source": "/tienda", "destination": "/tienda/index.html" },
     { "source": "/tienda/", "destination": "/tienda/index.html" },
     { "source": "/(.*)", "destination": "/index.html" }

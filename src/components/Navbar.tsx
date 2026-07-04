@@ -10,10 +10,11 @@ import { Menu, X, Shield, MapPin, Sparkles, Anchor, LifeBuoy, Download, Shopping
 interface NavbarProps {
   onScrollTo: (elementId: string) => void;
   onPreRegister: (role: 'pescador' | 'capitan') => void;
-  onDownloadClick: () => void;
 }
 
-export const Navbar: React.FC<NavbarProps> = ({ onScrollTo, onPreRegister, onDownloadClick }) => {
+const DOWNLOAD_PAGE = '/descarga';
+
+export const Navbar: React.FC<NavbarProps> = ({ onScrollTo, onPreRegister }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const navItems = [
@@ -78,14 +79,14 @@ export const Navbar: React.FC<NavbarProps> = ({ onScrollTo, onPreRegister, onDow
             >
               Buscar un viaje
             </button>
-            <button
-              onClick={onDownloadClick}
+            <a
+              href={DOWNLOAD_PAGE}
               className="px-6 py-3 bg-emerald-600 hover:bg-emerald-500 text-white text-sm font-bold rounded-xl shadow-lg shadow-emerald-900/40 transition-all hover:scale-105 active:scale-95 cursor-pointer flex items-center gap-2 border border-emerald-400/20"
               id="cta-be-captain"
             >
               <Download className="w-4 h-4" />
               Descargá la App
-            </button>
+            </a>
           </div>
 
           {/* Mobile menu button */}
@@ -126,17 +127,15 @@ export const Navbar: React.FC<NavbarProps> = ({ onScrollTo, onPreRegister, onDow
             >
               Buscar un viaje (Pescador)
             </button>
-            <button
-              onClick={() => {
-                setIsOpen(false);
-                onDownloadClick();
-              }}
+            <a
+              href={DOWNLOAD_PAGE}
+              onClick={() => setIsOpen(false)}
               className="w-full py-3.5 text-center text-white bg-emerald-600 hover:bg-emerald-500 rounded-xl text-sm font-bold shadow-lg transition-all cursor-pointer flex items-center justify-center gap-2 border border-emerald-400/20"
               id="mob-cta-capitan"
             >
               <Download className="w-4 h-4" />
               Descargá la App
-            </button>
+            </a>
           </div>
         </div>
       )}

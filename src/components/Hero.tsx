@@ -9,10 +9,11 @@ import { Anchor, ShieldCheck, Map, Users, ChevronRight, Download } from 'lucide-
 interface HeroProps {
   onPreRegister: (role: 'pescador' | 'capitan') => void;
   onExploreMap: () => void;
-  onDownloadClick: () => void;
 }
 
-export const Hero: React.FC<HeroProps> = ({ onPreRegister, onExploreMap, onDownloadClick }) => {
+const DOWNLOAD_PAGE = '/descarga';
+
+export const Hero: React.FC<HeroProps> = ({ onPreRegister, onExploreMap }) => {
   return (
     <div className="relative min-h-screen bg-[#0b2243] text-white pt-24 pb-16 flex items-center overflow-hidden" id="hero-section">
       
@@ -93,14 +94,14 @@ export const Hero: React.FC<HeroProps> = ({ onPreRegister, onExploreMap, onDownl
                 <ChevronRight className="w-5 h-5 text-emerald-400" />
               </button>
               
-              <button
-                onClick={onDownloadClick}
+              <a
+                href={DOWNLOAD_PAGE}
                 className="px-8 py-4 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl shadow-lg shadow-emerald-950/50 hover:shadow-emerald-700/40 transform transition-all hover:-translate-y-0.5 active:translate-y-0 flex items-center justify-center gap-2 cursor-pointer text-base border border-emerald-400/20 animate-pulse"
                 id="hero-btn-capitan"
               >
                 <span>Descargá la App</span>
                 <Download className="w-5 h-5 text-white" />
-              </button>
+              </a>
             </div>
 
             {/* Quality badges */}

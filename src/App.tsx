@@ -17,11 +17,9 @@ import { ProjectPhases } from './components/ProjectPhases';
 import { EarlyRegistration } from './components/EarlyRegistration';
 import { Footer } from './components/Footer';
 import { SmartFishingAssistant } from './components/SmartFishingAssistant';
-import { DownloadModal } from './components/DownloadModal';
 
 export default function App() {
   const [selectedRoleForRegistration, setSelectedRoleForRegistration] = useState<'pescador' | 'capitan'>('pescador');
-  const [isDownloadOpen, setIsDownloadOpen] = useState(false);
 
   const handleScrollTo = (id: string) => {
     const element = document.getElementById(id);
@@ -43,10 +41,10 @@ export default function App() {
     <div className="min-h-screen bg-[#0b2243] text-white font-sans overflow-x-hidden antialiased" id="app-root-container">
       
       {/* 🧭 Main Header Navbar Navigation */}
-      <Navbar onScrollTo={handleScrollTo} onPreRegister={handlePreRegister} onDownloadClick={() => setIsDownloadOpen(true)} />
+      <Navbar onScrollTo={handleScrollTo} onPreRegister={handlePreRegister} />
 
       {/* 🌊 Hero Intro with slowly flowing wave animations */}
-      <Hero onPreRegister={handlePreRegister} onExploreMap={handleExploreMap} onDownloadClick={() => setIsDownloadOpen(true)} />
+      <Hero onPreRegister={handlePreRegister} onExploreMap={handleExploreMap} />
 
       {/* 🚀 Parallel visual walkthroughs for stakeholders */}
       <HowItWorks />
@@ -77,10 +75,7 @@ export default function App() {
       <Footer onScrollTo={handleScrollTo} />
 
       {/* 🤖 Floating Satellite grounded AI chatbot (Capi) */}
-      <SmartFishingAssistant hidden={isDownloadOpen} />
-
-      {/* 📱 Interactive direct app download popover overlay */}
-      <DownloadModal isOpen={isDownloadOpen} onClose={() => setIsDownloadOpen(false)} />
+      <SmartFishingAssistant />
 
     </div>
   );
