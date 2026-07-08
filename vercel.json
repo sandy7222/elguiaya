@@ -8,9 +8,9 @@
   "rewrites": [
     { "source": "/app/descarga", "destination": "/descarga.html" },
     { "source": "/app/descarga/", "destination": "/descarga.html" },
-    { "source": "/app", "destination": "/index.html" },
-    { "source": "/app/", "destination": "/index.html" },
-    { "source": "/app/(.*)", "destination": "/index.html" },
+    { "source": "/app", "destination": "/app.html" },
+    { "source": "/app/", "destination": "/app.html" },
+    { "source": "/app/(.*)", "destination": "/app.html" },
     { "source": "/(.*)", "destination": "/tienda/index.html" }
   ]
 }

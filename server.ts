@@ -391,7 +391,7 @@ async function startServer() {
     // Mapear la app de React en /app
     app.use('/app', (req, res, next) => {
       if (!req.url.includes('.')) {
-        req.url = '/';
+        req.url = '/app.html';
       }
       vite.middlewares(req, res, next);
     });
@@ -423,7 +423,7 @@ async function startServer() {
 
     // Si entran a la app de viajes
     app.get('/app*', (req, res) => {
-      res.sendFile(path.join(distPath, 'index.html'));
+      res.sendFile(path.join(distPath, 'app.html'));
     });
 
     // Fallback general a la tienda
