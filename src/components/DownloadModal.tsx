@@ -13,7 +13,7 @@ interface DownloadModalProps {
   onClose: () => void;
 }
 
-const APK_URL = 'https://elguiaya.com/descarga';
+const APK_URL = 'https://elguiaya.com/app/descarga';
 
 export const DownloadModal: React.FC<DownloadModalProps> = ({ isOpen, onClose }) => {
   return (

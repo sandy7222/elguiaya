@@ -11,7 +11,7 @@ interface HeroProps {
   onExploreMap: () => void;
 }
 
-const DOWNLOAD_PAGE = '/descarga';
+const DOWNLOAD_PAGE = '/app/descarga';
 
 export const Hero: React.FC<HeroProps> = ({ onPreRegister, onExploreMap }) => {
   return (

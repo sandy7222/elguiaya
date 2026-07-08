@@ -4,6 +4,7 @@
  */
 
 import React from 'react';
+import { trackVisit } from '../utils/trackVisit';
 
 const WHATSAPP_NUMBER = '5491171548464';
 const DEFAULT_MESSAGE = '¡Hola! Quiero más información sobre El Guía Ya.';
@@ -17,14 +18,19 @@ const WhatsAppIcon: React.FC<{ className?: string }> = ({ className }) => (
 );
 
 export const WhatsAppButton: React.FC = () => {
+  const handleClick = () => {
+    trackVisit('/', 'whatsapp_click');
+    window.open(WHATSAPP_URL, '_blank', 'noopener,noreferrer');
+  };
+
   return (
-    <a
-      href={WHATSAPP_URL}
-      target="_blank"
-      rel="noreferrer"
-      className="fixed bottom-6 left-6 z-50 group flex items-center gap-3 cursor-pointer"
+    <button
+      type="button"
+      onClick={handleClick}
+      className="fixed bottom-6 left-6 z-50 group flex items-center gap-3 cursor-pointer border-0 bg-transparent p-0"
       id="whatsapp-float-button"
       title="Hablar por WhatsApp"
+      aria-label="Hablar por WhatsApp"
     >
       {/* Tooltip label on hover (desktop) */}
       <div className="hidden md:block bg-slate-900 border border-slate-800 text-emerald-400 font-extrabold text-[11px] px-3 py-1.5 rounded-xl shadow-lg opacity-0 group-hover:opacity-100 transition-all duration-300 select-none order-1">
@@ -40,6 +46,6 @@ export const WhatsAppButton: React.FC = () => {
           <WhatsAppIcon className="w-8 h-8 text-white" />
         </div>
       </div>
-    </a>
+    </button>
   );
 };

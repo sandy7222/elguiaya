@@ -1,9 +1,16 @@
 {
+  "redirects": [
+    { "source": "/tienda", "destination": "/", "permanent": true },
+    { "source": "/tienda/", "destination": "/", "permanent": true },
+    { "source": "/descarga", "destination": "/app/descarga", "permanent": true },
+    { "source": "/descarga/", "destination": "/app/descarga", "permanent": true }
+  ],
   "rewrites": [
-    { "source": "/descarga", "destination": "/descarga.html" },
-    { "source": "/descarga/", "destination": "/descarga.html" },
-    { "source": "/tienda", "destination": "/tienda/index.html" },
-    { "source": "/tienda/", "destination": "/tienda/index.html" },
-    { "source": "/(.*)", "destination": "/index.html" }
+    { "source": "/app/descarga", "destination": "/descarga.html" },
+    { "source": "/app/descarga/", "destination": "/descarga.html" },
+    { "source": "/app", "destination": "/index.html" },
+    { "source": "/app/", "destination": "/index.html" },
+    { "source": "/app/(.*)", "destination": "/index.html" },
+    { "source": "/(.*)", "destination": "/tienda/index.html" }
   ]
 }

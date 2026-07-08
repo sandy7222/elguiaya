@@ -3,7 +3,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { trackVisit } from './utils/trackVisit';
 import { Navbar } from './components/Navbar';
 import { Hero } from './components/Hero';
 import { HowItWorks } from './components/HowItWorks';
@@ -37,6 +38,10 @@ export default function App() {
   const handleExploreMap = () => {
     handleScrollTo('interactive-map');
   };
+
+  useEffect(() => {
+    trackVisit('/');
+  }, []);
 
   return (
     <div className="min-h-screen bg-[#0b2243] text-white font-sans overflow-x-hidden antialiased" id="app-root-container">

@@ -319,20 +319,116 @@ app.get('/api/track-download', async (req, res) => {
   res.redirect('https://github.com/sandy7222/elguiaya-plataforma/releases/latest/download/ElGuiaYA-latest.apk');
 });
 
+// API: Registrar visita o evento web (pageview, whatsapp_click)
+app.get('/api/track-visit', async (req, res) => {
+  const tipo = (req.query.tipo as string) || 'pageview';
+  const ruta = (req.query.ruta as string) || '/';
+  const userAgent = req.headers['user-agent'] || '';
+
+  let device = 'Otro';
+  if (/android/i.test(userAgent)) device = 'Android';
+  else if (/iphone|ipad|ipod/i.test(userAgent)) device = 'iOS';
+
+  const pick = (v: unknown) =>
+    typeof v === 'string' && v.trim() ? v.trim().slice(0, 200) : null;
+
+  try {
+    const SB_URL = 'https://ymgsxwfwntbqvguvbhoa.supabase.co';
+    const SB_KEY =
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InltZ3N4d2Z3bnRicXZndXZiaG9hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc3ODgxMzQsImV4cCI6MjA5MzM2NDEzNH0.ZT2xlCIAnSyr_tR9qZAKIB7QAVQjJO2Jv0cwb51f1Uw';
+
+    await fetch(`${SB_URL}/rest/v1/eventos_web`, {
+      method: 'POST',
+      headers: {
+        apikey: SB_KEY,
+        Authorization: `Bearer ${SB_KEY}`,
+        'Content-Type': 'application/json',
+        Prefer: 'return=minimal',
+      },
+      body: JSON.stringify({
+        tipo: pick(tipo) || 'pageview',
+        ruta: pick(ruta) || '/',
+        dispositivo: device,
+        utm_source: pick(req.query.utm_source),
+        utm_medium: pick(req.query.utm_medium),
+        utm_campaign: pick(req.query.utm_campaign),
+        referrer: pick(req.query.referrer),
+      }),
+    });
+  } catch (err) {
+    console.error('[Track Visit Error]:', err);
+  }
+
+  res.status(204).end();
+});
+
 // Vite mode versus Production server mode
 async function startServer() {
   if (process.env.NODE_ENV !== 'production') {
+    // Redirecciones
+    app.get(['/tienda', '/tienda/*'], (req, res) => {
+      res.redirect(301, '/');
+    });
+    app.get(['/descarga', '/descarga/*'], (req, res) => {
+      res.redirect(301, '/app/descarga');
+    });
+
+    // Descarga del APK
+    app.get(['/app/descarga', '/app/descarga/'], (req, res) => {
+      res.sendFile(path.join(process.cwd(), 'public', 'descarga.html'));
+    });
+
+    // Tienda oficial en /
+    app.get('/', (req, res) => {
+      res.sendFile(path.join(process.cwd(), 'public', 'tienda', 'index.html'));
+    });
+
     const vite = await createViteServer({
       server: { middlewareMode: true },
       appType: 'spa'
     });
+
+    // Mapear la app de React en /app
+    app.use('/app', (req, res, next) => {
+      if (!req.url.includes('.')) {
+        req.url = '/';
+      }
+      vite.middlewares(req, res, next);
+    });
+
+    // Para resolver los archivos fuentes y dependencias que pide el navegador
     app.use(vite.middlewares);
   } else {
-    // Serve production static assets
+    // Redirecciones
+    app.get(['/tienda', '/tienda/*'], (req, res) => {
+      res.redirect(301, '/');
+    });
+    app.get(['/descarga', '/descarga/*'], (req, res) => {
+      res.redirect(301, '/app/descarga');
+    });
+
+    // Descarga del APK
+    app.get(['/app/descarga', '/app/descarga/'], (req, res) => {
+      res.sendFile(path.join(process.cwd(), 'public', 'descarga.html'));
+    });
+
+    // Tienda oficial en /
+    app.get('/', (req, res) => {
+      res.sendFile(path.join(process.cwd(), 'public', 'tienda', 'index.html'));
+    });
+
+    // Servir recursos estáticos compilados en producción
     const distPath = path.join(process.cwd(), 'dist');
     app.use(express.static(distPath));
-    app.get('*', (req, res) => {
+
+    // Si entran a la app de viajes
+    app.get('/app*', (req, res) => {
       res.sendFile(path.join(distPath, 'index.html'));
+    });
+
+    // Fallback general a la tienda
+    app.get('*', (req, res) => {
+      res.sendFile(path.join(process.cwd(), 'public', 'tienda', 'index.html'));
     });
   }
 

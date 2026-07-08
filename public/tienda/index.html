@@ -377,7 +377,19 @@
 
     let prods = [], cats = [], bans = [], blogs = [], todosAtributos = {}, currentCategory = null;
 
+    function trackPageVisit(tipo) {
+      var params = new URLSearchParams({ ruta: '/tienda', tipo: tipo || 'pageview' });
+      var search = new URLSearchParams(window.location.search);
+      ['utm_source', 'utm_medium', 'utm_campaign'].forEach(function (key) {
+        var value = search.get(key);
+        if (value) params.set(key, value);
+      });
+      if (document.referrer) params.set('referrer', document.referrer.slice(0, 200));
+      fetch('/api/track-visit?' + params.toString(), { keepalive: true }).catch(function () {});
+    }
+
     async function init() {
+      trackPageVisit('pageview');
       try {
         [prods, cats, bans, blogs] = await Promise.all([
           api('productos', { filters: [{ col: 'activo', op: 'eq', val: true }], order: { col: 'created_at', asc: false } }),
@@ -480,7 +492,7 @@
 
     function cardHtml(p) {
       const img = p.imagen_url ? '<div class="card-img" style="background-image:url(\'' + esc(p.imagen_url) + '\');background-size:cover;background-position:center"></div>' : '<div class="card-img">Sin imagen</div>';
-      return '<div class="card" onclick="abrirProducto(\'' + p.id + '\')">' + img + '<div class="card-body"><h3>' + esc(p.nombre) + '</h3><div class="precio">$' + Number(p.precio).toLocaleString('es-AR', { minimumFractionDigits: 2 }) + '</div><a class="buy-btn" href="https://app.elguiaya.com/producto/' + p.id + '" target="_blank" onclick="event.stopPropagation()">Comprar</a></div></div>';
+      return '<div class="card" onclick="abrirProducto(\'' + p.id + '\')">' + img + '<div class="card-body"><h3>' + esc(p.nombre) + '</h3><div class="precio">$' + Number(p.precio).toLocaleString('es-AR', { minimumFractionDigits: 2 }) + '</div><a class="buy-btn" href="#" onclick="return false;">Comprar</a></div></div>';
     }
 
     let galeriaActual = 0, galeriaImgs = [];
