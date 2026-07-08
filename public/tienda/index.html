@@ -492,7 +492,7 @@
 
     function cardHtml(p) {
       const img = p.imagen_url ? '<div class="card-img" style="background-image:url(\'' + esc(p.imagen_url) + '\');background-size:cover;background-position:center"></div>' : '<div class="card-img">Sin imagen</div>';
-      return '<div class="card" onclick="abrirProducto(\'' + p.id + '\')">' + img + '<div class="card-body"><h3>' + esc(p.nombre) + '</h3><div class="precio">$' + Number(p.precio).toLocaleString('es-AR', { minimumFractionDigits: 2 }) + '</div><a class="buy-btn" href="#" onclick="return false;">Comprar</a></div></div>';
+      return '<div class="card" onclick="abrirProducto(\'' + p.id + '\')">' + img + '<div class="card-body"><h3>' + esc(p.nombre) + '</h3><div class="precio">$' + Number(p.precio).toLocaleString('es-AR', { minimumFractionDigits: 2 }) + '</div><a class="buy-btn" href="https://app.elguiaya.com/producto/' + p.id + '" target="_blank" onclick="event.stopPropagation()">Comprar</a></div></div>';
     }
 
     let galeriaActual = 0, galeriaImgs = [];
@@ -545,30 +545,8 @@
     function abrirZoom() { const src = document.getElementById('modal-img').src; if (!src) return; document.getElementById('zoom-img').src = src; document.getElementById('zoom-overlay').classList.add('open'); }
     function cerrarZoom() { document.getElementById('zoom-overlay').classList.remove('open'); }
 
-    async function comprar(productoId, nombre, precio) {
-      const btn = document.getElementById('modal-btn');
-      btn.disabled = true;
-      btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> PROCESANDO...';
-      try {
-        const r = await fetch('/api/create-preference', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ producto_id: productoId, nombre, precio, cantidad: 1 }),
-        });
-        const data = await r.json();
-        if (!r.ok) throw new Error(data.error || 'Error');
-        if (data.init_point) {
-          window.location.href = data.init_point;
-        } else {
-          throw new Error('No se recibió punto de pago');
-        }
-      } catch (err) {
-        btn.disabled = false;
-        btn.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Error al procesar el pago, intentá de nuevo';
-        setTimeout(() => {
-          btn.innerHTML = '<i class="fas fa-shopping-cart"></i> Comprar ahora';
-        }, 3000);
-      }
+    function comprar(productoId, nombre, precio) {
+      window.location.href = 'https://app.elguiaya.com/producto/' + productoId;
     }
 
     function cerrarModal() {
