@@ -47,9 +47,9 @@ export default async function handler(req, res) {
           currency_id: 'ARS',
         }],
         back_urls: {
-          success: 'https://www.elguiaya.com/tienda',
-          failure: 'https://www.elguiaya.com/tienda',
-          pending: 'https://www.elguiaya.com/tienda',
+          success: 'https://www.elguiaya.com/',
+          failure: 'https://www.elguiaya.com/',
+          pending: 'https://www.elguiaya.com/',
         },
         auto_return: 'approved',
       }),
