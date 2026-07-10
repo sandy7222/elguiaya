@@ -98,6 +98,53 @@
     .modal-thumbs .thumb.activo { border-color: #10b981; }
     .modal-body { padding: 20px; }
     .modal-body h2 { font-size: 1.2rem; font-weight: 700; color: #f1f5f9; margin-bottom: 6px; }
+
+    /* ── Checkout modal ────────────────────────────────────────────────────── */
+    #modal-checkout { z-index: 210; }
+    .checkout-modal { background: #0b1628; border-radius: 20px; max-width: 480px; width: 100%; max-height: 96vh; overflow-y: auto; border: 1px solid #1a2d50; transform: translateY(40px); transition: transform .35s cubic-bezier(.16,1,.3,1); scrollbar-width: thin; }
+    .modal-overlay.open .checkout-modal { transform: translateY(0); }
+    .checkout-modal::-webkit-scrollbar { width: 4px; }
+    .checkout-modal::-webkit-scrollbar-thumb { background: #1a2d50; border-radius: 4px; }
+    .co-header { display: flex; align-items: center; gap: 12px; padding: 20px; border-bottom: 1px solid #1a2d50; background: #0f1d38; border-radius: 20px 20px 0 0; }
+    .co-header .co-icon { width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg,#10b981,#059669); display: flex; align-items: center; justify-content: center; font-size: 1rem; color: #fff; flex-shrink: 0; }
+    .co-header h2 { font-size: 1rem; font-weight: 700; color: #f1f5f9; flex: 1; margin: 0; }
+    .co-header .co-close { background: none; border: none; color: #64748b; font-size: 1.1rem; cursor: pointer; padding: 4px 8px; border-radius: 8px; transition: all .2s; }
+    .co-header .co-close:hover { background: #1a2d50; color: #f1f5f9; }
+    .co-resumen { display: flex; align-items: center; gap: 12px; padding: 16px 20px; background: #132244; border-bottom: 1px solid #1a2d50; }
+    .co-resumen img { width: 56px; height: 56px; border-radius: 10px; object-fit: cover; background: #0b2243; border: 1px solid #1a2d50; }
+    .co-resumen .co-prod-info { flex: 1; min-width: 0; }
+    .co-resumen .co-prod-nombre { font-size: .85rem; font-weight: 700; color: #f1f5f9; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .co-resumen .co-prod-precio { font-size: 1.1rem; font-weight: 800; color: #10b981; margin-top: 2px; }
+    .co-steps { display: flex; padding: 16px 20px 0; gap: 0; }
+    .co-step-tab { flex: 1; text-align: center; font-size: .7rem; font-weight: 700; letter-spacing: .5px; color: #475569; padding-bottom: 10px; border-bottom: 2px solid #1a2d50; cursor: default; transition: all .2s; }
+    .co-step-tab.activo { color: #10b981; border-bottom-color: #10b981; }
+    .co-step-tab.completado { color: #059669; border-bottom-color: #059669; }
+    .co-form { padding: 20px; }
+    .co-section-title { font-size: .65rem; font-weight: 700; letter-spacing: 1.5px; color: #10b981; margin: 16px 0 10px; text-transform: uppercase; display: flex; align-items: center; gap: 8px; }
+    .co-section-title::before { content: ''; flex: 1; height: 1px; background: #1a2d50; }
+    .co-row { display: grid; gap: 10px; margin-bottom: 10px; }
+    .co-row.col2 { grid-template-columns: 1fr 1fr; }
+    .co-row.col3 { grid-template-columns: 2fr 1fr 1fr; }
+    .co-field { display: flex; flex-direction: column; gap: 4px; }
+    .co-field label { font-size: .68rem; font-weight: 600; color: #94a3b8; letter-spacing: .3px; }
+    .co-field input, .co-field select { padding: 10px 12px; border-radius: 10px; border: 1px solid #1a2d50; background: #0b2243; color: #e2e8f0; font-size: .88rem; outline: none; transition: border .2s; width: 100%; }
+    .co-field input:focus, .co-field select:focus { border-color: #10b981; box-shadow: 0 0 0 3px rgba(16,185,129,.1); }
+    .co-field select option { background: #0b2243; }
+    .co-field input::placeholder { color: #334155; }
+    .co-btn-pagar { display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; padding: 15px; border-radius: 14px; border: none; background: linear-gradient(135deg,#10b981,#059669); color: #fff; font-weight: 800; font-size: 1rem; cursor: pointer; margin-top: 20px; transition: all .25s; box-shadow: 0 4px 20px rgba(16,185,129,.35); letter-spacing: .5px; }
+    .co-btn-pagar:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(16,185,129,.5); }
+    .co-btn-pagar:disabled { opacity: .6; cursor: not-allowed; transform: none; box-shadow: none; }
+    .co-btn-pagar .co-spinner { width: 18px; height: 18px; border: 2px solid rgba(255,255,255,.3); border-top-color: #fff; border-radius: 50%; animation: spin .7s linear infinite; }
+    .co-disclaimer { font-size: .68rem; color: #475569; text-align: center; margin-top: 10px; line-height: 1.5; }
+    .co-disclaimer i { color: #10b981; margin-right: 3px; }
+    .co-error-msg { background: rgba(239,68,68,.1); border: 1px solid rgba(239,68,68,.3); color: #fca5a5; border-radius: 10px; padding: 10px 14px; font-size: .8rem; margin-top: 14px; display: none; }
+    .co-error-msg.visible { display: block; }
+    /* Estado aprobado / pendiente */
+    .co-success-box { text-align: center; padding: 32px 20px; }
+    .co-success-box .co-check { width: 64px; height: 64px; border-radius: 50%; background: linear-gradient(135deg,#10b981,#059669); display: flex; align-items: center; justify-content: center; font-size: 1.8rem; color: #fff; margin: 0 auto 16px; }
+    .co-success-box h3 { color: #f1f5f9; font-size: 1.1rem; margin-bottom: 6px; }
+    .co-success-box p { color: #94a3b8; font-size: .82rem; line-height: 1.6; }
+    .co-success-box .co-pedido-num { display: inline-block; background: #132244; border: 1px solid #1a2d50; color: #10b981; font-weight: 800; font-size: .9rem; padding: 6px 16px; border-radius: 8px; margin: 12px 0; letter-spacing: 1px; }
     .modal-body .rubro-badge { display: inline-block; background: #10b98120; color: #10b981; font-size: .65rem; font-weight: 700; letter-spacing: 1px; padding: 3px 8px; border-radius: 6px; margin-bottom: 10px; }
     .modal-body .desc { font-size: .82rem; color: #94a3b8; line-height: 1.7; margin-bottom: 12px; }
     .modal-body .precio-lg { font-size: 1.5rem; font-weight: 800; color: #10b981; margin-bottom: 16px; }
@@ -223,6 +270,162 @@
 
   <div class="zoom-overlay" id="zoom-overlay" onclick="cerrarZoom()">
     <img id="zoom-img" src="" alt="">
+  </div>
+
+  <!-- ╔══════════════════════════════════════════════════════════╗ -->
+  <!-- ║              MODAL DE CHECKOUT DE COMPRA                ║ -->
+  <!-- ╚══════════════════════════════════════════════════════════╝ -->
+  <div class="modal-overlay" id="modal-checkout">
+    <div class="checkout-modal">
+
+      <!-- Cabecera -->
+      <div class="co-header">
+        <div class="co-icon"><i class="fas fa-lock"></i></div>
+        <h2 id="co-titulo">Completar compra</h2>
+        <button class="co-close" onclick="cerrarCheckout()" title="Cancelar"><i class="fas fa-times"></i></button>
+      </div>
+
+      <!-- Resumen del producto -->
+      <div class="co-resumen">
+        <img id="co-img" src="" alt="">
+        <div class="co-prod-info">
+          <div class="co-prod-nombre" id="co-nombre-prod"></div>
+          <div class="co-prod-precio" id="co-precio-prod"></div>
+        </div>
+      </div>
+
+      <!-- Pestañas de paso -->
+      <div class="co-steps">
+        <div class="co-step-tab activo" id="co-tab-1"><i class="fas fa-user"></i> TUS DATOS</div>
+        <div class="co-step-tab" id="co-tab-2"><i class="fas fa-map-marker-alt"></i> ENVÍO</div>
+        <div class="co-step-tab" id="co-tab-3"><i class="fas fa-credit-card"></i> PAGAR</div>
+      </div>
+
+      <!-- Formulario -->
+      <form id="form-checkout" class="co-form" onsubmit="return submitCheckout(event)" novalidate>
+
+        <!-- ── Paso 1: Datos del comprador ────────────────────── -->
+        <div id="co-step-1">
+          <div class="co-section-title">DATOS PERSONALES</div>
+          <div class="co-row">
+            <div class="co-field">
+              <label>Nombre y apellido *</label>
+              <input type="text" id="co-nombre" placeholder="Juan García" required autocomplete="name">
+            </div>
+          </div>
+          <div class="co-row col2">
+            <div class="co-field">
+              <label>Email *</label>
+              <input type="email" id="co-email" placeholder="juan@correo.com" required autocomplete="email">
+            </div>
+            <div class="co-field">
+              <label>Teléfono / WhatsApp *</label>
+              <input type="tel" id="co-telefono" placeholder="+54 9 11 ..." required autocomplete="tel">
+            </div>
+          </div>
+          <button type="button" class="co-btn-pagar" style="background:linear-gradient(135deg,#1a2d50,#2d4a7a);box-shadow:none" onclick="coIrPaso2()">
+            <i class="fas fa-arrow-right"></i> CONTINUAR AL ENVÍO
+          </button>
+        </div>
+
+        <!-- ── Paso 2: Datos de envío ─────────────────────────── -->
+        <div id="co-step-2" style="display:none">
+          <div class="co-section-title">DIRECCIÓN DE ENVÍO</div>
+          <div class="co-row col3">
+            <div class="co-field">
+              <label>Calle *</label>
+              <input type="text" id="co-calle" placeholder="San Martín" required autocomplete="address-line1">
+            </div>
+            <div class="co-field">
+              <label>Número *</label>
+              <input type="text" id="co-numero" placeholder="1234" required>
+            </div>
+            <div class="co-field">
+              <label>Piso / Dto</label>
+              <input type="text" id="co-piso" placeholder="3°B">
+            </div>
+          </div>
+          <div class="co-row col2">
+            <div class="co-field">
+              <label>Localidad *</label>
+              <input type="text" id="co-localidad" placeholder="Tigre" required autocomplete="address-level2">
+            </div>
+            <div class="co-field">
+              <label>Código Postal *</label>
+              <input type="text" id="co-cp" placeholder="1648" required autocomplete="postal-code">
+            </div>
+          </div>
+          <div class="co-row">
+            <div class="co-field">
+              <label>Provincia *</label>
+              <select id="co-provincia" required>
+                <option value="">Seleccionar provincia...</option>
+                <option>Buenos Aires</option>
+                <option>CABA</option>
+                <option>Catamarca</option>
+                <option>Chaco</option>
+                <option>Chubut</option>
+                <option>Córdoba</option>
+                <option>Corrientes</option>
+                <option>Entre Ríos</option>
+                <option>Formosa</option>
+                <option>Jujuy</option>
+                <option>La Pampa</option>
+                <option>La Rioja</option>
+                <option>Mendoza</option>
+                <option>Misiones</option>
+                <option>Neuquén</option>
+                <option>Río Negro</option>
+                <option>Salta</option>
+                <option>San Juan</option>
+                <option>San Luis</option>
+                <option>Santa Cruz</option>
+                <option>Santa Fe</option>
+                <option>Santiago del Estero</option>
+                <option>Tierra del Fuego</option>
+                <option>Tucumán</option>
+              </select>
+            </div>
+          </div>
+          <div style="display:flex;gap:10px;margin-top:4px">
+            <button type="button" class="co-btn-pagar" style="flex:1;background:linear-gradient(135deg,#0f1d38,#132244);box-shadow:none;font-size:.8rem;padding:12px" onclick="coIrPaso1()">
+              <i class="fas fa-arrow-left"></i> VOLVER
+            </button>
+            <button type="button" class="co-btn-pagar" style="flex:2;background:linear-gradient(135deg,#1a2d50,#2d4a7a);box-shadow:none" onclick="coIrPaso3()">
+              <i class="fas fa-arrow-right"></i> REVISAR Y PAGAR
+            </button>
+          </div>
+        </div>
+
+        <!-- ── Paso 3: Confirmación y pago ────────────────────── -->
+        <div id="co-step-3" style="display:none">
+          <div class="co-section-title">RESUMEN DE TU PEDIDO</div>
+          <div id="co-resumen-final" style="background:#0b2243;border:1px solid #1a2d50;border-radius:12px;padding:14px;font-size:.82rem;color:#cbd5e1;line-height:2"></div>
+          <div class="co-error-msg" id="co-error"></div>
+          <button type="submit" class="co-btn-pagar" id="btn-pagar-mp">
+            <i class="fas fa-lock"></i> PAGAR CON MERCADOPAGO
+          </button>
+          <p class="co-disclaimer">
+            <i class="fas fa-shield-alt"></i> Pago 100% seguro a través de MercadoPago.
+            Tu información nunca se almacena en nuestros servidores.
+          </p>
+          <button type="button" style="display:block;width:100%;margin-top:8px;padding:10px;border-radius:10px;border:1px solid #1a2d50;background:transparent;color:#64748b;font-size:.82rem;cursor:pointer;transition:all .2s" onclick="coIrPaso2()" onmouseover="this.style.color='#f1f5f9'" onmouseout="this.style.color='#64748b'">
+            <i class="fas fa-arrow-left"></i> Corregir envío
+          </button>
+        </div>
+
+        <!-- ── Estado: éxito / pendiente (post MP) ────────────── -->
+        <div id="co-step-success" style="display:none">
+          <div class="co-success-box">
+            <div class="co-check"><i class="fas fa-check"></i></div>
+            <h3>¡Pedido registrado!</h3>
+            <div class="co-pedido-num" id="co-numero-pedido"></div>
+            <p>Serás redirigido a MercadoPago para completar el pago.<br>Una vez aprobado, tu pedido quedará confirmado.</p>
+          </div>
+        </div>
+
+      </form>
+    </div>
   </div>
 
   <!-- Modal Quiénes Somos -->
@@ -545,8 +748,144 @@
     function abrirZoom() { const src = document.getElementById('modal-img').src; if (!src) return; document.getElementById('zoom-img').src = src; document.getElementById('zoom-overlay').classList.add('open'); }
     function cerrarZoom() { document.getElementById('zoom-overlay').classList.remove('open'); }
 
+    // ── Variables del checkout ──────────────────────────────────────────────
+    let _co = { productoId: null, nombre: '', precio: 0, imagen: '', cantidad: 1 };
+
     function comprar(productoId, nombre, precio) {
-      window.location.href = 'https://app.elguiaya.com/producto/' + productoId;
+      const prod = prods.find(x => x.id === productoId);
+      _co = {
+        productoId,
+        nombre: nombre || (prod ? prod.nombre : ''),
+        precio: Number(precio || (prod ? prod.precio : 0)),
+        imagen: prod ? (prod.imagen_url || '') : '',
+        cantidad: 1,
+      };
+      // Rellenar cabecera del checkout
+      document.getElementById('co-nombre-prod').textContent = _co.nombre;
+      document.getElementById('co-precio-prod').textContent = '$' + _co.precio.toLocaleString('es-AR', { minimumFractionDigits: 2 });
+      const img = document.getElementById('co-img');
+      img.src = _co.imagen;
+      img.style.display = _co.imagen ? 'block' : 'none';
+      // Ir al paso 1
+      coIrPaso(1);
+      cerrarModal();
+      document.getElementById('modal-checkout').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function cerrarCheckout() {
+      document.getElementById('modal-checkout').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+    document.getElementById('modal-checkout').addEventListener('click', function(e) {
+      if (e.target === this) cerrarCheckout();
+    });
+
+    function coIrPaso(n) {
+      [1, 2, 3].forEach(i => {
+        const s = document.getElementById('co-step-' + i);
+        const t = document.getElementById('co-tab-' + i);
+        if (s) s.style.display = (i === n) ? '' : 'none';
+        if (t) {
+          t.classList.toggle('activo', i === n);
+          t.classList.toggle('completado', i < n);
+        }
+      });
+      document.getElementById('co-step-success').style.display = 'none';
+    }
+
+    function coIrPaso1() { coIrPaso(1); }
+
+    function coIrPaso2() {
+      const nombre = document.getElementById('co-nombre').value.trim();
+      const email = document.getElementById('co-email').value.trim();
+      const telefono = document.getElementById('co-telefono').value.trim();
+      if (!nombre) { document.getElementById('co-nombre').focus(); return alert('Ingresá tu nombre completo.'); }
+      if (!email || !/^[^@]+@[^@]+\.[^@]+$/.test(email)) { document.getElementById('co-email').focus(); return alert('Ingresá un email válido.'); }
+      if (!telefono) { document.getElementById('co-telefono').focus(); return alert('Ingresá tu teléfono.'); }
+      coIrPaso(2);
+    }
+
+    function coIrPaso3() {
+      const calle = document.getElementById('co-calle').value.trim();
+      const numero = document.getElementById('co-numero').value.trim();
+      const localidad = document.getElementById('co-localidad').value.trim();
+      const provincia = document.getElementById('co-provincia').value;
+      const cp = document.getElementById('co-cp').value.trim();
+      if (!calle) { document.getElementById('co-calle').focus(); return alert('Ingresá el nombre de la calle.'); }
+      if (!numero) { document.getElementById('co-numero').focus(); return alert('Ingresá el número.'); }
+      if (!localidad) { document.getElementById('co-localidad').focus(); return alert('Ingresá la localidad.'); }
+      if (!provincia) { document.getElementById('co-provincia').focus(); return alert('Seleccioná la provincia.'); }
+      if (!cp) { document.getElementById('co-cp').focus(); return alert('Ingresá el código postal.'); }
+      // Armar resumen
+      const resumen = document.getElementById('co-resumen-final');
+      resumen.innerHTML =
+        '<b style="color:#f1f5f9">Producto:</b> ' + esc(_co.nombre) + '<br>' +
+        '<b style="color:#f1f5f9">Precio:</b> $' + _co.precio.toLocaleString('es-AR', { minimumFractionDigits: 2 }) + '<br>' +
+        '<b style="color:#f1f5f9">Comprador:</b> ' + esc(document.getElementById('co-nombre').value) + '<br>' +
+        '<b style="color:#f1f5f9">Email:</b> ' + esc(document.getElementById('co-email').value) + '<br>' +
+        '<b style="color:#f1f5f9">Dirección:</b> ' + esc(calle + ' ' + numero + (document.getElementById('co-piso').value ? ', ' + document.getElementById('co-piso').value : '')) + '<br>' +
+        '<b style="color:#f1f5f9">Localidad:</b> ' + esc(localidad) + ', ' + esc(provincia) + ' (' + esc(cp) + ')';
+      document.getElementById('co-error').classList.remove('visible');
+      coIrPaso(3);
+    }
+
+    async function submitCheckout(e) {
+      e.preventDefault();
+      const btn = document.getElementById('btn-pagar-mp');
+      btn.disabled = true;
+      btn.innerHTML = '<span class="co-spinner"></span> PROCESANDO...';
+      document.getElementById('co-error').classList.remove('visible');
+
+      const payload = {
+        // Comprador
+        nombre_comprador: document.getElementById('co-nombre').value.trim(),
+        email: document.getElementById('co-email').value.trim(),
+        telefono: document.getElementById('co-telefono').value.trim(),
+        // Envío
+        calle: document.getElementById('co-calle').value.trim(),
+        numero: document.getElementById('co-numero').value.trim(),
+        piso: document.getElementById('co-piso').value.trim(),
+        localidad: document.getElementById('co-localidad').value.trim(),
+        provincia: document.getElementById('co-provincia').value,
+        codigo_postal: document.getElementById('co-cp').value.trim(),
+        // Producto
+        producto_id: _co.productoId,
+        nombre_producto: _co.nombre,
+        precio: _co.precio,
+        cantidad: _co.cantidad,
+      };
+
+      try {
+        const r = await fetch('/api/checkout-tienda', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        });
+        const data = await r.json();
+        if (!r.ok) throw new Error(data.error || 'Error al procesar el pedido.');
+
+        // Mostrar número de pedido y redirigir a MP
+        document.getElementById('co-numero-pedido').textContent = data.numero_pedido;
+        [1, 2, 3].forEach(i => {
+          const s = document.getElementById('co-step-' + i);
+          if (s) s.style.display = 'none';
+          const t = document.getElementById('co-tab-' + i);
+          if (t) { t.classList.remove('activo'); t.classList.add('completado'); }
+        });
+        document.getElementById('co-step-success').style.display = '';
+        document.getElementById('co-titulo').textContent = '¡Pedido generado!';
+
+        // Redirigir a MercadoPago en 1.5 seg
+        setTimeout(() => { window.location.href = data.init_point; }, 1500);
+
+      } catch (err) {
+        const errEl = document.getElementById('co-error');
+        errEl.textContent = '⚠ ' + err.message;
+        errEl.classList.add('visible');
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fas fa-lock"></i> REINTENTAR PAGO';
+      }
     }
 
     function cerrarModal() {
