@@ -132,9 +132,9 @@ export default async function handler(req, res) {
         email,
       },
       back_urls: {
-        success: `${baseUrl}/tienda?estado=aprobado&pedido=${encodeURIComponent(numeroPedido)}`,
-        failure: `${baseUrl}/tienda?estado=fallido&pedido=${encodeURIComponent(numeroPedido)}`,
-        pending: `${baseUrl}/tienda?estado=pendiente&pedido=${encodeURIComponent(numeroPedido)}`,
+        success: `${baseUrl}/seguimiento?pedido=${encodeURIComponent(numeroPedido)}`,
+        failure: `${baseUrl}/seguimiento?pedido=${encodeURIComponent(numeroPedido)}&estado=fallido`,
+        pending: `${baseUrl}/seguimiento?pedido=${encodeURIComponent(numeroPedido)}&estado=pendiente`,
       },
       auto_return: 'approved',
       notification_url: `${baseUrl}/api/mp-webhook`,

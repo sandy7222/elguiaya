@@ -11,6 +11,9 @@
     { "source": "/app", "destination": "/app.html" },
     { "source": "/app/", "destination": "/app.html" },
     { "source": "/app/(.*)", "destination": "/app.html" },
+    { "source": "/seguimiento", "destination": "/seguimiento/index.html" },
+    { "source": "/seguimiento/", "destination": "/seguimiento/index.html" },
     { "source": "/(.*)", "destination": "/tienda/index.html" }
   ]
 }
+
