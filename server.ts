@@ -383,6 +383,10 @@ async function startServer() {
       res.sendFile(path.join(process.cwd(), 'public', 'tienda', 'index.html'));
     });
 
+    app.get(['/cuenta', '/cuenta/'], (req, res) => {
+      res.sendFile(path.join(process.cwd(), 'public', 'tienda', 'index.html'));
+    });
+
     const vite = await createViteServer({
       server: { middlewareMode: true },
       appType: 'spa'
@@ -414,6 +418,10 @@ async function startServer() {
 
     // Tienda oficial en /
     app.get('/', (req, res) => {
+      res.sendFile(path.join(process.cwd(), 'public', 'tienda', 'index.html'));
+    });
+
+    app.get(['/cuenta', '/cuenta/'], (req, res) => {
       res.sendFile(path.join(process.cwd(), 'public', 'tienda', 'index.html'));
     });
 

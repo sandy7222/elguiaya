@@ -191,6 +191,35 @@
     .footer-link:hover { color: #10b981; }
     .footer-link i { width: 20px; text-align: center; font-size: .9rem; }
 
+    /* ── Mi Cuenta / Auth ─────────────────────────────────────────────────── */
+    #modal-auth, #modal-cuenta { z-index: 220; }
+    .auth-modal, .cuenta-modal { background: #0b1628; border-radius: 20px; max-width: 440px; width: 100%; max-height: 96vh; overflow-y: auto; border: 1px solid #1a2d50; transform: translateY(40px); transition: transform .35s cubic-bezier(.16,1,.3,1); scrollbar-width: thin; }
+    .cuenta-modal { max-width: 520px; }
+    .modal-overlay.open .auth-modal, .modal-overlay.open .cuenta-modal { transform: translateY(0); }
+    .auth-tabs { display: flex; gap: 0; padding: 0 20px; border-bottom: 1px solid #1a2d50; }
+    .auth-tab { flex: 1; text-align: center; padding: 12px 8px; font-size: .78rem; font-weight: 700; letter-spacing: .4px; color: #64748b; background: none; border: none; border-bottom: 2px solid transparent; cursor: pointer; }
+    .auth-tab.activo { color: #10b981; border-bottom-color: #10b981; }
+    .auth-body { padding: 20px; }
+    .auth-msg { font-size: .8rem; border-radius: 10px; padding: 10px 12px; margin-bottom: 12px; display: none; }
+    .auth-msg.visible { display: block; }
+    .auth-msg.error { background: rgba(239,68,68,.1); border: 1px solid rgba(239,68,68,.3); color: #fca5a5; }
+    .auth-msg.ok { background: rgba(16,185,129,.1); border: 1px solid rgba(16,185,129,.3); color: #6ee7b7; }
+    .auth-check { display: flex; align-items: flex-start; gap: 8px; margin: 12px 0; font-size: .75rem; color: #94a3b8; line-height: 1.4; }
+    .auth-check input { margin-top: 2px; }
+    .auth-link { background: none; border: none; color: #10b981; font-size: .78rem; cursor: pointer; padding: 0; text-decoration: underline; }
+    .header-actions button.cuenta-btn { width: 36px; height: 36px; border-radius: 50%; border: 1px solid #1a2d50; background: #0f1d38; display: flex; align-items: center; justify-content: center; color: #94a3b8; cursor: pointer; transition: all .2s; font-size: .9rem; position: relative; }
+    .header-actions button.cuenta-btn:hover { background: #10b981; color: #fff; border-color: #10b981; }
+    .header-actions button.cuenta-btn.logged { color: #10b981; border-color: #10b981; }
+    .header-actions button.cuenta-btn .dot { position: absolute; top: 2px; right: 2px; width: 8px; height: 8px; background: #10b981; border-radius: 50%; border: 1.5px solid #0b2243; display: none; }
+    .header-actions button.cuenta-btn.logged .dot { display: block; }
+    .cuenta-section { margin-bottom: 20px; }
+    .cuenta-section h3 { font-size: .7rem; font-weight: 700; letter-spacing: 1px; color: #10b981; margin-bottom: 10px; text-transform: uppercase; }
+    .pedido-item { display: flex; justify-content: space-between; gap: 10px; padding: 10px 12px; border: 1px solid #1a2d50; border-radius: 10px; background: #0b2243; margin-bottom: 8px; font-size: .8rem; }
+    .pedido-item .num { color: #10b981; font-weight: 700; }
+    .pedido-item .meta { color: #94a3b8; }
+    .pedido-item a { color: #10b981; text-decoration: none; font-weight: 600; }
+    .cuenta-empty { text-align: center; color: #64748b; font-size: .82rem; padding: 20px 8px; }
+
     .loading { text-align: center; padding: 80px 16px; }
     .spinner { width: 32px; height: 32px; border: 3px solid #1a2d50; border-top-color: #10b981; border-radius: 50%; animation: spin .8s linear infinite; margin: 0 auto 10px; }
     @keyframes spin { to { transform: rotate(360deg); } }
@@ -226,7 +255,7 @@
     <div class="header-actions">
       <a href="https://app.elguiaya.com/tienda" target="_blank" title="Carrito"><i class="fas fa-shopping-cart"></i></a>
       <a href="https://app.elguiaya.com/tienda" target="_blank" title="Favoritos"><i class="fas fa-heart"></i></a>
-      <a href="https://app.elguiaya.com/tienda" target="_blank" title="Cuenta"><i class="fas fa-user"></i></a>
+      <button type="button" class="cuenta-btn" id="btn-cuenta" title="Mi Cuenta" onclick="abrirCuenta()"><i class="fas fa-user"></i><span class="dot"></span></button>
     </div>
   </header>
 
@@ -428,6 +457,191 @@
     </div>
   </div>
 
+  <!-- ╔══════════════════════════════════════════════════════════╗ -->
+  <!-- ║              AUTH: Crear cuenta / Iniciar sesión        ║ -->
+  <!-- ╚══════════════════════════════════════════════════════════╝ -->
+  <div class="modal-overlay" id="modal-auth">
+    <div class="auth-modal">
+      <div class="co-header">
+        <div class="co-icon"><i class="fas fa-user"></i></div>
+        <h2 id="auth-titulo">Mi Cuenta</h2>
+        <button class="co-close" onclick="cerrarAuth()" title="Cerrar"><i class="fas fa-times"></i></button>
+      </div>
+      <div class="auth-tabs" id="auth-tabs">
+        <button type="button" class="auth-tab activo" id="auth-tab-login" onclick="mostrarAuthVista('login')">INICIAR SESIÓN</button>
+        <button type="button" class="auth-tab" id="auth-tab-register" onclick="mostrarAuthVista('register')">CREAR CUENTA</button>
+      </div>
+      <div class="auth-body">
+        <div class="auth-msg" id="auth-msg"></div>
+
+        <!-- Login -->
+        <form id="form-login" onsubmit="return submitLogin(event)" novalidate>
+          <div class="co-field" style="margin-bottom:10px">
+            <label>Email *</label>
+            <input type="email" id="login-email" placeholder="tu@correo.com" required autocomplete="email">
+          </div>
+          <div class="co-field" style="margin-bottom:10px">
+            <label>Contraseña *</label>
+            <input type="password" id="login-password" placeholder="••••••••" required autocomplete="current-password">
+          </div>
+          <button type="button" class="auth-link" onclick="mostrarAuthVista('recover')">¿Olvidaste tu contraseña?</button>
+          <button type="submit" class="co-btn-pagar" id="btn-login"><i class="fas fa-sign-in-alt"></i> INICIAR SESIÓN</button>
+        </form>
+
+        <!-- Register -->
+        <form id="form-register" style="display:none" onsubmit="return submitRegister(event)" novalidate>
+          <div class="co-field" style="margin-bottom:10px">
+            <label>Nombre y apellido *</label>
+            <input type="text" id="reg-nombre" placeholder="Juan García" required autocomplete="name">
+          </div>
+          <div class="co-field" style="margin-bottom:10px">
+            <label>Email *</label>
+            <input type="email" id="reg-email" placeholder="tu@correo.com" required autocomplete="email">
+          </div>
+          <div class="co-field" style="margin-bottom:10px">
+            <label>Teléfono / WhatsApp *</label>
+            <input type="tel" id="reg-telefono" placeholder="+54 9 11 ..." required autocomplete="tel">
+          </div>
+          <div class="co-row col2" style="margin-bottom:10px">
+            <div class="co-field">
+              <label>Contraseña *</label>
+              <input type="password" id="reg-password" placeholder="Mín. 6 caracteres" required autocomplete="new-password" minlength="6">
+            </div>
+            <div class="co-field">
+              <label>Confirmar *</label>
+              <input type="password" id="reg-password2" placeholder="Repetí la clave" required autocomplete="new-password" minlength="6">
+            </div>
+          </div>
+          <label class="auth-check">
+            <input type="checkbox" id="reg-terminos" required>
+            <span>Acepto los <button type="button" class="auth-link" onclick="abrirModalInst('terminos')">Términos y Condiciones</button> y la política de privacidad.</span>
+          </label>
+          <button type="submit" class="co-btn-pagar" id="btn-register"><i class="fas fa-user-plus"></i> CREAR CUENTA</button>
+        </form>
+
+        <!-- Recover -->
+        <form id="form-recover" style="display:none" onsubmit="return submitRecover(event)" novalidate>
+          <p style="color:#94a3b8;font-size:.82rem;margin-bottom:12px;line-height:1.5">Ingresá tu email y te enviamos un enlace para restablecer la contraseña.</p>
+          <div class="co-field" style="margin-bottom:10px">
+            <label>Email *</label>
+            <input type="email" id="recover-email" placeholder="tu@correo.com" required autocomplete="email">
+          </div>
+          <button type="submit" class="co-btn-pagar" id="btn-recover"><i class="fas fa-envelope"></i> ENVIAR ENLACE</button>
+          <button type="button" class="auth-link" style="display:block;margin:14px auto 0;text-align:center" onclick="mostrarAuthVista('login')">Volver a iniciar sesión</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- ╔══════════════════════════════════════════════════════════╗ -->
+  <!-- ║              MI CUENTA (perfil + compras)               ║ -->
+  <!-- ╚══════════════════════════════════════════════════════════╝ -->
+  <div class="modal-overlay" id="modal-cuenta">
+    <div class="cuenta-modal">
+      <div class="co-header">
+        <div class="co-icon"><i class="fas fa-id-card"></i></div>
+        <h2>Mi Cuenta</h2>
+        <button class="co-close" onclick="cerrarCuentaPanel()" title="Cerrar"><i class="fas fa-times"></i></button>
+      </div>
+      <div class="auth-body">
+        <div class="auth-msg" id="cuenta-msg"></div>
+
+        <div class="cuenta-section">
+          <h3>Datos personales</h3>
+          <form id="form-perfil" onsubmit="return guardarPerfil(event)" novalidate>
+            <div class="co-field" style="margin-bottom:10px">
+              <label>Nombre y apellido *</label>
+              <input type="text" id="perfil-nombre" required autocomplete="name">
+            </div>
+            <div class="co-field" style="margin-bottom:10px">
+              <label>Email</label>
+              <input type="email" id="perfil-email" readonly style="opacity:.7;cursor:not-allowed">
+            </div>
+            <div class="co-row col2" style="margin-bottom:10px">
+              <div class="co-field">
+                <label>Teléfono *</label>
+                <input type="tel" id="perfil-telefono" required autocomplete="tel">
+              </div>
+              <div class="co-field">
+                <label>DNI / CUIT</label>
+                <input type="text" id="perfil-dni" placeholder="Opcional" autocomplete="off">
+              </div>
+            </div>
+            <button type="submit" class="co-btn-pagar" id="btn-guardar-perfil" style="margin-top:8px"><i class="fas fa-save"></i> GUARDAR DATOS</button>
+          </form>
+        </div>
+
+        <div class="cuenta-section">
+          <h3>Dirección de envío</h3>
+          <form id="form-direccion" onsubmit="return guardarDireccion(event)" novalidate>
+            <div class="co-row col3" style="margin-bottom:10px">
+              <div class="co-field">
+                <label>Calle *</label>
+                <input type="text" id="dir-calle" required>
+              </div>
+              <div class="co-field">
+                <label>Número *</label>
+                <input type="text" id="dir-numero" required>
+              </div>
+              <div class="co-field">
+                <label>Piso / Dto</label>
+                <input type="text" id="dir-piso">
+              </div>
+            </div>
+            <div class="co-row col2" style="margin-bottom:10px">
+              <div class="co-field">
+                <label>Localidad *</label>
+                <input type="text" id="dir-localidad" required>
+              </div>
+              <div class="co-field">
+                <label>Código Postal *</label>
+                <input type="text" id="dir-cp" required>
+              </div>
+            </div>
+            <div class="co-field" style="margin-bottom:10px">
+              <label>Provincia *</label>
+              <select id="dir-provincia" required>
+                <option value="">Seleccionar provincia...</option>
+                <option>Buenos Aires</option>
+                <option>CABA</option>
+                <option>Catamarca</option>
+                <option>Chaco</option>
+                <option>Chubut</option>
+                <option>Córdoba</option>
+                <option>Corrientes</option>
+                <option>Entre Ríos</option>
+                <option>Formosa</option>
+                <option>Jujuy</option>
+                <option>La Pampa</option>
+                <option>La Rioja</option>
+                <option>Mendoza</option>
+                <option>Misiones</option>
+                <option>Neuquén</option>
+                <option>Río Negro</option>
+                <option>Salta</option>
+                <option>San Juan</option>
+                <option>San Luis</option>
+                <option>Santa Cruz</option>
+                <option>Santa Fe</option>
+                <option>Santiago del Estero</option>
+                <option>Tierra del Fuego</option>
+                <option>Tucumán</option>
+              </select>
+            </div>
+            <button type="submit" class="co-btn-pagar" id="btn-guardar-dir" style="margin-top:8px;background:linear-gradient(135deg,#1a2d50,#2d4a7a);box-shadow:none"><i class="fas fa-map-marker-alt"></i> GUARDAR DIRECCIÓN</button>
+          </form>
+        </div>
+
+        <div class="cuenta-section">
+          <h3>Mis compras</h3>
+          <div id="mis-compras-list"><div class="cuenta-empty">Cargando compras...</div></div>
+        </div>
+
+        <button type="button" class="co-btn-pagar" style="background:transparent;border:1px solid #1a2d50;box-shadow:none;color:#fca5a5;margin-top:4px" onclick="cerrarSesion()"><i class="fas fa-sign-out-alt"></i> CERRAR SESIÓN</button>
+      </div>
+    </div>
+  </div>
+
   <!-- Modal Quiénes Somos -->
   <div class="modal-overlay" id="modal-quienes-somos">
     <div class="modal inst-modal">
@@ -561,10 +775,382 @@
     <div class="footer-bot">© 2026 El Guía Ya — Todos los derechos reservados.</div>
   </footer>
 
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
     const SB_URL = 'https://ymgsxwfwntbqvguvbhoa.supabase.co';
     const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InltZ3N4d2Z3bnRicXZndXZiaG9hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc3ODgxMzQsImV4cCI6MjA5MzM2NDEzNH0.ZT2xlCIAnSyr_tR9qZAKIB7QAVQjJO2Jv0cwb51f1Uw';
     const H = { 'apikey': SB_KEY, 'Authorization': 'Bearer ' + SB_KEY, 'Accept': 'application/json' };
+    const sb = window.supabase.createClient(SB_URL, SB_KEY);
+
+    let sessionUser = null;
+    let perfilCliente = null;
+    let direccionCliente = null;
+
+    function authHeaders() {
+      const h = Object.assign({}, H);
+      if (sessionUser?.access_token) {
+        h.Authorization = 'Bearer ' + sessionUser.access_token;
+      }
+      return h;
+    }
+
+    function setAuthMsg(text, type) {
+      const el = document.getElementById('auth-msg');
+      if (!text) { el.className = 'auth-msg'; el.textContent = ''; return; }
+      el.className = 'auth-msg visible ' + (type || 'error');
+      el.textContent = text;
+    }
+
+    function setCuentaMsg(text, type) {
+      const el = document.getElementById('cuenta-msg');
+      if (!text) { el.className = 'auth-msg'; el.textContent = ''; return; }
+      el.className = 'auth-msg visible ' + (type || 'ok');
+      el.textContent = text;
+    }
+
+    function actualizarBotonCuenta() {
+      const btn = document.getElementById('btn-cuenta');
+      if (!btn) return;
+      btn.classList.toggle('logged', !!sessionUser);
+    }
+
+    async function refreshSession() {
+      const { data } = await sb.auth.getSession();
+      sessionUser = data?.session || null;
+      actualizarBotonCuenta();
+      if (sessionUser) {
+        await cargarPerfilYDireccion();
+      } else {
+        perfilCliente = null;
+        direccionCliente = null;
+      }
+      return sessionUser;
+    }
+
+    async function cargarPerfilYDireccion() {
+      if (!sessionUser) return;
+      const uid = sessionUser.user.id;
+      const headers = authHeaders();
+      try {
+        const [pRes, dRes] = await Promise.all([
+          fetch(SB_URL + '/rest/v1/clientes_tienda?id=eq.' + uid + '&select=*&limit=1', { headers }),
+          fetch(SB_URL + '/rest/v1/direcciones_cliente?cliente_id=eq.' + uid + '&es_principal=eq.true&select=*&limit=1', { headers }),
+        ]);
+        const perfiles = pRes.ok ? await pRes.json() : [];
+        const dirs = dRes.ok ? await dRes.json() : [];
+        perfilCliente = perfiles[0] || null;
+        direccionCliente = dirs[0] || null;
+
+        // Si el trigger no creó el perfil, lo creamos ahora
+        if (!perfilCliente) {
+          const meta = sessionUser.user.user_metadata || {};
+          const body = {
+            id: uid,
+            nombre_completo: meta.nombre_completo || (sessionUser.user.email || '').split('@')[0],
+            email: sessionUser.user.email,
+            telefono: meta.telefono || '',
+          };
+          await fetch(SB_URL + '/rest/v1/clientes_tienda', {
+            method: 'POST',
+            headers: Object.assign({}, headers, { 'Content-Type': 'application/json', Prefer: 'return=representation' }),
+            body: JSON.stringify(body),
+          });
+          const again = await fetch(SB_URL + '/rest/v1/clientes_tienda?id=eq.' + uid + '&select=*&limit=1', { headers });
+          const rows = again.ok ? await again.json() : [];
+          perfilCliente = rows[0] || body;
+        }
+      } catch (e) {
+        console.warn('[Mi Cuenta] perfil:', e);
+      }
+    }
+
+    function prellenarCheckoutDesdeCuenta() {
+      if (!perfilCliente && !direccionCliente) return;
+      if (perfilCliente) {
+        if (perfilCliente.nombre_completo) document.getElementById('co-nombre').value = perfilCliente.nombre_completo;
+        if (perfilCliente.email) document.getElementById('co-email').value = perfilCliente.email;
+        if (perfilCliente.telefono) document.getElementById('co-telefono').value = perfilCliente.telefono;
+      }
+      if (direccionCliente) {
+        document.getElementById('co-calle').value = direccionCliente.calle || '';
+        document.getElementById('co-numero').value = direccionCliente.numero || '';
+        document.getElementById('co-piso').value = direccionCliente.piso || '';
+        document.getElementById('co-localidad').value = direccionCliente.localidad || '';
+        document.getElementById('co-cp').value = direccionCliente.codigo_postal || '';
+        if (direccionCliente.provincia) document.getElementById('co-provincia').value = direccionCliente.provincia;
+      }
+    }
+
+    function abrirCuenta() {
+      if (sessionUser) abrirCuentaPanel();
+      else abrirAuth('login');
+    }
+
+    function abrirAuth(vista) {
+      setAuthMsg('');
+      mostrarAuthVista(vista || 'login');
+      document.getElementById('modal-auth').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function cerrarAuth() {
+      document.getElementById('modal-auth').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    function mostrarAuthVista(vista) {
+      setAuthMsg('');
+      document.getElementById('form-login').style.display = vista === 'login' ? '' : 'none';
+      document.getElementById('form-register').style.display = vista === 'register' ? '' : 'none';
+      document.getElementById('form-recover').style.display = vista === 'recover' ? '' : 'none';
+      document.getElementById('auth-tabs').style.display = vista === 'recover' ? 'none' : 'flex';
+      document.getElementById('auth-tab-login').classList.toggle('activo', vista === 'login');
+      document.getElementById('auth-tab-register').classList.toggle('activo', vista === 'register');
+      document.getElementById('auth-titulo').textContent =
+        vista === 'register' ? 'Crear cuenta' : vista === 'recover' ? 'Recuperar contraseña' : 'Iniciar sesión';
+    }
+
+    async function submitLogin(e) {
+      e.preventDefault();
+      const email = document.getElementById('login-email').value.trim();
+      const password = document.getElementById('login-password').value;
+      const btn = document.getElementById('btn-login');
+      btn.disabled = true;
+      btn.innerHTML = '<span class="co-spinner"></span> ENTRANDO...';
+      setAuthMsg('');
+      try {
+        const { data, error } = await sb.auth.signInWithPassword({ email, password });
+        if (error) throw error;
+        sessionUser = data.session;
+        actualizarBotonCuenta();
+        await cargarPerfilYDireccion();
+        cerrarAuth();
+        abrirCuentaPanel();
+      } catch (err) {
+        setAuthMsg(err.message || 'No se pudo iniciar sesión.', 'error');
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fas fa-sign-in-alt"></i> INICIAR SESIÓN';
+      }
+      return false;
+    }
+
+    async function submitRegister(e) {
+      e.preventDefault();
+      const nombre = document.getElementById('reg-nombre').value.trim();
+      const email = document.getElementById('reg-email').value.trim();
+      const telefono = document.getElementById('reg-telefono').value.trim();
+      const password = document.getElementById('reg-password').value;
+      const password2 = document.getElementById('reg-password2').value;
+      const terminos = document.getElementById('reg-terminos').checked;
+      if (!nombre || !email || !telefono) { setAuthMsg('Completá todos los campos obligatorios.', 'error'); return false; }
+      if (password.length < 6) { setAuthMsg('La contraseña debe tener al menos 6 caracteres.', 'error'); return false; }
+      if (password !== password2) { setAuthMsg('Las contraseñas no coinciden.', 'error'); return false; }
+      if (!terminos) { setAuthMsg('Debés aceptar los términos y condiciones.', 'error'); return false; }
+
+      const btn = document.getElementById('btn-register');
+      btn.disabled = true;
+      btn.innerHTML = '<span class="co-spinner"></span> CREANDO...';
+      setAuthMsg('');
+      try {
+        const { data, error } = await sb.auth.signUp({
+          email,
+          password,
+          options: {
+            data: { nombre_completo: nombre, telefono, acepta_terminos: 'true' },
+            emailRedirectTo: window.location.origin + '/#cuenta',
+          },
+        });
+        if (error) throw error;
+        if (data.session) {
+          sessionUser = data.session;
+          actualizarBotonCuenta();
+          await cargarPerfilYDireccion();
+          // Completar teléfono/nombre por si el trigger usó defaults
+          await fetch(SB_URL + '/rest/v1/clientes_tienda?id=eq.' + data.user.id, {
+            method: 'PATCH',
+            headers: Object.assign({}, authHeaders(), { 'Content-Type': 'application/json', Prefer: 'return=minimal' }),
+            body: JSON.stringify({ nombre_completo: nombre, telefono, acepta_terminos_at: new Date().toISOString() }),
+          });
+          await cargarPerfilYDireccion();
+          cerrarAuth();
+          abrirCuentaPanel();
+        } else {
+          setAuthMsg('Te enviamos un email de confirmación. Revisá tu bandeja y después iniciá sesión.', 'ok');
+          mostrarAuthVista('login');
+          document.getElementById('login-email').value = email;
+        }
+      } catch (err) {
+        setAuthMsg(err.message || 'No se pudo crear la cuenta.', 'error');
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fas fa-user-plus"></i> CREAR CUENTA';
+      }
+      return false;
+    }
+
+    async function submitRecover(e) {
+      e.preventDefault();
+      const email = document.getElementById('recover-email').value.trim();
+      const btn = document.getElementById('btn-recover');
+      btn.disabled = true;
+      btn.innerHTML = '<span class="co-spinner"></span> ENVIANDO...';
+      setAuthMsg('');
+      try {
+        const { error } = await sb.auth.resetPasswordForEmail(email, {
+          redirectTo: window.location.origin + '/#cuenta',
+        });
+        if (error) throw error;
+        setAuthMsg('Te enviamos un enlace para restablecer tu contraseña.', 'ok');
+      } catch (err) {
+        setAuthMsg(err.message || 'No se pudo enviar el enlace.', 'error');
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fas fa-envelope"></i> ENVIAR ENLACE';
+      }
+      return false;
+    }
+
+    async function abrirCuentaPanel() {
+      setCuentaMsg('');
+      if (!sessionUser) { abrirAuth('login'); return; }
+      await cargarPerfilYDireccion();
+      document.getElementById('perfil-nombre').value = perfilCliente?.nombre_completo || '';
+      document.getElementById('perfil-email').value = perfilCliente?.email || sessionUser.user.email || '';
+      document.getElementById('perfil-telefono').value = perfilCliente?.telefono || '';
+      document.getElementById('perfil-dni').value = perfilCliente?.dni_cuit || '';
+      document.getElementById('dir-calle').value = direccionCliente?.calle || '';
+      document.getElementById('dir-numero').value = direccionCliente?.numero || '';
+      document.getElementById('dir-piso').value = direccionCliente?.piso || '';
+      document.getElementById('dir-localidad').value = direccionCliente?.localidad || '';
+      document.getElementById('dir-cp').value = direccionCliente?.codigo_postal || '';
+      document.getElementById('dir-provincia').value = direccionCliente?.provincia || '';
+      document.getElementById('modal-cuenta').classList.add('open');
+      document.body.style.overflow = 'hidden';
+      cargarMisCompras();
+    }
+
+    function cerrarCuentaPanel() {
+      document.getElementById('modal-cuenta').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    async function guardarPerfil(e) {
+      e.preventDefault();
+      if (!sessionUser) return false;
+      const btn = document.getElementById('btn-guardar-perfil');
+      btn.disabled = true;
+      btn.innerHTML = '<span class="co-spinner"></span> GUARDANDO...';
+      setCuentaMsg('');
+      try {
+        const body = {
+          nombre_completo: document.getElementById('perfil-nombre').value.trim(),
+          telefono: document.getElementById('perfil-telefono').value.trim(),
+          dni_cuit: document.getElementById('perfil-dni').value.trim() || null,
+        };
+        const r = await fetch(SB_URL + '/rest/v1/clientes_tienda?id=eq.' + sessionUser.user.id, {
+          method: 'PATCH',
+          headers: Object.assign({}, authHeaders(), { 'Content-Type': 'application/json', Prefer: 'return=minimal' }),
+          body: JSON.stringify(body),
+        });
+        if (!r.ok) throw new Error(await r.text());
+        await cargarPerfilYDireccion();
+        setCuentaMsg('Datos personales guardados.', 'ok');
+      } catch (err) {
+        setCuentaMsg(err.message || 'No se pudo guardar el perfil.', 'error');
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fas fa-save"></i> GUARDAR DATOS';
+      }
+      return false;
+    }
+
+    async function guardarDireccion(e) {
+      e.preventDefault();
+      if (!sessionUser) return false;
+      const btn = document.getElementById('btn-guardar-dir');
+      btn.disabled = true;
+      btn.innerHTML = '<span class="co-spinner"></span> GUARDANDO...';
+      setCuentaMsg('');
+      try {
+        const body = {
+          cliente_id: sessionUser.user.id,
+          etiqueta: 'principal',
+          calle: document.getElementById('dir-calle').value.trim(),
+          numero: document.getElementById('dir-numero').value.trim(),
+          piso: document.getElementById('dir-piso').value.trim() || null,
+          localidad: document.getElementById('dir-localidad').value.trim(),
+          provincia: document.getElementById('dir-provincia').value,
+          codigo_postal: document.getElementById('dir-cp').value.trim(),
+          es_principal: true,
+        };
+        let r;
+        if (direccionCliente?.id) {
+          r = await fetch(SB_URL + '/rest/v1/direcciones_cliente?id=eq.' + direccionCliente.id, {
+            method: 'PATCH',
+            headers: Object.assign({}, authHeaders(), { 'Content-Type': 'application/json', Prefer: 'return=minimal' }),
+            body: JSON.stringify(body),
+          });
+        } else {
+          r = await fetch(SB_URL + '/rest/v1/direcciones_cliente', {
+            method: 'POST',
+            headers: Object.assign({}, authHeaders(), { 'Content-Type': 'application/json', Prefer: 'return=minimal' }),
+            body: JSON.stringify(body),
+          });
+        }
+        if (!r.ok) throw new Error(await r.text());
+        await cargarPerfilYDireccion();
+        setCuentaMsg('Dirección de envío guardada.', 'ok');
+      } catch (err) {
+        setCuentaMsg(err.message || 'No se pudo guardar la dirección.', 'error');
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fas fa-map-marker-alt"></i> GUARDAR DIRECCIÓN';
+      }
+      return false;
+    }
+
+    async function cargarMisCompras() {
+      const box = document.getElementById('mis-compras-list');
+      if (!sessionUser) {
+        box.innerHTML = '<div class="cuenta-empty">Iniciá sesión para ver tus compras.</div>';
+        return;
+      }
+      box.innerHTML = '<div class="cuenta-empty">Cargando compras...</div>';
+      try {
+        const r = await fetch('/api/mis-compras', {
+          headers: { Authorization: 'Bearer ' + sessionUser.access_token },
+        });
+        const data = await r.json();
+        if (!r.ok) throw new Error(data.error || 'Error al cargar compras');
+        const pedidos = data.pedidos || [];
+        if (!pedidos.length) {
+          box.innerHTML = '<div class="cuenta-empty">Todavía no tenés compras.<br><button type="button" class="auth-link" onclick="cerrarCuentaPanel()">Ver catálogo</button></div>';
+          return;
+        }
+        box.innerHTML = pedidos.map(function (p) {
+          const fecha = p.created_at ? new Date(p.created_at).toLocaleDateString('es-AR') : '';
+          const monto = p.monto_total != null ? '$' + Number(p.monto_total).toLocaleString('es-AR', { minimumFractionDigits: 2 }) : '';
+          return '<div class="pedido-item"><div><div class="num">' + esc(p.numero_pedido) + '</div><div class="meta">' + esc(fecha) + ' · ' + esc(p.estado || '') + '</div></div><div style="text-align:right"><div style="color:#f1f5f9;font-weight:700">' + esc(monto) + '</div><a href="/seguimiento?pedido=' + encodeURIComponent(p.numero_pedido) + '">Seguir</a></div></div>';
+        }).join('');
+      } catch (err) {
+        box.innerHTML = '<div class="cuenta-empty">' + esc(err.message || 'No se pudieron cargar las compras') + '</div>';
+      }
+    }
+
+    async function cerrarSesion() {
+      await sb.auth.signOut();
+      sessionUser = null;
+      perfilCliente = null;
+      direccionCliente = null;
+      actualizarBotonCuenta();
+      cerrarCuentaPanel();
+    }
+
+    sb.auth.onAuthStateChange(function (_event, session) {
+      sessionUser = session;
+      actualizarBotonCuenta();
+    });
 
     async function api(table, opts) {
       let url = SB_URL + '/rest/v1/' + table + '?select=*';
@@ -695,7 +1281,7 @@
 
     function cardHtml(p) {
       const img = p.imagen_url ? '<div class="card-img" style="background-image:url(\'' + esc(p.imagen_url) + '\');background-size:cover;background-position:center"></div>' : '<div class="card-img">Sin imagen</div>';
-      return '<div class="card" onclick="abrirProducto(\'' + p.id + '\')">' + img + '<div class="card-body"><h3>' + esc(p.nombre) + '</h3><div class="precio">$' + Number(p.precio).toLocaleString('es-AR', { minimumFractionDigits: 2 }) + '</div><a class="buy-btn" href="https://app.elguiaya.com/producto/' + p.id + '" target="_blank" onclick="event.stopPropagation()">Comprar</a></div></div>';
+      return '<div class="card" onclick="abrirProducto(\'' + p.id + '\')">' + img + '<div class="card-body"><h3>' + esc(p.nombre) + '</h3><div class="precio">$' + Number(p.precio).toLocaleString('es-AR', { minimumFractionDigits: 2 }) + '</div><a class="buy-btn" href="javascript:void(0)" onclick="event.stopPropagation();comprar(\'' + p.id + '\')">Comprar</a></div></div>';
     }
 
     let galeriaActual = 0, galeriaImgs = [];
@@ -768,6 +1354,7 @@
       img.style.display = _co.imagen ? 'block' : 'none';
       // Ir al paso 1
       coIrPaso(1);
+      prellenarCheckoutDesdeCuenta();
       cerrarModal();
       document.getElementById('modal-checkout').classList.add('open');
       document.body.style.overflow = 'hidden';
@@ -857,9 +1444,13 @@
       };
 
       try {
+        const headers = { 'Content-Type': 'application/json' };
+        if (sessionUser?.access_token) {
+          headers.Authorization = 'Bearer ' + sessionUser.access_token;
+        }
         const r = await fetch('/api/checkout-tienda', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers,
           body: JSON.stringify(payload),
         });
         const data = await r.json();
@@ -953,6 +1544,14 @@
     }
 
     function esc(t) { if (!t) return ''; const d = document.createElement('div'); d.textContent = t; return d.innerHTML; }
+
+    (async function bootCuenta() {
+      await refreshSession();
+      if (location.hash === '#cuenta' || location.pathname === '/cuenta' || location.pathname === '/cuenta/') {
+        abrirCuenta();
+      }
+    })();
+
     init();
   </script>
 </body>

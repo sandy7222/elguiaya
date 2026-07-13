@@ -13,6 +13,8 @@
     { "source": "/app/(.*)", "destination": "/app.html" },
     { "source": "/seguimiento", "destination": "/seguimiento/index.html" },
     { "source": "/seguimiento/", "destination": "/seguimiento/index.html" },
+    { "source": "/cuenta", "destination": "/tienda/index.html" },
+    { "source": "/cuenta/", "destination": "/tienda/index.html" },
     { "source": "/(.*)", "destination": "/tienda/index.html" }
   ]
 }

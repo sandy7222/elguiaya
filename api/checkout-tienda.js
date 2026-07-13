@@ -4,13 +4,14 @@ export default async function handler(req, res) {
     'https://www.elguiaya.com',
     'https://elguiaya.com',
     'https://app.elguiaya.com',
+    'http://localhost:3000',
   ];
 
   if (allowedOrigins.includes(origin)) {
     res.setHeader('Access-Control-Allow-Origin', origin);
   }
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
 
   if (req.method === 'OPTIONS') return res.status(200).end();
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
@@ -37,7 +38,29 @@ export default async function handler(req, res) {
 
   const SB_URL = process.env.SUPABASE_URL;
   const SB_SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  const SB_ANON_KEY = process.env.SUPABASE_ANON_KEY;
   const MP_ACCESS_TOKEN = process.env.MP_ACCESS_TOKEN;
+
+  // Vincular pedido a cuenta si hay JWT válido
+  let cliente_id = null;
+  const authHeader = req.headers.authorization || '';
+  const accessToken = authHeader.startsWith('Bearer ') ? authHeader.slice(7).trim() : '';
+  if (accessToken && SB_URL) {
+    try {
+      const userRes = await fetch(`${SB_URL}/auth/v1/user`, {
+        headers: {
+          apikey: SB_ANON_KEY || SB_SERVICE_KEY,
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+      if (userRes.ok) {
+        const user = await userRes.json();
+        if (user?.id) cliente_id = user.id;
+      }
+    } catch (e) {
+      console.warn('[checkout-tienda] No se pudo validar sesión:', e.message);
+    }
+  }
 
   if (!SB_URL || !SB_SERVICE_KEY) {
     return res.status(500).json({ error: 'Variables de Supabase no configuradas.' });
@@ -65,17 +88,20 @@ export default async function handler(req, res) {
     // ── 2. Crear el pedido ──────────────────────────────────────────────────
     const monto_total = Number(precio) * Number(cantidad);
 
+    const pedidoPayload = {
+      numero_pedido: numeroPedido,
+      tipo_checkout: 'tienda',
+      estado: 'pendiente_pago',
+      estado_logistico: 'pendiente_pago',
+      monto_total,
+      notas: `Compra web — ${nombre_comprador} — ${email} — Tel: ${telefono}`,
+    };
+    if (cliente_id) pedidoPayload.cliente_id = cliente_id;
+
     const pedidoRes = await fetch(`${SB_URL}/rest/v1/pedidos`, {
       method: 'POST',
       headers: sbHeaders,
-      body: JSON.stringify({
-        numero_pedido: numeroPedido,
-        tipo_checkout: 'tienda',
-        estado: 'pendiente_pago',
-        estado_logistico: 'pendiente_pago',
-        monto_total,
-        notas: `Compra web — ${nombre_comprador} — ${email} — Tel: ${telefono}`,
-      }),
+      body: JSON.stringify(pedidoPayload),
     });
     if (!pedidoRes.ok) {
       const err = await pedidoRes.text();
