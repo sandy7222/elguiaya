@@ -18,8 +18,10 @@
     .header-logo .brand-text h1 span { color: #10b981; }
     .header-logo .brand-text .slogan { font-size: .62rem; color: #10b981; font-weight: 500; letter-spacing: .3px; opacity: .85; }
     .header-actions { display: flex; align-items: center; gap: 6px; }
-    .header-actions a { width: 36px; height: 36px; border-radius: 50%; border: 1px solid #1a2d50; background: #0f1d38; display: flex; align-items: center; justify-content: center; color: #94a3b8; text-decoration: none; transition: all .2s; font-size: .9rem; }
-    .header-actions a:hover { background: #10b981; color: #fff; border-color: #10b981; }
+    .header-actions a, .header-actions button.icon-btn { width: 36px; height: 36px; border-radius: 50%; border: 1px solid #1a2d50; background: #0f1d38; display: flex; align-items: center; justify-content: center; color: #94a3b8; text-decoration: none; transition: all .2s; font-size: .9rem; cursor: pointer; position: relative; padding: 0; }
+    .header-actions a:hover, .header-actions button.icon-btn:hover { background: #10b981; color: #fff; border-color: #10b981; }
+    .header-actions .badge-count { position: absolute; top: -2px; right: -2px; min-width: 16px; height: 16px; padding: 0 4px; border-radius: 999px; background: #10b981; color: #fff; font-size: .62rem; font-weight: 700; display: none; align-items: center; justify-content: center; border: 1.5px solid #0b2243; line-height: 1; }
+    .header-actions .badge-count.visible { display: flex; }
 
     .marquee-bar { overflow: hidden; padding: 8px 0; white-space: nowrap; }
     .marquee-bar .inner { display: inline-block; animation: marq 25s linear infinite; font-size: .78rem; font-weight: 600; letter-spacing: .5px; }
@@ -46,6 +48,11 @@
     .card-body .precio { font-size: .92rem; font-weight: 700; color: #10b981; margin-top: auto; }
     .card-body .buy-btn { display: block; width: 100%; margin-top: 8px; padding: 7px 0; border-radius: 8px; border: none; background: #10b981; color: #fff; font-weight: 600; font-size: .75rem; text-align: center; text-decoration: none; cursor: pointer; transition: all .2s; }
     .card-body .buy-btn:hover { background: #059669; }
+    .card-actions { display: flex; gap: 6px; margin-top: 8px; }
+    .card-actions .buy-btn { flex: 1; margin-top: 0; }
+    .card-actions .icon-mini { width: 32px; height: 32px; border-radius: 8px; border: 1px solid #1a2d50; background: #132244; color: #94a3b8; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: .78rem; flex-shrink: 0; }
+    .card-actions .icon-mini:hover, .card-actions .icon-mini.activo { color: #fff; background: #10b981; border-color: #10b981; }
+    .card-actions .icon-mini.fav.activo { background: #e11d48; border-color: #e11d48; }
 
     .carousel-wrap { position: relative; overflow: hidden; height: 280px; margin: 8px 16px; border-radius: 12px; }
     .carousel-slide { position: absolute; inset: 0; opacity: 0; transition: opacity .6s; background-size: cover; background-position: center; display: flex; align-items: flex-end; padding: 24px; }
@@ -155,6 +162,27 @@
     .modal-body .caracts .item .val { font-size: .82rem; color: #e2e8f0; font-weight: 600; margin-top: 1px; }
     .modal-body .btn-comprar { display: block; width: 100%; padding: 14px; border-radius: 12px; border: none; background: #10b981; color: #fff; font-weight: 700; font-size: 1rem; text-align: center; text-decoration: none; cursor: pointer; transition: background .2s; }
     .modal-body .btn-comprar:hover { background: #059669; }
+    .modal-body .prod-actions { display: flex; gap: 8px; margin-top: 10px; }
+    .modal-body .btn-sec { flex: 1; padding: 12px; border-radius: 12px; border: 1px solid #1a2d50; background: #132244; color: #e2e8f0; font-weight: 600; font-size: .85rem; cursor: pointer; }
+    .modal-body .btn-sec:hover { border-color: #10b981; color: #10b981; }
+    .modal-body .btn-sec.activo { border-color: #e11d48; color: #fda4af; }
+
+    #modal-carrito, #modal-favoritos { z-index: 215; }
+    .lista-modal { background: #0b1628; border-radius: 20px; max-width: 480px; width: 100%; max-height: 96vh; overflow-y: auto; border: 1px solid #1a2d50; transform: translateY(40px); transition: transform .35s cubic-bezier(.16,1,.3,1); scrollbar-width: thin; }
+    .modal-overlay.open .lista-modal { transform: translateY(0); }
+    .lista-item { display: flex; gap: 12px; padding: 12px 0; border-bottom: 1px solid #1a2d50; align-items: center; }
+    .lista-item img { width: 64px; height: 64px; border-radius: 10px; object-fit: cover; background: #132244; flex-shrink: 0; }
+    .lista-item .info { flex: 1; min-width: 0; }
+    .lista-item .info h4 { font-size: .88rem; color: #f1f5f9; margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .lista-item .info .precio { font-size: .9rem; font-weight: 700; color: #10b981; }
+    .lista-item .qty { display: flex; align-items: center; gap: 6px; margin-top: 6px; }
+    .lista-item .qty button { width: 26px; height: 26px; border-radius: 6px; border: 1px solid #1a2d50; background: #132244; color: #e2e8f0; cursor: pointer; }
+    .lista-item .qty span { min-width: 18px; text-align: center; font-size: .85rem; }
+    .lista-item .remove { background: none; border: none; color: #64748b; cursor: pointer; font-size: .95rem; padding: 6px; }
+    .lista-item .remove:hover { color: #f87171; }
+    .lista-total { display: flex; justify-content: space-between; align-items: center; padding: 14px 0 6px; font-weight: 700; }
+    .lista-total .monto { color: #10b981; font-size: 1.1rem; }
+    .lista-empty { text-align: center; color: #64748b; font-size: .85rem; padding: 28px 8px; }
     .modal-body .btn-cerrar { display: block; margin-top: 10px; padding: 10px; border-radius: 10px; border: 1px solid #1a2d50; background: transparent; color: #64748b; font-size: .85rem; text-align: center; cursor: pointer; transition: all .2s; width: 100%; }
     .modal-body .btn-cerrar:hover { color: #f1f5f9; border-color: #475569; }
     .modal-gallery img { cursor: zoom-in; }
@@ -253,8 +281,8 @@
       </div>
     </div>
     <div class="header-actions">
-      <a href="https://app.elguiaya.com/tienda" target="_blank" title="Carrito"><i class="fas fa-shopping-cart"></i></a>
-      <a href="https://app.elguiaya.com/tienda" target="_blank" title="Favoritos"><i class="fas fa-heart"></i></a>
+      <button type="button" class="icon-btn" id="btn-carrito" title="Carrito" onclick="abrirCarrito()"><i class="fas fa-shopping-cart"></i><span class="badge-count" id="badge-carrito">0</span></button>
+      <button type="button" class="icon-btn" id="btn-favoritos" title="Favoritos" onclick="abrirFavoritos()"><i class="fas fa-heart"></i><span class="badge-count" id="badge-favoritos">0</span></button>
       <button type="button" class="cuenta-btn" id="btn-cuenta" title="Mi Cuenta" onclick="abrirCuenta()"><i class="fas fa-user"></i><span class="dot"></span></button>
     </div>
   </header>
@@ -292,6 +320,10 @@
         <div class="caracts" id="modal-caracts"></div>
         <div class="precio-lg" id="modal-price"></div>
         <a class="btn-comprar" id="modal-btn" href="javascript:void(0)"><i class="fas fa-shopping-cart"></i> Comprar ahora</a>
+        <div class="prod-actions">
+          <button type="button" class="btn-sec" id="modal-add-cart" onclick="agregarAlCarritoDesdeModal()"><i class="fas fa-cart-plus"></i> Al carrito</button>
+          <button type="button" class="btn-sec" id="modal-fav" onclick="toggleFavoritoDesdeModal()"><i class="fas fa-heart"></i> Favorito</button>
+        </div>
         <button class="btn-cerrar" onclick="cerrarModal()">Seguir viendo</button>
       </div>
     </div>
@@ -299,6 +331,38 @@
 
   <div class="zoom-overlay" id="zoom-overlay" onclick="cerrarZoom()">
     <img id="zoom-img" src="" alt="">
+  </div>
+
+  <!-- Carrito -->
+  <div class="modal-overlay" id="modal-carrito">
+    <div class="lista-modal">
+      <div class="co-header">
+        <div class="co-icon"><i class="fas fa-shopping-cart"></i></div>
+        <h2>Carrito</h2>
+        <button class="co-close" onclick="cerrarCarrito()" title="Cerrar"><i class="fas fa-times"></i></button>
+      </div>
+      <div class="auth-body">
+        <div id="carrito-lista"><div class="lista-empty">Tu carrito está vacío.</div></div>
+        <div id="carrito-footer" style="display:none">
+          <div class="lista-total"><span>Total</span><span class="monto" id="carrito-total">$0</span></div>
+          <button type="button" class="co-btn-pagar" onclick="checkoutDesdeCarrito()"><i class="fas fa-lock"></i> FINALIZAR COMPRA</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Favoritos -->
+  <div class="modal-overlay" id="modal-favoritos">
+    <div class="lista-modal">
+      <div class="co-header">
+        <div class="co-icon"><i class="fas fa-heart"></i></div>
+        <h2>Favoritos</h2>
+        <button class="co-close" onclick="cerrarFavoritos()" title="Cerrar"><i class="fas fa-times"></i></button>
+      </div>
+      <div class="auth-body">
+        <div id="favoritos-lista"><div class="lista-empty">Todavía no tenés favoritos.</div></div>
+      </div>
+    </div>
   </div>
 
   <!-- ╔══════════════════════════════════════════════════════════╗ -->
@@ -785,6 +849,9 @@
     let sessionUser = null;
     let perfilCliente = null;
     let direccionCliente = null;
+    let carritoItems = [];
+    let favoritosIds = new Set();
+    let productoModalId = null;
 
     function authHeaders() {
       const h = Object.assign({}, H);
@@ -820,11 +887,265 @@
       actualizarBotonCuenta();
       if (sessionUser) {
         await cargarPerfilYDireccion();
+        await Promise.all([cargarCarrito(), cargarFavoritos()]);
       } else {
         perfilCliente = null;
         direccionCliente = null;
+        carritoItems = [];
+        favoritosIds = new Set();
+        actualizarBadges();
       }
       return sessionUser;
+    }
+
+    function requireLogin() {
+      if (sessionUser) return true;
+      abrirAuth('login');
+      return false;
+    }
+
+    function actualizarBadges() {
+      const bc = document.getElementById('badge-carrito');
+      const bf = document.getElementById('badge-favoritos');
+      const nCart = carritoItems.reduce((s, it) => s + (Number(it.cantidad) || 0), 0);
+      const nFav = favoritosIds.size;
+      if (bc) {
+        bc.textContent = String(nCart);
+        bc.classList.toggle('visible', nCart > 0);
+      }
+      if (bf) {
+        bf.textContent = String(nFav);
+        bf.classList.toggle('visible', nFav > 0);
+      }
+    }
+
+    async function cargarCarrito() {
+      if (!sessionUser) { carritoItems = []; actualizarBadges(); return; }
+      try {
+        const r = await fetch(SB_URL + '/rest/v1/carrito_items?cliente_id=eq.' + sessionUser.user.id + '&select=id,producto_id,cantidad&order=created_at.asc', { headers: authHeaders() });
+        carritoItems = r.ok ? await r.json() : [];
+      } catch (e) {
+        console.warn('[Carrito]', e);
+        carritoItems = [];
+      }
+      actualizarBadges();
+      if (document.getElementById('modal-carrito')?.classList.contains('open')) renderCarritoLista();
+    }
+
+    async function cargarFavoritos() {
+      if (!sessionUser) { favoritosIds = new Set(); actualizarBadges(); return; }
+      try {
+        const r = await fetch(SB_URL + '/rest/v1/favoritos_tienda?cliente_id=eq.' + sessionUser.user.id + '&select=producto_id', { headers: authHeaders() });
+        const rows = r.ok ? await r.json() : [];
+        favoritosIds = new Set(rows.map(x => x.producto_id));
+      } catch (e) {
+        console.warn('[Favoritos]', e);
+        favoritosIds = new Set();
+      }
+      actualizarBadges();
+      if (document.getElementById('modal-favoritos')?.classList.contains('open')) renderFavoritosLista();
+      syncFavButtons();
+    }
+
+    function syncFavButtons() {
+      document.querySelectorAll('[data-fav-id]').forEach(el => {
+        const id = el.getAttribute('data-fav-id');
+        el.classList.toggle('activo', favoritosIds.has(id));
+      });
+      const modalFav = document.getElementById('modal-fav');
+      if (modalFav && productoModalId) {
+        modalFav.classList.toggle('activo', favoritosIds.has(productoModalId));
+      }
+    }
+
+    async function agregarAlCarrito(productoId, cantidad) {
+      if (!requireLogin()) return false;
+      const qty = Math.max(1, Number(cantidad) || 1);
+      const uid = sessionUser.user.id;
+      const headers = Object.assign({}, authHeaders(), { 'Content-Type': 'application/json', Prefer: 'resolution=merge-duplicates,return=minimal' });
+      const existente = carritoItems.find(x => x.producto_id === productoId);
+      try {
+        if (existente) {
+          const nueva = (Number(existente.cantidad) || 0) + qty;
+          const r = await fetch(SB_URL + '/rest/v1/carrito_items?id=eq.' + existente.id, {
+            method: 'PATCH',
+            headers,
+            body: JSON.stringify({ cantidad: nueva }),
+          });
+          if (!r.ok) throw new Error(await r.text());
+        } else {
+          const r = await fetch(SB_URL + '/rest/v1/carrito_items', {
+            method: 'POST',
+            headers,
+            body: JSON.stringify({ cliente_id: uid, producto_id: productoId, cantidad: qty }),
+          });
+          if (!r.ok) throw new Error(await r.text());
+        }
+        await cargarCarrito();
+        return true;
+      } catch (e) {
+        alert('No se pudo agregar al carrito: ' + (e.message || e));
+        return false;
+      }
+    }
+
+    async function setCantidadCarrito(itemId, cantidad) {
+      if (!requireLogin()) return;
+      const qty = Number(cantidad);
+      try {
+        if (qty <= 0) {
+          await fetch(SB_URL + '/rest/v1/carrito_items?id=eq.' + itemId, { method: 'DELETE', headers: authHeaders() });
+        } else {
+          const r = await fetch(SB_URL + '/rest/v1/carrito_items?id=eq.' + itemId, {
+            method: 'PATCH',
+            headers: Object.assign({}, authHeaders(), { 'Content-Type': 'application/json' }),
+            body: JSON.stringify({ cantidad: qty }),
+          });
+          if (!r.ok) throw new Error(await r.text());
+        }
+        await cargarCarrito();
+      } catch (e) {
+        alert('No se pudo actualizar el carrito.');
+      }
+    }
+
+    async function toggleFavorito(productoId) {
+      if (!requireLogin()) return;
+      const uid = sessionUser.user.id;
+      try {
+        if (favoritosIds.has(productoId)) {
+          const r = await fetch(SB_URL + '/rest/v1/favoritos_tienda?cliente_id=eq.' + uid + '&producto_id=eq.' + productoId, {
+            method: 'DELETE',
+            headers: authHeaders(),
+          });
+          if (!r.ok) throw new Error(await r.text());
+        } else {
+          const r = await fetch(SB_URL + '/rest/v1/favoritos_tienda', {
+            method: 'POST',
+            headers: Object.assign({}, authHeaders(), { 'Content-Type': 'application/json', Prefer: 'return=minimal' }),
+            body: JSON.stringify({ cliente_id: uid, producto_id: productoId }),
+          });
+          if (!r.ok) throw new Error(await r.text());
+        }
+        await cargarFavoritos();
+      } catch (e) {
+        alert('No se pudo actualizar favoritos.');
+      }
+    }
+
+    function abrirCarrito() {
+      if (!requireLogin()) return;
+      renderCarritoLista();
+      document.getElementById('modal-carrito').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+    function cerrarCarrito() {
+      document.getElementById('modal-carrito').classList.remove('open');
+      if (!document.querySelector('.modal-overlay.open')) document.body.style.overflow = '';
+    }
+    function abrirFavoritos() {
+      if (!requireLogin()) return;
+      renderFavoritosLista();
+      document.getElementById('modal-favoritos').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+    function cerrarFavoritos() {
+      document.getElementById('modal-favoritos').classList.remove('open');
+      if (!document.querySelector('.modal-overlay.open')) document.body.style.overflow = '';
+    }
+
+    function renderCarritoLista() {
+      const box = document.getElementById('carrito-lista');
+      const foot = document.getElementById('carrito-footer');
+      if (!carritoItems.length) {
+        box.innerHTML = '<div class="lista-empty">Tu carrito está vacío.<br><button type="button" class="auth-link" onclick="cerrarCarrito()">Seguir comprando</button></div>';
+        foot.style.display = 'none';
+        return;
+      }
+      let total = 0;
+      box.innerHTML = carritoItems.map(it => {
+        const p = prods.find(x => x.id === it.producto_id);
+        const nombre = p ? p.nombre : 'Producto';
+        const precio = p ? Number(p.precio) : 0;
+        const img = p && p.imagen_url ? p.imagen_url : '';
+        const sub = precio * Number(it.cantidad);
+        total += sub;
+        return '<div class="lista-item">' +
+          (img ? '<img src="' + esc(img) + '" alt="">' : '<div style="width:64px;height:64px;border-radius:10px;background:#132244"></div>') +
+          '<div class="info"><h4>' + esc(nombre) + '</h4><div class="precio">$' + sub.toLocaleString('es-AR', { minimumFractionDigits: 2 }) + '</div>' +
+          '<div class="qty"><button type="button" onclick="setCantidadCarrito(\'' + it.id + '\',' + (Number(it.cantidad) - 1) + ')">−</button><span>' + it.cantidad + '</span>' +
+          '<button type="button" onclick="setCantidadCarrito(\'' + it.id + '\',' + (Number(it.cantidad) + 1) + ')">+</button></div></div>' +
+          '<button type="button" class="remove" title="Quitar" onclick="setCantidadCarrito(\'' + it.id + '\',0)"><i class="fas fa-trash"></i></button></div>';
+      }).join('');
+      document.getElementById('carrito-total').textContent = '$' + total.toLocaleString('es-AR', { minimumFractionDigits: 2 });
+      foot.style.display = '';
+    }
+
+    function renderFavoritosLista() {
+      const box = document.getElementById('favoritos-lista');
+      const ids = [...favoritosIds];
+      if (!ids.length) {
+        box.innerHTML = '<div class="lista-empty">Todavía no tenés favoritos.</div>';
+        return;
+      }
+      box.innerHTML = ids.map(id => {
+        const p = prods.find(x => x.id === id);
+        if (!p) return '';
+        const img = p.imagen_url || '';
+        return '<div class="lista-item">' +
+          (img ? '<img src="' + esc(img) + '" alt="">' : '<div style="width:64px;height:64px;border-radius:10px;background:#132244"></div>') +
+          '<div class="info"><h4>' + esc(p.nombre) + '</h4><div class="precio">$' + Number(p.precio).toLocaleString('es-AR', { minimumFractionDigits: 2 }) + '</div>' +
+          '<div class="qty"><button type="button" onclick="agregarAlCarrito(\'' + p.id + '\',1)" title="Al carrito"><i class="fas fa-cart-plus"></i></button>' +
+          '<button type="button" onclick="abrirProducto(\'' + p.id + '\');cerrarFavoritos()">Ver</button></div></div>' +
+          '<button type="button" class="remove" onclick="toggleFavorito(\'' + p.id + '\')"><i class="fas fa-heart-broken"></i></button></div>';
+      }).join('') || '<div class="lista-empty">No se encontraron productos.</div>';
+    }
+
+    async function agregarAlCarritoDesdeModal() {
+      if (!productoModalId) return;
+      const ok = await agregarAlCarrito(productoModalId, 1);
+      if (ok) alert('Agregado al carrito.');
+    }
+    function toggleFavoritoDesdeModal() {
+      if (!productoModalId) return;
+      toggleFavorito(productoModalId);
+    }
+
+    function checkoutDesdeCarrito() {
+      if (!carritoItems.length) return;
+      const items = [];
+      for (const it of carritoItems) {
+        const p = prods.find(x => x.id === it.producto_id);
+        if (!p) continue;
+        items.push({
+          producto_id: p.id,
+          nombre_producto: p.nombre,
+          precio: Number(p.precio),
+          cantidad: Number(it.cantidad) || 1,
+          imagen: p.imagen_url || '',
+        });
+      }
+      if (!items.length) return alert('Hay productos del carrito que ya no están disponibles.');
+      const total = items.reduce((s, it) => s + it.precio * it.cantidad, 0);
+      _co = {
+        items,
+        fromCart: true,
+        productoId: items[0].producto_id,
+        nombre: items.length === 1 ? items[0].nombre_producto : (items.length + ' productos'),
+        precio: total,
+        imagen: items[0].imagen || '',
+        cantidad: 1,
+      };
+      document.getElementById('co-nombre-prod').textContent = _co.nombre;
+      document.getElementById('co-precio-prod').textContent = '$' + total.toLocaleString('es-AR', { minimumFractionDigits: 2 });
+      const img = document.getElementById('co-img');
+      img.src = _co.imagen;
+      img.style.display = _co.imagen ? 'block' : 'none';
+      coIrPaso(1);
+      prellenarCheckoutDesdeCuenta();
+      cerrarCarrito();
+      document.getElementById('modal-checkout').classList.add('open');
+      document.body.style.overflow = 'hidden';
     }
 
     async function cargarPerfilYDireccion() {
@@ -1143,13 +1464,23 @@
       sessionUser = null;
       perfilCliente = null;
       direccionCliente = null;
+      carritoItems = [];
+      favoritosIds = new Set();
       actualizarBotonCuenta();
+      actualizarBadges();
       cerrarCuentaPanel();
     }
 
-    sb.auth.onAuthStateChange(function (_event, session) {
+    sb.auth.onAuthStateChange(async function (_event, session) {
       sessionUser = session;
       actualizarBotonCuenta();
+      if (session) {
+        await Promise.all([cargarCarrito(), cargarFavoritos()]);
+      } else {
+        carritoItems = [];
+        favoritosIds = new Set();
+        actualizarBadges();
+      }
     });
 
     async function api(table, opts) {
@@ -1281,7 +1612,13 @@
 
     function cardHtml(p) {
       const img = p.imagen_url ? '<div class="card-img" style="background-image:url(\'' + esc(p.imagen_url) + '\');background-size:cover;background-position:center"></div>' : '<div class="card-img">Sin imagen</div>';
-      return '<div class="card" onclick="abrirProducto(\'' + p.id + '\')">' + img + '<div class="card-body"><h3>' + esc(p.nombre) + '</h3><div class="precio">$' + Number(p.precio).toLocaleString('es-AR', { minimumFractionDigits: 2 }) + '</div><a class="buy-btn" href="javascript:void(0)" onclick="event.stopPropagation();comprar(\'' + p.id + '\')">Comprar</a></div></div>';
+      const favActivo = favoritosIds.has(p.id) ? ' activo' : '';
+      return '<div class="card" onclick="abrirProducto(\'' + p.id + '\')">' + img + '<div class="card-body"><h3>' + esc(p.nombre) + '</h3><div class="precio">$' + Number(p.precio).toLocaleString('es-AR', { minimumFractionDigits: 2 }) + '</div>' +
+        '<div class="card-actions">' +
+        '<a class="buy-btn" href="javascript:void(0)" onclick="event.stopPropagation();comprar(\'' + p.id + '\')">Comprar</a>' +
+        '<button type="button" class="icon-mini" title="Al carrito" onclick="event.stopPropagation();agregarAlCarrito(\'' + p.id + '\',1)"><i class="fas fa-cart-plus"></i></button>' +
+        '<button type="button" class="icon-mini fav' + favActivo + '" data-fav-id="' + p.id + '" title="Favorito" onclick="event.stopPropagation();toggleFavorito(\'' + p.id + '\')"><i class="fas fa-heart"></i></button>' +
+        '</div></div></div>';
     }
 
     let galeriaActual = 0, galeriaImgs = [];
@@ -1289,11 +1626,13 @@
     function abrirProducto(id) {
       const p = prods.find(x => x.id === id);
       if (!p) return;
+      productoModalId = p.id;
       document.getElementById('modal-rubro').textContent = p.rubro || 'GENERAL';
       document.getElementById('modal-title').textContent = p.nombre;
       document.getElementById('modal-desc').textContent = p.descripcion || 'Producto de pesca, camping y náutica de la más alta calidad.';
       document.getElementById('modal-price').textContent = '$' + Number(p.precio).toLocaleString('es-AR', { minimumFractionDigits: 2 });
       document.getElementById('modal-btn').onclick = function(e) { comprar(p.id, p.nombre, p.precio); };
+      syncFavButtons();
 
       galeriaImgs = [p.imagen_url, ...(p.galeria_urls || [])].filter(Boolean);
       galeriaImgs = [...new Set(galeriaImgs)];
@@ -1335,16 +1674,25 @@
     function cerrarZoom() { document.getElementById('zoom-overlay').classList.remove('open'); }
 
     // ── Variables del checkout ──────────────────────────────────────────────
-    let _co = { productoId: null, nombre: '', precio: 0, imagen: '', cantidad: 1 };
+    let _co = { productoId: null, nombre: '', precio: 0, imagen: '', cantidad: 1, items: null, fromCart: false };
 
     function comprar(productoId, nombre, precio) {
       const prod = prods.find(x => x.id === productoId);
+      const nom = nombre || (prod ? prod.nombre : '');
+      const prec = Number(precio || (prod ? prod.precio : 0));
       _co = {
         productoId,
-        nombre: nombre || (prod ? prod.nombre : ''),
-        precio: Number(precio || (prod ? prod.precio : 0)),
+        nombre: nom,
+        precio: prec,
         imagen: prod ? (prod.imagen_url || '') : '',
         cantidad: 1,
+        fromCart: false,
+        items: [{
+          producto_id: productoId,
+          nombre_producto: nom,
+          precio: prec,
+          cantidad: 1,
+        }],
       };
       // Rellenar cabecera del checkout
       document.getElementById('co-nombre-prod').textContent = _co.nombre;
@@ -1366,6 +1714,12 @@
     }
     document.getElementById('modal-checkout').addEventListener('click', function(e) {
       if (e.target === this) cerrarCheckout();
+    });
+    document.getElementById('modal-carrito').addEventListener('click', function(e) {
+      if (e.target === this) cerrarCarrito();
+    });
+    document.getElementById('modal-favoritos').addEventListener('click', function(e) {
+      if (e.target === this) cerrarFavoritos();
     });
 
     function coIrPaso(n) {
@@ -1406,9 +1760,16 @@
       if (!cp) { document.getElementById('co-cp').focus(); return alert('Ingresá el código postal.'); }
       // Armar resumen
       const resumen = document.getElementById('co-resumen-final');
+      const items = (_co.items && _co.items.length) ? _co.items : [{
+        nombre_producto: _co.nombre,
+        precio: _co.precio,
+        cantidad: _co.cantidad,
+      }];
+      const lineas = items.map(it => esc(it.nombre_producto) + ' x' + it.cantidad + ' — $' + (Number(it.precio) * Number(it.cantidad)).toLocaleString('es-AR', { minimumFractionDigits: 2 })).join('<br>');
+      const total = items.reduce((s, it) => s + Number(it.precio) * Number(it.cantidad), 0);
       resumen.innerHTML =
-        '<b style="color:#f1f5f9">Producto:</b> ' + esc(_co.nombre) + '<br>' +
-        '<b style="color:#f1f5f9">Precio:</b> $' + _co.precio.toLocaleString('es-AR', { minimumFractionDigits: 2 }) + '<br>' +
+        '<b style="color:#f1f5f9">Productos:</b><br>' + lineas + '<br>' +
+        '<b style="color:#f1f5f9">Total:</b> $' + total.toLocaleString('es-AR', { minimumFractionDigits: 2 }) + '<br>' +
         '<b style="color:#f1f5f9">Comprador:</b> ' + esc(document.getElementById('co-nombre').value) + '<br>' +
         '<b style="color:#f1f5f9">Email:</b> ' + esc(document.getElementById('co-email').value) + '<br>' +
         '<b style="color:#f1f5f9">Dirección:</b> ' + esc(calle + ' ' + numero + (document.getElementById('co-piso').value ? ', ' + document.getElementById('co-piso').value : '')) + '<br>' +
@@ -1424,6 +1785,12 @@
       btn.innerHTML = '<span class="co-spinner"></span> PROCESANDO...';
       document.getElementById('co-error').classList.remove('visible');
 
+      const items = (_co.items && _co.items.length) ? _co.items : [{
+        producto_id: _co.productoId,
+        nombre_producto: _co.nombre,
+        precio: _co.precio,
+        cantidad: _co.cantidad,
+      }];
       const payload = {
         // Comprador
         nombre_comprador: document.getElementById('co-nombre').value.trim(),
@@ -1436,11 +1803,14 @@
         localidad: document.getElementById('co-localidad').value.trim(),
         provincia: document.getElementById('co-provincia').value,
         codigo_postal: document.getElementById('co-cp').value.trim(),
-        // Producto
-        producto_id: _co.productoId,
-        nombre_producto: _co.nombre,
-        precio: _co.precio,
-        cantidad: _co.cantidad,
+        // Productos
+        items: items.map(it => ({
+          producto_id: it.producto_id,
+          nombre_producto: it.nombre_producto,
+          precio: Number(it.precio),
+          cantidad: Number(it.cantidad) || 1,
+        })),
+        vaciar_carrito: !!_co.fromCart,
       };
 
       try {
@@ -1466,6 +1836,11 @@
         });
         document.getElementById('co-step-success').style.display = '';
         document.getElementById('co-titulo').textContent = '¡Pedido generado!';
+
+        if (_co.fromCart) {
+          carritoItems = [];
+          actualizarBadges();
+        }
 
         // Redirigir a MercadoPago en 1.5 seg
         setTimeout(() => { window.location.href = data.init_point; }, 1500);

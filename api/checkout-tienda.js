@@ -16,24 +16,44 @@ export default async function handler(req, res) {
   if (req.method === 'OPTIONS') return res.status(200).end();
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
+  const body = req.body || {};
   const {
-    // Datos del comprador
     email, nombre_comprador, telefono,
-    // Datos del envío
     calle, numero, piso, localidad, provincia, codigo_postal,
-    // Datos del producto
     producto_id, nombre_producto, precio, cantidad,
-  } = req.body || {};
+    vaciar_carrito,
+  } = body;
 
-  // Validaciones mínimas
+  // Normalizar items: array multi-ítem o un solo producto (compat)
+  let items = Array.isArray(body.items) ? body.items : null;
+  if (!items || !items.length) {
+    if (producto_id && nombre_producto != null && precio != null && cantidad) {
+      items = [{
+        producto_id,
+        nombre_producto,
+        precio: Number(precio),
+        cantidad: Number(cantidad),
+      }];
+    } else {
+      items = [];
+    }
+  }
+
+  items = items.map((it) => ({
+    producto_id: it.producto_id,
+    nombre_producto: String(it.nombre_producto || '').trim(),
+    precio: Number(it.precio),
+    cantidad: Number(it.cantidad) || 1,
+  })).filter((it) => it.producto_id && it.nombre_producto && Number.isFinite(it.precio) && it.cantidad > 0);
+
   if (!nombre_comprador || !email || !telefono) {
     return res.status(400).json({ error: 'Faltan datos del comprador (nombre, email, teléfono).' });
   }
   if (!calle || !localidad || !provincia || !codigo_postal) {
     return res.status(400).json({ error: 'Faltan datos de envío (calle, localidad, provincia, CP).' });
   }
-  if (!producto_id || !nombre_producto || precio == null || !cantidad) {
-    return res.status(400).json({ error: 'Faltan datos del producto.' });
+  if (!items.length) {
+    return res.status(400).json({ error: 'Faltan datos del producto o el carrito está vacío.' });
   }
 
   const SB_URL = process.env.SUPABASE_URL;
@@ -41,7 +61,6 @@ export default async function handler(req, res) {
   const SB_ANON_KEY = process.env.SUPABASE_ANON_KEY;
   const MP_ACCESS_TOKEN = process.env.MP_ACCESS_TOKEN;
 
-  // Vincular pedido a cuenta si hay JWT válido
   let cliente_id = null;
   const authHeader = req.headers.authorization || '';
   const accessToken = authHeader.startsWith('Bearer ') ? authHeader.slice(7).trim() : '';
@@ -77,7 +96,6 @@ export default async function handler(req, res) {
   };
 
   try {
-    // ── 1. Generar número de pedido ─────────────────────────────────────────
     const rpcRes = await fetch(`${SB_URL}/rest/v1/rpc/generar_numero_pedido`, {
       method: 'POST',
       headers: sbHeaders,
@@ -85,8 +103,7 @@ export default async function handler(req, res) {
     });
     const numeroPedido = await rpcRes.json();
 
-    // ── 2. Crear el pedido ──────────────────────────────────────────────────
-    const monto_total = Number(precio) * Number(cantidad);
+    const monto_total = items.reduce((sum, it) => sum + (it.precio * it.cantidad), 0);
 
     const pedidoPayload = {
       numero_pedido: numeroPedido,
@@ -94,7 +111,8 @@ export default async function handler(req, res) {
       estado: 'pendiente_pago',
       estado_logistico: 'pendiente_pago',
       monto_total,
-      notas: `Compra web — ${nombre_comprador} — ${email} — Tel: ${telefono}`,
+      notas: `Compra web — ${nombre_comprador} — ${email} — Tel: ${telefono}` +
+        (items.length > 1 ? ` — ${items.length} ítems` : ''),
     };
     if (cliente_id) pedidoPayload.cliente_id = cliente_id;
 
@@ -110,21 +128,25 @@ export default async function handler(req, res) {
     const [pedido] = await pedidoRes.json();
     const pedido_id = pedido.id;
 
-    // ── 3. Crear el ítem del pedido ─────────────────────────────────────────
-    await fetch(`${SB_URL}/rest/v1/pedido_items`, {
+    const pedidoItems = items.map((it) => ({
+      pedido_id,
+      producto_id: it.producto_id,
+      nombre_producto: it.nombre_producto,
+      cantidad: it.cantidad,
+      precio_unitario: it.precio,
+      subtotal: it.precio * it.cantidad,
+    }));
+
+    const itemsRes = await fetch(`${SB_URL}/rest/v1/pedido_items`, {
       method: 'POST',
       headers: { ...sbHeaders, 'Prefer': 'return=minimal' },
-      body: JSON.stringify({
-        pedido_id,
-        producto_id,
-        nombre_producto,
-        cantidad: Number(cantidad),
-        precio_unitario: Number(precio),
-        subtotal: monto_total,
-      }),
+      body: JSON.stringify(pedidoItems),
     });
+    if (!itemsRes.ok) {
+      const err = await itemsRes.text();
+      throw new Error(`Error al crear ítems del pedido: ${err}`);
+    }
 
-    // ── 4. Guardar dirección de envío ───────────────────────────────────────
     const direccion_completa = [calle, numero, piso].filter(Boolean).join(' ');
     await fetch(`${SB_URL}/rest/v1/envio_domicilio`, {
       method: 'POST',
@@ -142,17 +164,16 @@ export default async function handler(req, res) {
       }),
     });
 
-    // ── 5. Crear preferencia de MercadoPago ─────────────────────────────────
     const baseUrl = 'https://www.elguiaya.com';
     const mpBody = {
       external_reference: pedido_id,
-      items: [{
-        id: producto_id,
-        title: nombre_producto,
-        quantity: Number(cantidad),
-        unit_price: Number(precio),
+      items: items.map((it) => ({
+        id: String(it.producto_id),
+        title: it.nombre_producto,
+        quantity: it.cantidad,
+        unit_price: it.precio,
         currency_id: 'ARS',
-      }],
+      })),
       payer: {
         name: nombre_comprador,
         email,
@@ -178,6 +199,17 @@ export default async function handler(req, res) {
     const mpData = await mpRes.json();
     if (!mpRes.ok) {
       throw new Error(`Error de MercadoPago: ${mpData.message || JSON.stringify(mpData)}`);
+    }
+
+    if (vaciar_carrito && cliente_id) {
+      try {
+        await fetch(`${SB_URL}/rest/v1/carrito_items?cliente_id=eq.${cliente_id}`, {
+          method: 'DELETE',
+          headers: { ...sbHeaders, 'Prefer': 'return=minimal' },
+        });
+      } catch (e) {
+        console.warn('[checkout-tienda] No se pudo vaciar carrito:', e.message);
+      }
     }
 
     return res.status(200).json({
