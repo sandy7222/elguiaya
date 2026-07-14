@@ -281,6 +281,19 @@ Si querés conectar la **Inteligencia Artificial con búsquedas satelitales auto
   res.json({ ...simulated, engine: 'mock' });
 });
 
+// API: Chat híbrido de la tienda (Vercel: api/chat-tienda.js)
+app.post('/api/chat-tienda', async (req, res) => {
+  try {
+    const mod = await import('./api/chat-tienda.js');
+    await mod.default(req, res);
+  } catch (err) {
+    console.error('[chat-tienda local]', err);
+    if (!res.headersSent) {
+      res.status(500).json({ error: 'Error al cargar el chat.' });
+    }
+  }
+});
+
 // API: Registrar descarga y redirigir
 app.get('/api/track-download', async (req, res) => {
   const source = (req.query.source as string) || 'direct_url';

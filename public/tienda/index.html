@@ -183,6 +183,52 @@
     .lista-total { display: flex; justify-content: space-between; align-items: center; padding: 14px 0 6px; font-weight: 700; }
     .lista-total .monto { color: #10b981; font-size: 1.1rem; }
     .lista-empty { text-align: center; color: #64748b; font-size: .85rem; padding: 28px 8px; }
+
+    /* Chat híbrido (consulta in-page; WhatsApp se mantiene) */
+    .chat-fab {
+      position: fixed; right: 18px; bottom: 18px; z-index: 230;
+      width: 56px; height: 56px; border-radius: 50%; border: none;
+      background: linear-gradient(135deg, #10b981, #059669); color: #fff;
+      box-shadow: 0 10px 28px rgba(16,185,129,.4); cursor: pointer; font-size: 1.35rem;
+      display: flex; align-items: center; justify-content: center; transition: transform .2s;
+    }
+    .chat-fab:hover { transform: scale(1.06); }
+    .chat-panel {
+      position: fixed; right: 18px; bottom: 86px; z-index: 231;
+      width: min(380px, calc(100vw - 24px)); height: min(520px, calc(100vh - 110px));
+      background: #0b1628; border: 1px solid #1a2d50; border-radius: 18px;
+      box-shadow: 0 20px 50px rgba(0,0,0,.45); display: none; flex-direction: column; overflow: hidden;
+    }
+    .chat-panel.open { display: flex; }
+    .chat-head {
+      padding: 14px 16px; border-bottom: 1px solid #1a2d50; display: flex; align-items: center; gap: 10px;
+      background: #0f1d38;
+    }
+    .chat-head h3 { flex: 1; font-size: .95rem; color: #f1f5f9; margin: 0; }
+    .chat-head .estado { font-size: .68rem; color: #6ee7b7; letter-spacing: .3px; }
+    .chat-head button { background: none; border: none; color: #94a3b8; cursor: pointer; font-size: 1rem; }
+    .chat-msgs { flex: 1; overflow-y: auto; padding: 14px; display: flex; flex-direction: column; gap: 8px; }
+    .chat-bubble {
+      max-width: 88%; padding: 10px 12px; border-radius: 12px; font-size: .82rem; line-height: 1.45; white-space: pre-wrap; word-break: break-word;
+    }
+    .chat-bubble.cliente { align-self: flex-end; background: #10b981; color: #fff; border-bottom-right-radius: 4px; }
+    .chat-bubble.bot, .chat-bubble.agente { align-self: flex-start; background: #132244; color: #e2e8f0; border: 1px solid #1a2d50; border-bottom-left-radius: 4px; }
+    .chat-bubble.agente { border-color: #334155; }
+    .chat-bubble .who { display: block; font-size: .65rem; opacity: .7; margin-bottom: 4px; font-weight: 600; }
+    .chat-gate, .chat-foot { padding: 12px 14px; border-top: 1px solid #1a2d50; background: #0f1d38; }
+    .chat-gate .co-field { margin-bottom: 8px; }
+    .chat-gate input, .chat-foot textarea {
+      width: 100%; padding: 10px 12px; border-radius: 10px; border: 1px solid #1a2d50;
+      background: #0b1628; color: #e2e8f0; font-size: .82rem; outline: none; resize: none;
+    }
+    .chat-actions { display: flex; gap: 8px; margin-top: 8px; }
+    .chat-actions button {
+      flex: 1; border: none; border-radius: 10px; padding: 10px; font-weight: 700; font-size: .78rem; cursor: pointer;
+    }
+    .chat-actions .send { background: #10b981; color: #fff; }
+    .chat-actions .human { background: #132244; color: #e2e8f0; border: 1px solid #1a2d50; }
+    .chat-actions button:disabled { opacity: .55; cursor: not-allowed; }
+    .chat-hint { font-size: .7rem; color: #64748b; margin-top: 8px; line-height: 1.4; }
     .modal-body .btn-cerrar { display: block; margin-top: 10px; padding: 10px; border-radius: 10px; border: 1px solid #1a2d50; background: transparent; color: #64748b; font-size: .85rem; text-align: center; cursor: pointer; transition: all .2s; width: 100%; }
     .modal-body .btn-cerrar:hover { color: #f1f5f9; border-color: #475569; }
     .modal-gallery img { cursor: zoom-in; }
@@ -780,7 +826,7 @@
         <div class="section-title">CANCELACIONES</div>
         <p><strong>¿Puedo cancelar un pedido antes de recibirlo?</strong> Sí, siempre y cuando el pedido no haya sido despachado. Podés solicitar la cancelación inmediata desde tu panel de control o por soporte de WhatsApp.</p>
         <p><strong>¿Cuánto demora en acreditarse mi reembolso?</strong> Una vez aprobada la devolución o cancelación, el reembolso se procesa de inmediato. Si pagaste con dinero en Mercado Pago se acredita al instante; si fue con tarjeta de crédito, puede demorar entre 2 y 10 días hábiles.</p>
-        <a class="btn-ok" href="https://wa.me/5491122334455?text=Hola%20necesito%20ayuda%20con%20una%20compra%20en%20El%20Gu%C3%ADa%20Ya" target="_blank" style="display:block;text-align:center;text-decoration:none"><i class="fab fa-whatsapp"></i> HABLAR CON SOPORTE</a>
+        <a class="btn-ok" href="https://wa.me/5491171548464?text=Hola%20necesito%20ayuda%20con%20una%20compra%20en%20El%20Gu%C3%ADa%20Ya" target="_blank" style="display:block;text-align:center;text-decoration:none"><i class="fab fa-whatsapp"></i> HABLAR CON SOPORTE</a>
       </div>
     </div>
   </div>
@@ -833,11 +879,38 @@
         <p><i class="fas fa-map-marker-alt"></i> Buenos Aires, Argentina</p>
         <p><i class="fas fa-envelope"></i> info@elguiaya.com</p>
         <p><i class="fas fa-phone"></i> 011-4899 9921</p>
-        <a class="footer-link" href="https://wa.me/5491122334455?text=Hola%20El%20Gu%C3%ADa%20Ya" target="_blank"><i class="fab fa-whatsapp"></i> WhatsApp</a>
+        <a class="footer-link" href="https://wa.me/5491171548464?text=Hola%20El%20Gu%C3%ADa%20Ya" target="_blank"><i class="fab fa-whatsapp"></i> WhatsApp</a>
       </div>
     </div>
     <div class="footer-bot">© 2026 El Guía Ya — Todos los derechos reservados.</div>
   </footer>
+
+  <!-- Chat consulta (complementario a WhatsApp) -->
+  <button type="button" class="chat-fab" id="chat-fab" title="Consultas" onclick="toggleChatPanel()"><i class="fas fa-comments"></i></button>
+  <div class="chat-panel" id="chat-panel" aria-live="polite">
+    <div class="chat-head">
+      <div>
+        <h3>Consultas El Guía Ya</h3>
+        <div class="estado" id="chat-estado-label">Asistente</div>
+      </div>
+      <button type="button" onclick="toggleChatPanel()" title="Cerrar"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="chat-msgs" id="chat-msgs">
+      <div class="chat-bubble bot"><span class="who">Asistente</span>¡Hola! Consultame por productos, envíos o compras. Si preferís, WhatsApp sigue disponible en Contacto.</div>
+    </div>
+    <div class="chat-gate" id="chat-gate">
+      <div class="co-field"><label style="font-size:.72rem;color:#94a3b8">Nombre *</label><input type="text" id="chat-nombre" placeholder="Tu nombre" autocomplete="name"></div>
+      <div class="co-field"><label style="font-size:.72rem;color:#94a3b8">Email *</label><input type="email" id="chat-email" placeholder="tu@correo.com" autocomplete="email"></div>
+      <p class="chat-hint">Solo lo pedimos para poder seguir la consulta. No reemplaza WhatsApp.</p>
+    </div>
+    <div class="chat-foot">
+      <textarea id="chat-input" rows="2" placeholder="Escribí tu consulta..." maxlength="2000"></textarea>
+      <div class="chat-actions">
+        <button type="button" class="human" id="chat-btn-human" onclick="escalarChatHumano()">Hablar con persona</button>
+        <button type="button" class="send" id="chat-btn-send" onclick="enviarChatMensaje()">Enviar</button>
+      </div>
+    </div>
+  </div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
@@ -1920,8 +1993,209 @@
 
     function esc(t) { if (!t) return ''; const d = document.createElement('div'); d.textContent = t; return d.innerHTML; }
 
+    // ── Chat híbrido ────────────────────────────────────────────────────────
+    const CHAT_LS_KEY = 'elguia_chat_v1';
+    let chatState = { conversacionId: null, guestToken: null, estado: 'bot', sending: false, pollTimer: null };
+
+    function loadChatLocal() {
+      try {
+        const raw = localStorage.getItem(CHAT_LS_KEY);
+        if (!raw) return;
+        const saved = JSON.parse(raw);
+        if (saved && saved.conversacionId) {
+          chatState.conversacionId = saved.conversacionId;
+          chatState.guestToken = saved.guestToken || null;
+        }
+      } catch (_) {}
+    }
+    function saveChatLocal() {
+      try {
+        localStorage.setItem(CHAT_LS_KEY, JSON.stringify({
+          conversacionId: chatState.conversacionId,
+          guestToken: chatState.guestToken,
+        }));
+      } catch (_) {}
+    }
+
+    function chatAuthHeaders() {
+      const h = { 'Content-Type': 'application/json' };
+      if (sessionUser?.access_token) h.Authorization = 'Bearer ' + sessionUser.access_token;
+      return h;
+    }
+
+    function prefillChatGate() {
+      const gate = document.getElementById('chat-gate');
+      if (sessionUser && perfilCliente) {
+        document.getElementById('chat-nombre').value = perfilCliente.nombre_completo || '';
+        document.getElementById('chat-email').value = perfilCliente.email || sessionUser.user.email || '';
+        if (chatState.conversacionId) gate.style.display = 'none';
+        else gate.style.display = '';
+      } else if (sessionUser) {
+        document.getElementById('chat-email').value = sessionUser.user.email || '';
+        gate.style.display = chatState.conversacionId ? 'none' : '';
+      } else {
+        gate.style.display = chatState.conversacionId ? 'none' : '';
+      }
+    }
+
+    function setChatEstadoLabel(estado) {
+      chatState.estado = estado || 'bot';
+      const el = document.getElementById('chat-estado-label');
+      if (!el) return;
+      if (estado === 'humano') el.textContent = 'Esperando / con soporte';
+      else if (estado === 'cerrada') el.textContent = 'Cerrada';
+      else el.textContent = 'Asistente';
+    }
+
+    function renderChatMensajes(mensajes) {
+      const box = document.getElementById('chat-msgs');
+      if (!mensajes || !mensajes.length) return;
+      box.innerHTML = mensajes.map(m => {
+        const who = m.rol === 'cliente' ? 'Vos' : m.rol === 'agente' ? 'Soporte' : 'Asistente';
+        return '<div class="chat-bubble ' + m.rol + '"><span class="who">' + who + '</span>' + esc(m.cuerpo) + '</div>';
+      }).join('');
+      box.scrollTop = box.scrollHeight;
+    }
+
+    function toggleChatPanel() {
+      const panel = document.getElementById('chat-panel');
+      const open = !panel.classList.contains('open');
+      panel.classList.toggle('open', open);
+      if (open) {
+        prefillChatGate();
+        if (chatState.conversacionId) refrescarChatHistorial();
+        startChatPolling();
+      } else {
+        stopChatPolling();
+      }
+    }
+
+    function startChatPolling() {
+      stopChatPolling();
+      chatState.pollTimer = setInterval(function() {
+        if (!document.getElementById('chat-panel').classList.contains('open')) return;
+        if (!chatState.conversacionId) return;
+        if (chatState.estado === 'humano') refrescarChatHistorial(true);
+      }, 4000);
+    }
+    function stopChatPolling() {
+      if (chatState.pollTimer) { clearInterval(chatState.pollTimer); chatState.pollTimer = null; }
+    }
+
+    async function refrescarChatHistorial(silent) {
+      if (!chatState.conversacionId) return;
+      try {
+        const r = await fetch('/api/chat-tienda', {
+          method: 'POST',
+          headers: chatAuthHeaders(),
+          body: JSON.stringify({
+            action: 'historial',
+            conversacion_id: chatState.conversacionId,
+            guest_token: chatState.guestToken,
+          }),
+        });
+        const data = await r.json();
+        if (!r.ok) throw new Error(data.error || 'Error');
+        setChatEstadoLabel(data.conversacion.estado);
+        renderChatMensajes(data.mensajes);
+        document.getElementById('chat-gate').style.display = 'none';
+      } catch (e) {
+        if (!silent) console.warn('[chat]', e);
+      }
+    }
+
+    async function enviarChatMensaje() {
+      if (chatState.sending) return;
+      const input = document.getElementById('chat-input');
+      const mensaje = (input.value || '').trim();
+      if (!mensaje) return;
+
+      let nombre = document.getElementById('chat-nombre').value.trim();
+      let email = document.getElementById('chat-email').value.trim();
+      if (!chatState.conversacionId) {
+        if (!nombre || !email) {
+          alert('Completá nombre y email para iniciar la consulta.');
+          return;
+        }
+      }
+
+      chatState.sending = true;
+      document.getElementById('chat-btn-send').disabled = true;
+      try {
+        const payload = {
+          action: 'enviar',
+          mensaje,
+          conversacion_id: chatState.conversacionId,
+          guest_token: chatState.guestToken,
+          nombre,
+          email,
+        };
+        const r = await fetch('/api/chat-tienda', {
+          method: 'POST',
+          headers: chatAuthHeaders(),
+          body: JSON.stringify(payload),
+        });
+        const data = await r.json();
+        if (!r.ok) throw new Error(data.error || 'No se pudo enviar');
+        chatState.conversacionId = data.conversacion.id;
+        chatState.guestToken = data.conversacion.guest_token || chatState.guestToken;
+        saveChatLocal();
+        setChatEstadoLabel(data.conversacion.estado);
+        renderChatMensajes(data.mensajes);
+        document.getElementById('chat-gate').style.display = 'none';
+        input.value = '';
+        startChatPolling();
+      } catch (e) {
+        alert(e.message || 'Error al enviar el mensaje');
+      } finally {
+        chatState.sending = false;
+        document.getElementById('chat-btn-send').disabled = false;
+      }
+    }
+
+    async function escalarChatHumano() {
+      if (!chatState.conversacionId) {
+        const input = document.getElementById('chat-input');
+        if (!(input.value || '').trim()) input.value = 'Quiero hablar con una persona';
+        return enviarChatMensaje();
+      }
+      if (chatState.sending) return;
+      chatState.sending = true;
+      document.getElementById('chat-btn-human').disabled = true;
+      try {
+        const r = await fetch('/api/chat-tienda', {
+          method: 'POST',
+          headers: chatAuthHeaders(),
+          body: JSON.stringify({
+            action: 'escalar',
+            conversacion_id: chatState.conversacionId,
+            guest_token: chatState.guestToken,
+          }),
+        });
+        const data = await r.json();
+        if (!r.ok) throw new Error(data.error || 'No se pudo derivar');
+        setChatEstadoLabel(data.conversacion.estado);
+        renderChatMensajes(data.mensajes);
+        startChatPolling();
+      } catch (e) {
+        alert(e.message || 'Error al derivar a soporte');
+      } finally {
+        chatState.sending = false;
+        document.getElementById('chat-btn-human').disabled = false;
+      }
+    }
+
+    document.getElementById('chat-input').addEventListener('keydown', function(e) {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        enviarChatMensaje();
+      }
+    });
+    loadChatLocal();
+
     (async function bootCuenta() {
       await refreshSession();
+      prefillChatGate();
       if (location.hash === '#cuenta' || location.pathname === '/cuenta' || location.pathname === '/cuenta/') {
         abrirCuenta();
       }
