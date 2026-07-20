@@ -1610,6 +1610,42 @@
       } catch (e) { console.error(e); document.getElementById('loading').style.display = 'none'; document.getElementById('error').style.display = 'block'; }
     }
 
+    function isVideoUrl(url) {
+      if (!url) return false;
+      var l = String(url).toLowerCase();
+      return l.indexOf('.mp4') !== -1 || l.indexOf('.webm') !== -1 || l.indexOf('.mov') !== -1 || l.indexOf('.m4v') !== -1 || l.indexOf('.3gp') !== -1 || l.indexOf('video') !== -1;
+    }
+
+    function renderBannerMediaHtml(url) {
+      if (!url) return '';
+      var safeUrl = esc(url);
+      if (isVideoUrl(url)) {
+        return '<video src="' + safeUrl + '" autoplay loop muted playsinline preload="auto" style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;z-index:0;pointer-events:none;"></video>';
+      }
+      return '<div style="position:absolute;top:0;left:0;width:100%;height:100%;background-image:url(\'' + safeUrl + '\');background-size:cover;background-position:center;z-index:0;"></div>';
+    }
+
+    function playBannerVideos(root) {
+      var scope = root || document;
+      var videos = scope.querySelectorAll('video');
+      for (var i = 0; i < videos.length; i++) {
+        var v = videos[i];
+        v.muted = true;
+        v.defaultMuted = true;
+        v.playsInline = true;
+        v.setAttribute('muted', '');
+        v.setAttribute('playsinline', '');
+        var p = v.play();
+        if (p && typeof p.catch === 'function') p.catch(function () {});
+      }
+    }
+
+    function bannerClickAttr(b) {
+      if (b.product_id) return ' onclick="abrirProducto(\'' + esc(b.product_id) + '\')" style="cursor:pointer;"';
+      if (b.categoria_id) return ' onclick="mostrarCategoria(\'' + esc(b.categoria_id) + '\')" style="cursor:pointer;"';
+      return '';
+    }
+
     function render() {
       document.getElementById('loading').style.display = 'none';
       document.getElementById('error').style.display = 'none';
@@ -1657,10 +1693,10 @@
       if (hero.length) {
         html += '<div class="carousel-wrap" id="hero">';
         hero.forEach((b, i) => {
-          html += '<div class="carousel-slide' + (i === 0 ? ' activo' : '') + '" style="background-image:url(\'' + b.imagen_url + '\')"><div class="overlay"><h2>' + esc(b.titulo) + '</h2>' + (b.subtitulo ? '<p>' + esc(b.subtitulo) + '</p>' : '') + '</div></div>';
+          html += '<div class="carousel-slide' + (i === 0 ? ' activo' : '') + '"' + bannerClickAttr(b) + '>' + renderBannerMediaHtml(b.imagen_url) + '<div class="overlay"><h2>' + esc(b.titulo) + '</h2>' + (b.subtitulo ? '<p>' + esc(b.subtitulo) + '</p>' : '') + '</div></div>';
         });
         html += '<div class="carousel-dots">' + hero.map((_, i) => '<button class="' + (i === 0 ? 'activo' : '') + '" onclick="goSlide(' + i + ')"></button>').join('') + '</div></div>';
-        if (hero.length > 1) setInterval(() => { const w = document.getElementById('hero'); if (!w) return; const s = w.querySelectorAll('.carousel-slide'), d = w.querySelectorAll('.carousel-dots button'); if (!s.length) return; const cur = Array.from(s).findIndex(x => x.classList.contains('activo')); const n = (cur + 1) % s.length; s.forEach(x => x.classList.remove('activo')); d.forEach(x => x.classList.remove('activo')); s[n].classList.add('activo'); d[n].classList.add('activo'); }, 5000);
+        if (hero.length > 1) setInterval(() => { const w = document.getElementById('hero'); if (!w) return; const s = w.querySelectorAll('.carousel-slide'), d = w.querySelectorAll('.carousel-dots button'); if (!s.length) return; const cur = Array.from(s).findIndex(x => x.classList.contains('activo')); const n = (cur + 1) % s.length; s.forEach(x => x.classList.remove('activo')); d.forEach(x => x.classList.remove('activo')); s[n].classList.add('activo'); d[n].classList.add('activo'); playBannerVideos(s[n]); }, 5000);
       }
 
       const interleaveBanners = bans.filter(b => b.tipo === 'middle' || b.tipo === 'bottom');
@@ -1675,7 +1711,7 @@
 
         if (bannerIdx < interleaveBanners.length) {
           const b = interleaveBanners[bannerIdx++];
-          html += '<div class="banner-fixo" style="background-image:url(\'' + b.imagen_url + '\')"><div class="overlay"><h3>' + esc(b.titulo) + '</h3>' + (b.subtitulo ? '<p>' + esc(b.subtitulo) + '</p>' : '') + '</div></div>';
+          html += '<div class="banner-fixo"' + bannerClickAttr(b) + '>' + renderBannerMediaHtml(b.imagen_url) + '<div class="overlay"><h3>' + esc(b.titulo) + '</h3>' + (b.subtitulo ? '<p>' + esc(b.subtitulo) + '</p>' : '') + '</div></div>';
         }
       });
 
@@ -1689,8 +1725,10 @@
       });
       html += '</div>';
 
-      document.getElementById('content').innerHTML = html;
-      document.getElementById('content').style.display = 'block';
+      const contentEl = document.getElementById('content');
+      contentEl.innerHTML = html;
+      contentEl.style.display = 'block';
+      playBannerVideos(contentEl);
     }
 
     function cardHtml(p) {
@@ -1973,7 +2011,7 @@
       const w = document.getElementById('hero'); if (!w) return;
       const s = w.querySelectorAll('.carousel-slide'), d = w.querySelectorAll('.carousel-dots button');
       s.forEach(x => x.classList.remove('activo')); d.forEach(x => x.classList.remove('activo'));
-      if (s[n]) { s[n].classList.add('activo'); if (d[n]) d[n].classList.add('activo'); }
+      if (s[n]) { s[n].classList.add('activo'); if (d[n]) d[n].classList.add('activo'); playBannerVideos(s[n]); }
     }
 
     function abrirModalInst(id) { const el = document.getElementById('modal-' + id); if (el) { el.classList.add('open'); document.body.style.overflow = 'hidden'; } }
