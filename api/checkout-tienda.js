@@ -147,22 +147,35 @@ export default async function handler(req, res) {
       throw new Error(`Error al crear ítems del pedido: ${err}`);
     }
 
-    const direccion_completa = [calle, numero, piso].filter(Boolean).join(' ');
-    await fetch(`${SB_URL}/rest/v1/envio_domicilio`, {
+    const calleLimpia = String(calle || '').trim();
+    const numeroLimpio = String(numero || '').trim() || 'S/N';
+    const localidadLimpia = String(localidad || '').trim();
+    const envioPayload = {
+      pedido_id,
+      nombre_receptor: nombre_comprador,
+      telefono_receptor: telefono,
+      email_receptor: email,
+      calle: calleLimpia,
+      numero: numeroLimpio,
+      ciudad: localidadLimpia,
+      localidad: localidadLimpia,
+      provincia,
+      codigo_postal,
+      piso_depto: piso || null,
+      notas_entrega: 'Compra vía tienda web',
+      acepta_aviso_ausencia: true,
+    };
+    if (cliente_id) envioPayload.usuario_id = cliente_id;
+
+    const envioRes = await fetch(`${SB_URL}/rest/v1/envio_domicilio`, {
       method: 'POST',
       headers: { ...sbHeaders, 'Prefer': 'return=minimal' },
-      body: JSON.stringify({
-        pedido_id,
-        nombre_receptor: nombre_comprador,
-        telefono_receptor: telefono,
-        email_receptor: email,
-        calle: direccion_completa,
-        localidad,
-        provincia,
-        codigo_postal,
-        notas_entrega: `Compra vía tienda web`,
-      }),
+      body: JSON.stringify(envioPayload),
     });
+    if (!envioRes.ok) {
+      const err = await envioRes.text();
+      throw new Error(`Error al guardar datos de envío: ${err}`);
+    }
 
     const baseUrl = 'https://www.elguiaya.com';
     const mpBody = {
