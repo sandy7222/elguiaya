@@ -294,6 +294,19 @@ app.post('/api/chat-tienda', async (req, res) => {
   }
 });
 
+// API: Postulaciones / CV (Vercel: api/postulaciones.js)
+app.post('/api/postulaciones', async (req, res) => {
+  try {
+    const mod = await import('./api/postulaciones.js');
+    await mod.default(req, res);
+  } catch (err) {
+    console.error('[postulaciones local]', err);
+    if (!res.headersSent) {
+      res.status(500).json({ error: 'Error al cargar postulaciones.' });
+    }
+  }
+});
+
 // API: Registrar descarga y redirigir
 app.get('/api/track-download', async (req, res) => {
   const source = (req.query.source as string) || 'direct_url';
