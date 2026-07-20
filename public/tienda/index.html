@@ -64,8 +64,9 @@
     .carousel-dots button { width: 8px; height: 8px; border-radius: 50%; border: 2px solid rgba(255,255,255,.4); background: transparent; cursor: pointer; transition: all .3s; padding: 0; }
     .carousel-dots button.activo { background: #10b981; border-color: #10b981; }
 
-    .banner-fixo { margin: 16px auto; border-radius: 12px; overflow: hidden; height: 160px; max-width: 1200px; position: relative; cursor: pointer; transition: transform .3s; }
-    @media (min-width: 768px) { .banner-fixo { height: 220px; } }
+    .banner-fixo { margin: 16px auto; border-radius: 12px; overflow: hidden; height: 220px; max-width: 1200px; position: relative; cursor: pointer; transition: transform .3s; }
+    @media (min-width: 768px) { .banner-fixo { height: 320px; } }
+    @media (min-width: 1024px) { .banner-fixo { height: 380px; } }
     .banner-fixo:hover { transform: scale(1.01); }
     .banner-fixo .overlay { position: absolute; inset: 0; background: linear-gradient(135deg, rgba(0,0,0,.5), transparent); padding: 20px; display: flex; flex-direction: column; justify-content: flex-end; z-index: 2; }
     .banner-fixo .overlay h3 { font-size: 1.1rem; font-weight: 700; color: #fff; }
@@ -304,7 +305,7 @@
       .scroll-inner .card { flex: 0 0 190px; }
       .card-img { height: 160px; }
       .carousel-wrap { height: 340px; margin: 8px auto; max-width: 1200px; }
-      .banner-fixo { max-width: 1200px; margin: 0 auto 16px; height: 200px; }
+      .banner-fixo { max-width: 1200px; margin: 0 auto 16px; }
       .section-wrap { padding: 0; }
       .scroll-inner { padding: 0; }
       .cat-grid { padding: 0 0 16px; }
