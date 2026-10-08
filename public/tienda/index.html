@@ -1627,6 +1627,32 @@
       fetch('/api/track-visit?' + params.toString(), { keepalive: true }).catch(function () {});
     }
 
+    // <deeplink>
+    // Enlaces directos a un producto (catálogo de WhatsApp, redes): ?producto=<id>, #/producto/<id> o /producto/<id>.
+    function productoIdDesdeUrl(loc) {
+      var uuid = /[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/i;
+      var fuentes = [];
+      // El hash es lo más reciente (cambia al navegar dentro de la página): va primero.
+      var h = /^#\/producto\/([^?#]+)/.exec(loc.hash || '');
+      if (h) fuentes.push(h[1]);
+      var q = new URLSearchParams(loc.search || '').get('producto');
+      if (q) fuentes.push(q);
+      var p = /^\/producto\/([^/?#]+)/.exec(loc.pathname || '');
+      if (p) fuentes.push(p[1]);
+      for (var i = 0; i < fuentes.length; i++) {
+        var m = uuid.exec(fuentes[i]);
+        if (m) return m[0].toLowerCase();
+      }
+      return null;
+    }
+    // </deeplink>
+
+    function abrirProductoDesdeUrl() {
+      var id = productoIdDesdeUrl(window.location);
+      if (id) abrirProducto(id);
+    }
+    window.addEventListener('hashchange', abrirProductoDesdeUrl);
+
     async function init() {
       trackPageVisit('pageview');
       try {
@@ -1643,6 +1669,7 @@
         attrs.forEach(a => { a.detalle = defMap[a.atributo_id] || null; });
         prods.forEach(p => { todosAtributos[p.id] = attrs.filter(a => a.producto_id === p.id); });
         render();
+        abrirProductoDesdeUrl();
       } catch (e) { console.error(e); document.getElementById('loading').style.display = 'none'; document.getElementById('error').style.display = 'block'; }
     }
 
