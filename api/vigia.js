@@ -37,7 +37,7 @@ export function crearHandler({ env = process.env, fetch = globalThis.fetch, crea
   return async function handler(req, res) {
     if (req.method !== 'GET') return res.status(405).json({ error: 'Método no permitido.' });
 
-    const secreto = env.CRON_SECRET || '';
+    const secreto = String(env.CRON_SECRET ?? '').trim();
     if (secreto.length < LARGO_MINIMO_SECRETO) {
       console.error('[vigia] Falta CRON_SECRET (o tiene menos de 16 caracteres): no corro.');
       return res.status(500).json({ error: 'El Vigía no está configurado.' });

@@ -505,3 +505,24 @@ test('la ficha real no contiene valores de claves', () => {
   ];
   for (const patron of parecidosAClaves) assert.doesNotMatch(texto, patron);
 });
+
+// ── Claves mal pegadas ──────────────────────────────────────────────────────
+
+test('las claves con espacios o saltos de línea al principio o al final igual funcionan', async () => {
+  const fetch = internetFalso();
+  await juntarFuentes({ piezas: [], env: { GROQ_API_KEY: '  clave-falsa-groq \n', GEMINI_API_KEY: '\tclave-falsa-gemini\r\n' }, fetch });
+  const groq = fetch.llamadas.find((l) => l.url.startsWith(URLS.groqLista));
+  const gemini = fetch.llamadas.find((l) => l.url.startsWith(URLS.geminiLista));
+  assert.equal(encabezado(groq, 'authorization'), 'Bearer clave-falsa-groq');
+  assert.equal(encabezado(gemini, 'x-goog-api-key'), 'clave-falsa-gemini');
+});
+
+test('si el proveedor rechaza la clave, el aviso dice qué variable revisar', async () => {
+  const f = await juntarFuentes({
+    piezas: [],
+    env: ENV,
+    fetch: internetFalso({ [URLS.groqLista]: resp({ error: 'invalid' }, 401), [URLS.geminiLista]: resp({ error: 'API_KEY_INVALID' }, 400) }),
+  });
+  assert.ok(f.errores.some((e) => /lista de modelos de Groq/.test(e) && /401/.test(e) && /GROQ_API_KEY/.test(e) && /no es válida/.test(e)), JSON.stringify(f.errores));
+  assert.ok(f.errores.some((e) => /lista de modelos de Gemini/.test(e) && /GEMINI_API_KEY/.test(e) && /no es válida/.test(e)), JSON.stringify(f.errores));
+});

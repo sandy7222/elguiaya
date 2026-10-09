@@ -311,3 +311,51 @@ test('vercel.json: una tarea diaria a /api/vigia a las 11 UTC (8 de la mañana e
   assert.ok(vercel.functions?.['api/vigia.js']?.maxDuration >= 30, 'la revisión baja varias páginas: necesita más de 10 segundos');
   assert.ok(vercel.rewrites.some((r) => r.source === '/(.*)' && r.destination === '/tienda/index.html'), 'las reglas de la tienda siguen igual');
 });
+
+// ── Datos mal pegados en Vercel ─────────────────────────────────────────────
+
+test('Telegram y correo funcionan aunque las variables tengan espacios o saltos de línea de más', async () => {
+  const fetch = internetFalso();
+  const correo = correoFalso();
+  const env = {
+    ...ENV,
+    TELEGRAM_BOT_TOKEN: ` ${ENV.TELEGRAM_BOT_TOKEN}\n`,
+    TELEGRAM_CHAT_ID: ' 987654 ',
+    SMTP_HOST: ' smtp.zoho.com',
+    SMTP_PORT: '465 ',
+    SMTP_USER: 'avisos@elguiaya.com\n',
+    SMTP_PASS: ` ${ENV.SMTP_PASS} `,
+    VIGIA_CORREO_PARA: ' dueno@elguiaya.com\r\n',
+  };
+  const canales = await avisar({ asunto: 'a', texto: 'b', env, fetch, crearTransporte: correo });
+  assert.deepEqual(canales, { telegram: 'ok', correo: 'ok' });
+  assert.equal(fetch.llamadas[0].url, `https://api.telegram.org/bot${ENV.TELEGRAM_BOT_TOKEN}/sendMessage`);
+  assert.equal(JSON.parse(fetch.llamadas[0].opciones.body).chat_id, '987654');
+  assert.equal(correo.configs[0].host, 'smtp.zoho.com');
+  assert.equal(correo.configs[0].port, 465);
+  assert.deepEqual(correo.configs[0].auth, { user: 'avisos@elguiaya.com', pass: ENV.SMTP_PASS });
+  assert.equal(correo.enviados[0].to, 'dueno@elguiaya.com');
+});
+
+test('el CRON_SECRET con un espacio o salto de línea de más igual se reconoce', async () => {
+  const r = await llamar({ env: { ...ENV, CRON_SECRET: `${SECRETO}\n` }, ficha: FICHA_SANA });
+  assert.equal(r.res.statusCode, 200);
+});
+
+test('los secretos se tapan aunque en Vercel tengan espacios de más', () => {
+  const env = { ...ENV, TELEGRAM_BOT_TOKEN: ` ${ENV.TELEGRAM_BOT_TOKEN}\n` };
+  assert.equal(taparSecretos(`falló bot${ENV.TELEGRAM_BOT_TOKEN}/x`, env), 'falló bot***/x');
+});
+
+test('si Telegram rechaza el token o el chat, el error dice qué variable revisar', async () => {
+  const casos = [
+    [404, { ok: false, error_code: 404, description: 'Not Found' }, /TELEGRAM_BOT_TOKEN/],
+    [401, { ok: false, error_code: 401, description: 'Unauthorized' }, /TELEGRAM_BOT_TOKEN/],
+    [400, { ok: false, error_code: 400, description: 'Bad Request: chat not found' }, /TELEGRAM_CHAT_ID/],
+  ];
+  for (const [status, cuerpo, pista] of casos) {
+    const fetch = internetFalso({ 'https://api.telegram.org/': resp(cuerpo, status) });
+    const canales = await avisar({ asunto: 'a', texto: 'b', env: ENV, fetch, crearTransporte: correoFalso() });
+    assert.match(canales.telegram, pista, `con ${status}: ${canales.telegram}`);
+  }
+});

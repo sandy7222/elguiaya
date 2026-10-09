@@ -137,8 +137,15 @@ Invoke-RestMethod "https://www.elguiaya.com/api/vigia?modo=simulacro" -Headers @
 
 La respuesta dice cómo le fue a cada canal (`ok` o `error: ...`). Errores comunes:
 - Telegram `chat not found`: el identificador de chat está mal o no tocaste **Iniciar** en el bot.
-- Telegram `Unauthorized`: el token está mal copiado.
+- Telegram `Unauthorized` (401) o `Not Found` (404): el token está mal copiado. Volvé a copiarlo de BotFather
+  (`/mybots` → el bot → **API Token**) y reemplazalo en Vercel.
 - Correo `Invalid login` o `535`: usuario o contraseña mal, o tu plan de Zoho no permite SMTP (usá Resend).
+- "No pude revisar la lista de modelos de Groq: respondió 401": la `GROQ_API_KEY` de Vercel no sirve más.
+  Creá una nueva en console.groq.com → API Keys y reemplazala en Vercel (también la usa el chat de la tienda).
+
+Los espacios o saltos de línea de más al principio o al final de un valor no importan: el Vigía los ignora.
+Después de cambiar una variable en Vercel hay que volver a publicar (Deployments → la última → `···` →
+**Redeploy**) para que la función use el valor nuevo.
 
 Modos: `?modo=prueba` (aviso de prueba, no revisa nada), `?modo=simulacro` (hace como si el primer modelo
 de la ficha se hubiera apagado hoy), `?modo=resumen` (manda el resumen semanal aunque no sea lunes).

@@ -7,11 +7,15 @@ const ESPERA_MS = 10_000;
 // Variables cuyos valores nunca pueden aparecer en una respuesta, un registro o un aviso.
 const SECRETOS = ['CRON_SECRET', 'TELEGRAM_BOT_TOKEN', 'SMTP_PASS', 'GROQ_API_KEY', 'GEMINI_API_KEY'];
 
+// Un espacio o salto de línea de más al pegar el valor en Vercel no debe romper nada.
+const variable = (env, nombre) => String(env[nombre] ?? '').trim();
+
 export function taparSecretos(texto, env = {}) {
   let salida = String(texto);
   for (const nombre of SECRETOS) {
-    const valor = env[nombre];
-    if (valor && valor.length >= 6) salida = salida.split(valor).join('***');
+    for (const valor of [env[nombre], variable(env, nombre)]) {
+      if (valor && valor.length >= 6) salida = salida.split(valor).join('***');
+    }
   }
   return salida;
 }
@@ -23,8 +27,8 @@ function motivo(error) {
 }
 
 async function mandarTelegram({ texto, env, fetch }) {
-  const token = env.TELEGRAM_BOT_TOKEN;
-  const chat = env.TELEGRAM_CHAT_ID;
+  const token = variable(env, 'TELEGRAM_BOT_TOKEN');
+  const chat = variable(env, 'TELEGRAM_CHAT_ID');
   if (!token || !chat) throw new Error('faltan las variables TELEGRAM_BOT_TOKEN o TELEGRAM_CHAT_ID');
   const corte = '\n… (sigue en el correo)';
   const recortado = texto.length > LIMITE_TELEGRAM ? texto.slice(0, LIMITE_TELEGRAM - corte.length) + corte : texto;
@@ -35,18 +39,23 @@ async function mandarTelegram({ texto, env, fetch }) {
     signal: AbortSignal.timeout(ESPERA_MS),
   });
   const datos = await r.json().catch(() => ({}));
-  if (!r.ok || !datos.ok) throw new Error(`Telegram respondió ${r.status}${datos.description ? `: ${datos.description}` : ''}`);
+  if (!r.ok || !datos.ok) {
+    let pista = '';
+    if (r.status === 401 || r.status === 404) pista = ' (revisá TELEGRAM_BOT_TOKEN en Vercel: está mal copiado o ya no es válido)';
+    else if (/chat not found/i.test(datos.description || '')) pista = ' (revisá TELEGRAM_CHAT_ID en Vercel y que hayas tocado Iniciar en el bot)';
+    throw new Error(`Telegram respondió ${r.status}${datos.description ? `: ${datos.description}` : ''}${pista}`);
+  }
 }
 
 async function mandarCorreo({ asunto, texto, env, crearTransporte }) {
-  const { SMTP_HOST, SMTP_USER, SMTP_PASS, VIGIA_CORREO_PARA } = env;
+  const [SMTP_HOST, SMTP_USER, SMTP_PASS, VIGIA_CORREO_PARA] = ['SMTP_HOST', 'SMTP_USER', 'SMTP_PASS', 'VIGIA_CORREO_PARA'].map((n) => variable(env, n));
   if (!SMTP_HOST || !SMTP_USER || !SMTP_PASS || !VIGIA_CORREO_PARA) {
     throw new Error('faltan variables del correo (SMTP_HOST, SMTP_USER, SMTP_PASS o VIGIA_CORREO_PARA)');
   }
   // Con Zoho o Gmail el remitente es la misma casilla; con Resend el usuario es "resend" y hay que indicarlo.
-  const remitente = env.VIGIA_CORREO_DE || SMTP_USER;
+  const remitente = variable(env, 'VIGIA_CORREO_DE') || SMTP_USER;
   if (!remitente.includes('@')) throw new Error('falta la variable VIGIA_CORREO_DE (la dirección que figura como remitente)');
-  const puerto = Number(env.SMTP_PORT || 465);
+  const puerto = Number(variable(env, 'SMTP_PORT') || 465);
   let crear = crearTransporte;
   if (!crear) {
     const nodemailer = (await import('nodemailer')).default;
