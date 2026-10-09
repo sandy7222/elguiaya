@@ -1,4 +1,10 @@
 {
+  "crons": [
+    { "path": "/api/vigia", "schedule": "0 11 * * *" }
+  ],
+  "functions": {
+    "api/vigia.js": { "maxDuration": 60 }
+  },
   "redirects": [
     { "source": "/tienda", "destination": "/", "permanent": true },
     { "source": "/tienda/", "destination": "/", "permanent": true },

@@ -297,3 +297,17 @@ test('taparSecretos reemplaza los valores de las claves por ***', () => {
   assert.equal(taparSecretos(`auth ${ENV.SMTP_PASS} y ${SECRETO}`, ENV), 'auth *** y ***');
   assert.equal(taparSecretos('nada que tapar', ENV), 'nada que tapar');
 });
+
+// ── La tarea programada ─────────────────────────────────────────────────────
+
+test('vercel.json: una tarea diaria a /api/vigia a las 11 UTC (8 de la mañana en Argentina) con tiempo suficiente', () => {
+  const vercel = JSON.parse(readFileSync(new URL('../vercel.json', import.meta.url), 'utf8'));
+  const tareas = (vercel.crons || []).filter((c) => c.path === '/api/vigia');
+  assert.equal(tareas.length, 1, 'tiene que haber exactamente una tarea para /api/vigia');
+  const [minuto, hora, ...resto] = tareas[0].schedule.split(' ');
+  assert.match(minuto, /^\d+$/, 'plan Hobby: un solo horario por día');
+  assert.equal(Number(hora), 11);
+  assert.deepEqual(resto, ['*', '*', '*'], 'todos los días');
+  assert.ok(vercel.functions?.['api/vigia.js']?.maxDuration >= 30, 'la revisión baja varias páginas: necesita más de 10 segundos');
+  assert.ok(vercel.rewrites.some((r) => r.source === '/(.*)' && r.destination === '/tienda/index.html'), 'las reglas de la tienda siguen igual');
+});
