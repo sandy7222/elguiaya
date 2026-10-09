@@ -102,7 +102,7 @@ async function callGemini(prompt, history, apiKey) {
   return text;
 }
 
-async function callGroq(prompt, history, apiKey) {
+export async function callGroq(prompt, history, apiKey) {
   const messages = [{ role: 'system', content: TIENDA_SYSTEM_PROMPT }];
   for (const msg of history) {
     messages.push({
@@ -118,10 +118,13 @@ async function callGroq(prompt, history, apiKey) {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      model: 'llama-3.3-70b-versatile',
+      // Respaldo si Gemini falla. llama-3.3-70b-versatile se apagó el 2026-08-16. gpt-oss "piensa" antes de
+      // contestar: con reasoning_effort 'low' piensa poco y no se come el tope de la respuesta (igual que la app).
+      model: 'openai/gpt-oss-120b',
+      reasoning_effort: 'low',
       messages,
       temperature: 0.5,
-      max_tokens: 1024,
+      max_completion_tokens: 1024,
     }),
   });
   if (!groqResponse.ok) throw new Error(`Groq error: ${groqResponse.status}`);

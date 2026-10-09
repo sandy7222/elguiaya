@@ -28,8 +28,8 @@ export const piezas = [
     nombre: 'Sitio (chat de la tienda)',
     modelos: [
       { proveedor: 'gemini', id: 'gemini-2.5-flash' },
-      // Respaldo. Groq lo apagó el 2026-08-16: hay que cambiarlo.
-      { proveedor: 'groq', id: 'llama-3.3-70b-versatile' },
+      // Respaldo si Gemini falla (antes llama-3.3-70b-versatile, que Groq apagó el 2026-08-16).
+      { proveedor: 'groq', id: 'openai/gpt-oss-120b' },
     ],
     codigo: [
       { repo: 'sandy7222/elguiaya', rama: 'main', archivo: 'api/chat-tienda.js' },
