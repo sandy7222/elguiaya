@@ -11,7 +11,7 @@ export const ProjectPhases: React.FC = () => {
     {
       phase: 'FASE 1',
       title: 'Mínimo Producto Viable (MVP)',
-      status: 'En curso / Registro Abierto',
+      status: 'En desarrollo',
       statusClass: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30',
       desc: 'Lanzamiento controlado en la zona náutica del Delta de Tigre, San Fernando y San Isidro. Registro inicial de capitanes e integraciones de mapas.',
       icon: MapPin,
@@ -19,7 +19,7 @@ export const ProjectPhases: React.FC = () => {
     {
       phase: 'FASE 2',
       title: 'Expansión Nacional',
-      status: 'Q3 - Q4 2026',
+      status: 'Q4 2026 - Q1 2027',
       statusClass: 'bg-sky-500/10 text-sky-400 border-sky-500/30',
       desc: 'Inclusión de cuencas de pesca deportiva premium: Esquina, Goya, Paso de la Patria (Corrientes), Victoria (Entre Ríos) y lagunas bonaerenses principales.',
       icon: Ship,
@@ -27,7 +27,7 @@ export const ProjectPhases: React.FC = () => {
     {
       phase: 'FASE 3',
       title: 'Ecosistema Náutico',
-      status: 'Q1 2027',
+      status: 'Q2 2027',
       statusClass: 'bg-purple-500/10 text-purple-400 border-purple-500/30',
       desc: 'Integración vertical con cabañas fluviales asociadas, venta física de carnada viva certificada, alquiler de cañas y licencias de pesca con descuento.',
       icon: Compass,
@@ -35,7 +35,7 @@ export const ProjectPhases: React.FC = () => {
     {
       phase: 'FASE 4',
       title: 'Aplicación Móvil Nativa',
-      status: 'Q2 2027',
+      status: 'Q3 2027',
       statusClass: 'bg-blue-500/10 text-blue-400 border-blue-500/30',
       desc: 'Diseño e implementación de apps nativas en Flutter para Android e iOS. Notificaciones satelitales push y rastreo GPS sin conexión móvil activa.',
       icon: Smartphone,
@@ -43,7 +43,7 @@ export const ProjectPhases: React.FC = () => {
     {
       phase: 'FASE 5',
       title: 'Faro Internacional',
-      status: 'Q4 2027',
+      status: 'Q1 2028',
       statusClass: 'bg-amber-500/10 text-amber-400 border-amber-500/30',
       desc: 'Aterrizaje en las cuencas de Uruguay (Salto Grande), Paraguay (Encarnación) y sur de Brasil. Consolidación como la plataforma líder en pesca de América del Sur.',
       icon: PlaneTakeoff,
