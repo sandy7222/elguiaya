@@ -469,6 +469,34 @@ test('un archivo de código que no existe en GitHub → error que nombra el arch
   assert.equal(f.codigo[0].texto, null);
 });
 
+const PRIVADO = [pieza('App', [['groq', 'openai/gpt-oss-120b']], [{ repo: 'sandy7222/elguiaya-plataforma', rama: 'fase-0-contencion', archivo: 'lib/config/groq_config.dart' }])];
+
+test('repo privado con GITHUB_TOKEN: pide el archivo a la API de GitHub con la clave en el encabezado', async () => {
+  const fetch = internetFalso({
+    'https://raw.githubusercontent.com/': resp('404: Not Found', 404),
+    'https://api.github.com/repos/sandy7222/elguiaya-plataforma/contents/lib/config/groq_config.dart?ref=fase-0-contencion': resp("const modelo = 'openai/gpt-oss-120b';"),
+  });
+  const f = await juntarFuentes({ piezas: PRIVADO, env: { ...ENV, GITHUB_TOKEN: ' ghp-falso\n' }, fetch });
+  assert.deepEqual(f.errores, []);
+  assert.equal(f.codigo[0].texto, "const modelo = 'openai/gpt-oss-120b';");
+  const llamada = fetch.llamadas.find((l) => l.url.startsWith('https://api.github.com/'));
+  assert.equal(encabezado(llamada, 'authorization'), 'Bearer ghp-falso');
+  assert.match(encabezado(llamada, 'accept'), /raw/);
+  for (const l of fetch.llamadas) assert.ok(!l.url.includes('ghp-falso'), `clave en la dirección: ${l.url}`);
+});
+
+test('sin GITHUB_TOKEN y un 404 de GitHub: el error explica que puede ser un repo privado', async () => {
+  const fetch = internetFalso({ 'https://raw.githubusercontent.com/': resp('404: Not Found', 404) });
+  const f = await juntarFuentes({ piezas: PRIVADO, env: ENV, fetch });
+  assert.ok(f.errores.some((e) => e.includes('groq_config.dart') && e.includes('GITHUB_TOKEN')), f.errores.join(' | '));
+});
+
+test('con GITHUB_TOKEN rechazado: el error dice que revise la clave de Vercel', async () => {
+  const fetch = internetFalso({ 'https://api.github.com/': resp('Bad credentials', 401) });
+  const f = await juntarFuentes({ piezas: PRIVADO, env: { ...ENV, GITHUB_TOKEN: 'vencido' }, fetch });
+  assert.ok(f.errores.some((e) => e.includes('GITHUB_TOKEN') && /no es válida/.test(e)), f.errores.join(' | '));
+});
+
 test('la lista de Gemini en varias páginas se lee entera', async () => {
   const paginada = (url) => new Response(JSON.stringify(url.includes('pageToken=p2')
     ? { models: [{ name: 'models/gemini-3.8-flash' }] }

@@ -17,15 +17,22 @@ const ESPERA_MS = 10_000;
 const MAX_PAGINAS_GEMINI = 10;
 
 // variableClave: si el proveedor rechaza la clave, el error dice qué variable de Vercel revisar.
-async function bajar(fetch, url, { headers = {}, comoJson = false, variableClave = null } = {}) {
+// avisoNoEncontrado: texto extra para un 404 (GitHub responde 404, no 403, ante un repo privado sin permiso).
+async function bajar(fetch, url, { headers = {}, comoJson = false, variableClave = null, avisoNoEncontrado = '' } = {}) {
   const r = await fetch(url, {
     headers: { 'User-Agent': 'ElGuiaYA-Vigia/1.0', ...headers },
     signal: AbortSignal.timeout(ESPERA_MS),
   });
   if (!r.ok) {
-    const clave = variableClave && [400, 401, 403].includes(r.status)
-      ? `: la clave ${variableClave} de Vercel no es válida o fue dada de baja` : '';
-    throw new Error(`respondió ${r.status}${clave}`);
+    let detalle = '';
+    if (variableClave && [400, 401, 403].includes(r.status)) {
+      detalle = `: la clave ${variableClave} de Vercel no es válida o fue dada de baja`;
+    } else if (variableClave && r.status === 404) {
+      detalle = `: o el archivo no existe, o la clave ${variableClave} de Vercel no tiene permiso sobre ese repositorio`;
+    } else if (r.status === 404) {
+      detalle = avisoNoEncontrado;
+    }
+    throw new Error(`respondió ${r.status}${detalle}`);
   }
   return comoJson ? r.json() : r.text();
 }
@@ -42,6 +49,8 @@ export async function juntarFuentes({ piezas = [], env = {}, fetch = globalThis.
   // Un espacio o salto de línea de más al pegar la clave en Vercel no debe romper nada.
   const claveGroq = String(env.GROQ_API_KEY ?? '').trim();
   const claveGemini = String(env.GEMINI_API_KEY ?? '').trim();
+  // Para leer el código de repos privados (permiso de solo lectura, ver docs/VIGIA.md).
+  const claveGitHub = String(env.GITHUB_TOKEN ?? '').trim();
   const intentar = async (nombre, tarea, { anotarLeida = true } = {}) => {
     try {
       const valor = await tarea();
@@ -91,7 +100,14 @@ export async function juntarFuentes({ piezas = [], env = {}, fetch = globalThis.
       archivo: a.archivo,
       texto: await intentar(
         `${a.archivo} (${a.repo}, rama ${a.rama})`,
-        () => bajar(fetch, `https://raw.githubusercontent.com/${a.repo}/${a.rama}/${a.archivo}`),
+        () => (claveGitHub
+          ? bajar(fetch, `https://api.github.com/repos/${a.repo}/contents/${a.archivo}?ref=${encodeURIComponent(a.rama)}`, {
+            headers: { Authorization: `Bearer ${claveGitHub}`, Accept: 'application/vnd.github.raw+json' },
+            variableClave: 'GITHUB_TOKEN',
+          })
+          : bajar(fetch, `https://raw.githubusercontent.com/${a.repo}/${a.rama}/${a.archivo}`, {
+            avisoNoEncontrado: ': si el repositorio es privado, falta la variable GITHUB_TOKEN en Vercel',
+          })),
         { anotarLeida: false },
       ),
     }))),

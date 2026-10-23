@@ -5,7 +5,7 @@
 const LIMITE_TELEGRAM = 4096;
 const ESPERA_MS = 10_000;
 // Variables cuyos valores nunca pueden aparecer en una respuesta, un registro o un aviso.
-const SECRETOS = ['CRON_SECRET', 'TELEGRAM_BOT_TOKEN', 'SMTP_PASS', 'GROQ_API_KEY', 'GEMINI_API_KEY'];
+const SECRETOS = ['CRON_SECRET', 'TELEGRAM_BOT_TOKEN', 'SMTP_PASS', 'GROQ_API_KEY', 'GEMINI_API_KEY', 'GITHUB_TOKEN'];
 
 // Un espacio o salto de línea de más al pegar el valor en Vercel no debe romper nada.
 const variable = (env, nombre) => String(env[nombre] ?? '').trim();

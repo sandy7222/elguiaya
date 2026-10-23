@@ -118,6 +118,16 @@ Vercel → proyecto del sitio → **Settings → Environment Variables**. Cada u
 
 `GROQ_API_KEY` y `GEMINI_API_KEY` ya están cargadas porque las usa el chat de la tienda: fijate que sigan ahí.
 
+**`GITHUB_TOKEN` (solo si el código de la app está en un repositorio privado).** El Vigía lee el código de la app
+(`sandy7222/elguiaya-plataforma`) para ver qué modelos usa. Ese repositorio es privado: sin permiso GitHub contesta
+"404" y el Vigía avisa "No pude revisar …: respondió 404". Para darle permiso de **solo lectura**:
+
+1. GitHub → tu foto → **Settings → Developer settings → Personal access tokens → Fine-grained tokens → Generate new token**.
+2. Nombre: `vigia-solo-lectura`. Vencimiento: 1 año (anotá la fecha: el Vigía avisa si lo rechazan).
+3. **Repository access → Only select repositories** → elegí `elguiaya-plataforma` (y `elguiaya` si también es privado).
+4. **Permissions → Repository permissions → Contents: Read-only.** Ninguna otra.
+5. Copiá el token y cargalo en Vercel como `GITHUB_TOKEN` (Production, "Sensitive"). Volvé a publicar el sitio.
+
 Las variables valen para las publicaciones **nuevas**: cargalas antes de publicar el Vigía (o volvé a
 publicar después de cargarlas).
 
